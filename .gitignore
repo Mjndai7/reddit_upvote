@@ -1,6 +1,0 @@
-.idea*
-*.pyc
-.env
-node_modules/
-mounts/
-build/
