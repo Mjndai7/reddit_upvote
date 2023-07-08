@@ -94,7 +94,7 @@ DATABASES = {
         'NAME': 'coredb',
         'USER': 'core',
         'PASSWORD': 'wCh29&HE&T83',
-        'HOST': 'localhost',
+        'HOST': 'db',
         'PORT': '5432'
 
     }

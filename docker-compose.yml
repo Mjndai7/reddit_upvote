@@ -1,0 +1,57 @@
+version: '3.9'
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    
+    restart: always
+    environment:
+      - HTTPS=true
+    
+    networks:
+      upvotenet:
+        ipv4_address: 172.50.0.4
+
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_DB=coredb
+      - POSTGRES_USER=core
+      - POSTGRES_PASSWORD=wCh29&HE&T83
+      
+    networks:
+      - upvotenet
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    
+    depends_on:
+     - db
+    command: |
+      sh -c '
+        python manage.py migrate --noinput
+        uwsgi --http "0.0.0.0:8000" --module CoreRoot.wsgi:application --master --processes 4 --threads 2 --static-map /static=/code/static
+      '
+    
+    networks:
+      upvotenet:
+        ipv4_address: 172.50.0.5
+
+    environment:
+      - DEBUG=False
+      - ALLOWED_HOST=host
+      - SECRET_KEY=django-insecure-zt8!jbn&t3^x*5@5&di!d(h^ptm@vgesboqrboc&o3)drbv^rr
+      - POSTGRES_DB=coredb
+      - POSTGRES_USER=core
+      - POSTGRES_PASSWORD=wCh29&HE&T83
+      - POSTGRES_HOST=localhost
+      - POSTGRES_PORT=5432
+
+networks:
+  upvotenet:
+    ipam:
+      config:
+        - subnet: 172.50.0.1/24
