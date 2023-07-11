@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
 import { Card, CardContent, Container, Typography, Grid, Link} from '@material-ui/core';
-import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
 import { IconButton, InputAdornment, TextField } from '@material-ui/core';
 import {RxEyeClosed} from "react-icons/rx"
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 
 //local imports 
@@ -21,69 +21,63 @@ const RegisterPage = () => {
   const [responseMessage, setResponseMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState('')
-
-
-  const endpoint = "https://botustech.com/graphql"
- 
+  const endpoint = "http://localhost:8000/graphql"
   const navigate = useNavigate()
- 
+
   const navigateLink = (path) => {
     navigate(path)
   }
 
- 
+  const isValidEmail = (email) => {
+    // Regular expression pattern for email validation
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    
+    return emailPattern.test(email);
+  };
+  
+  const handleSubmit = async (e) => {
 
-  const handleSubmit = (e) => {
     e.preventDefault();
-    // Send the form data to the backend
-    // You can access the values using the state variables (name, email, company, message)
-    // Perform the necessary actions, such as making an API request, saving to a database, etc.
-    if (name && email ) {
-      // Process form submission
-      sendMutate();
-    } else {
-      // Highlight required fields
-      setResponseMessage('All fields are required!');
+    const isEmailValid = isValidEmail(email);
+
+    if (password === confirmPassword && isEmailValid) {
+      // Passwords match
+      try {
+        const response = await axios.post(endpoint, {
+          query: `
+            mutation {
+              createUsers(email: "${email}", name: "${name}", password: "${password}") {
+                user {
+                  name
+                  isadmin
+                  balance
+                }
+              }
+            }
+          `,
+        });
+  
+        // Handle the response data
+        if(response.data.data.createUsers.user){
+          navigate("/login")
+        }
+      
+        if(response.data.errors){
+        setResponseMessage("Email Already in use")
+      }
+      
+    } catch (error) {
+        // Handle the error
+        setResponseMessage(error.message)
+      }
+    }
+
+    else{
+      {isValidEmail ? setResponseMessage("Use a valid Email") : setResponseMessage("Passwords do not match.")}
     }
   };
 
-  const client = new ApolloClient({
-    
-    uri: endpoint,
-    cache: new InMemoryCache(),
-  });
-
-  const WAIT_LIST_USER = gql`
-  mutation WaitlistUsersMutaion($email: String!, $name: String!, $waitType: String!) {
-    waitlistUsers(email: $email, name: $name, waitType: $waitType) {
-      user {
-        name
-      }
-    }
-  }
-`;
-const sendMutate = () => {
-  client
-    .mutate({
-      mutation: WAIT_LIST_USER,
-      variables: {
-        email: email,
-        name: name,
-      },
-    })
-    .then((result) => {
-      if (result.data.name !== null) {
-        setResponseMessage(`We'll notify you when our product out`);
-      } 
-      else {
-        setResponseMessage('An error occurred.try again later');
-      }
-    })
-    .catch((error) => {
-      setResponseMessage('An error occurred.try again later');
-    });
-};
-
+  
   return (
     <div className={classes.root}>
       {/* Logo */}
@@ -133,7 +127,7 @@ const sendMutate = () => {
                   <TextField
                       className={classes.formField}
                       type="password"
-                      id="email"
+                      id="password"
                       required
                       placeholder="Password"
                       onChange={(e) => setPassword(e.target.value)}
@@ -143,7 +137,7 @@ const sendMutate = () => {
                   <TextField
                       className={classes.formField}
                       type={showPassword ? 'text' : 'password'}
-                      id="email"
+                      id="confirmpass"
                       required
                       placeholder="Confirm Password"
                       onChange={(e) => setConfirmPassword(e.target.value)}

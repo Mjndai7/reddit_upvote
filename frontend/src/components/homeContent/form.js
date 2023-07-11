@@ -1,242 +1,53 @@
 import React, {useState} from "react";
-import { Card, CardContent, Typography, Grid} from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-
-const useStyles = makeStyles((theme) => ({
-  cardContainer: {
-    display: "flex",
-    justifyContent: "center",
-    boxShadow: "none",
-
-    [theme.breakpoints.down("sm")]: {
-      flexDirection: "column", // Stack cards vertically
-      
-    },  
-  },
-  
-  card: {
-    width: "40%",
-    background: "none",
-    marginTop: "6%",
-    boxShadow: "none",
-    marginRight: "50px",
-    borderRadius: "10px",
-    [theme.breakpoints.down("sm")]: {
-      width: "97%",
-      marginTop: "7%",
-      marginLeft: "10px",
-    },
-
-    [theme.breakpoints.up("md")]: {
-      width: "100%",
-      marginLeft: "-19px",
-    },
-
-    [theme.breakpoints.up("lg")]: {
-      width: "500px",
-    },
-  },
-
-  card2: {
-    width: "40%",
-    background: "none",
-    marginTop: "6%",
-    boxShadow: "none",
-    width: "650px",
-    marginLeft: "-20px",
-    
-    [theme.breakpoints.down("sm")]: {
-      width: "100%",
-      marginLeft: "0px",
-      marginBottom: "50px"
-    },
-
-   
-  },
-  cardContent: {
-    clear: "both",
-    color: "white",
-    width: "90%",
-    marginLeft: "20px",
-    background: "#171E2E",
-    borderRadius: "10px",
-
-    [theme.breakpoints.down("sm")]: {
-      width: "90%",
-      marginLeft: "0px",
-    },
-
-  },
-
-  cardContent1: {
-    justifyContent: "center",
-    clear: "both",
-    color: "white",
-    paddingLeft: "50px",
-    background: "#171E2E",
-    width: "0px",
-    borderRadius: "10px",
-    [theme.breakpoints.down("sm")]: {
-      paddingLeft: "10px",
-      width: "94%",
-    },
-
-    [theme.breakpoints.up("md")]: {
-      width: "85%",
-    },
+import { FormControl,  Select, Card, CardContent, Typography, Grid} from "@material-ui/core";
+import useStyles from "../../assets/styles/upvotesection";
+import axios from "axios";
 
 
-  },
-  logo: {
-    height: "200px",
-  },
-  title: {
-    marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(1),
-    color: "#E34234",
-    fontFamily: "Lato",
-
-    [theme.breakpoints.down("sm")]: {
-      marginTop: "30px"
-    },  
-  },
-  description: {
-    fontSize: "1.2rem",
-    fontFamily: "Lato",
-
-    [theme.breakpoints.down("sm")]: {
-      display: "none",
-    },
-  },
-  gridContainer: {
-    display: 'flex',
-    direction: 'row',
-    gap: theme.spacing(2),
-    
-    '@media (max-width: 600px)': {
-      direction: 'column',
-    }
-  },
-
-  input: {
-    width: '100%',
-    background: "#0D1321",
-    color: "#7F8183",
-    height: "25px",
-    border: "none",
-    padding: theme.spacing(1),
-    borderRadius: theme.spacing(0.5),
-    outline: "none",
-
-    [theme.breakpoints.down("xl")]: {
-      width: "98%"
-    },
-  },
-  button: {
-    padding: theme.spacing(1),
-    border: 'none',
-    borderRadius: theme.spacing(0.5),
-    cursor: 'pointer',
-    height: "35px",
-    width: "100%",
-    marginLeft : "1px",
-    marginTop: "20px",
-    margin: "10px",
-    background: "#E34234",
-    color: "white",
-    outline: "none",
-
-    '@media (max-width: 600px)': {
-      width: "98%",
-      marginLeft: "2px"
-    } ,
-    [theme.breakpoints.down("xl")]: {
-      width: "99%"
-    },
-  },
-  label: {
-    marginBottom: theme.spacing(1),
-    marginLeft: "0px",
-    color: "white",
-    fontFamily: "Lato",
-    fontSize: "1em"
-  },
-  cardTitle: {
-    fontFamily: "Lato",
-    color: "#E34234"
-  },
-  listContainer: {
-    height: 240,
-    background: "none",
-    boxShadow: "none",
-    [theme.breakpoints.up('lg')]: {
-      width: '100%',
-      paddingRight: '10px',
-      marginLeft: '0px',
-      height: 235,
-    },
-    '@media (max-width: 600px)': {
-      width: "100%",
-      height: 200
-    }    
-  },
-
-  listButtons: { 
-    padding: theme.spacing(1),
-    border: 'none',
-    borderRadius: theme.spacing(0.5),
-    cursor: 'pointer',
-    width: "83%",
-    height: "35px",
-    marginLeft : "1px",
-    margin: "10px",
-    background: "#E34234",
-    color: "white",
-    '@media (max-width: 600px)': {
-      width: "100%",
-    } 
-  },
-
-  gridButtons: {
-    direction: "row",
-    marginTop: "12px",
-    
-    '@media (max-width: 600px)': {
-      direction: "row"
-    }   
-  },
-  listItem: {
-    marginTop: "5px",
-    color:"#7F8183",
-    boxShadow: "none",
-  }
-
-}));
-
-const ContactFormCard = () => {
+const ContactFormCard = ({setGlobalUrls}) => {
   const classes = useStyles();
+  const email = localStorage.getItem("Email")
+  const [action, setAction] = useState('upvotes')
   const [postLink, setPostLink] = useState('');
-  const [upvotes, setUpvotes] = useState(50);
+  const [upvotes, setUpvotes] = useState('');
   const [speed, setSpeed] = useState('');
+  const [urls, setUrls] = useState([]);
+  const [selectedOption, setSelectedOption] = useState('');
+  const endpoint = "http://localhost:8000/graphql"
 
-  const [urls, setUrls] = useState([
-    "https://www.reddit.com/r/2000sGirls/comments/14p72uw/do_older_men_still_eat_pussy_tell_me_your_age_if/",
-    "https://www.reddit.com/r/2000sGirls/comments/14p72uw/do_older_men_still_eat_pussy_tell_me_your_age_if/",
-    "https://www.reddit.com/r/2000sGirls/comments/14p72uw/do_older_men_still_eat_pussy_tell_me_your_age_if/",
-    "https://www.reddit.com/r/2000sGirls/comments/14p72uw/do_older_men_still_eat_pussy_tell_me_your_age_if/",
-    "https://www.reddit.com/r/2000sGirls/comments/14p72uw/do_older_men_still_eat_pussy_tell_me_your_age_if/",
-  ]);
+  const handleOptionChange = (event) => {
+    setSelectedOption(event.target.value);
+    setAction(event.target.value)
+  };
 
-  const shortenUrl = (url, maxLength) => {
-    return url.length > maxLength ? url.substring(0, maxLength) + '...' : url;
+  const createOrder = async (e) => {
+    e.preventDefault();
+      // Passwords match
+      try {
+        const response = await axios.post(endpoint, {
+          query: `
+            mutation {
+              createOrder(email: "${email}",action: "${action}", url: "${postLink}", number: "${upvotes}", speed: "${speed}") {
+                url {
+                  dateCreated
+                }
+              }
+            }
+          `,
+        });
+  
+        // Handle the response data
+        console.log(response)
+      if(response.data.data.createOrder.url.dateCreated){
+        handleAddLink()
+      }
+      
+    } catch (error) {
+      console.log(error)
+    }
   };
 
   const handleAddLink = () => {
-    // Logic to add the link to a post
-    console.log('Link added:', postLink);
-    console.log('Upvotes:', upvotes);
-    console.log('Speed:', speed);
-
 
     // Add the new URL to the beginning of the array
     if(postLink != ""){
@@ -250,21 +61,51 @@ const ContactFormCard = () => {
 
         // Set the state with the updated array
         setUrls(updatedUrls);
+
       }
     }
       // Reset the form fields
       setPostLink('');
-      setUpvotes(50);
+      setUpvotes('');
       setSpeed('');
     };
 
 
-    const startVotes = () => {
+    const startVotes = async (e) => {
       //send data to the api to start voting
       //return the url as they are being processed
-      //also clear the url list when data is send to the backend
-      setUrls([])
+      //also clear the url list when data is sent to the backend
+      try {
+        const response = await axios.post(endpoint, {
+          query: `
+            mutation {
+              startOrder(email: "${email}", urls: "${urls}") {
+                urls {
+                  dateCreated
+                  status
+                  url
+                  action
+                  speed
+                  cost
+                  number
+                }
+              }
+            }
+          `,
+        });
+  
+      // Handle the response data
+      console.log(response)
+      if(response.data.data.startOrder){
+        setGlobalUrls(response.data.data.startOrder.urls)
+        setUrls([])
+
+      }
+      
+    } catch (error) {
+      console.log(error)
     }
+  };
 
     const clearList = () => {
       //send data to the api to start voting
@@ -277,13 +118,33 @@ const ContactFormCard = () => {
     <div className={classes.cardContainer}>
       <Card className={classes.card}>
         <CardContent className={classes.cardContent}>
-          <Typography className={classes.title} variant="body1">
-          Order UPvotes.
-          </Typography>
+        <FormControl className={classes.formControl}>
+          <Select
+            native
+            value={selectedOption}
+            className={classes.select}
+            onChange={handleOptionChange}
+            MenuProps={{
+              PaperProps: {
+                style: {
+                  backgroundColor: '#171E2E',
+                  borderRadius: '10px',
+                  width: "10%",
+                  marginTop: "20px"
+                },
+              },
+            }}
+          > 
+            <option value="">Choose an Action</option>
+            <option value="comments">Comments</option>
+            <option value="upvotes">Upovtes</option>
+            <option value="downvotes">Downvotes</option>
+          </Select>
+        </FormControl>
           <Grid container direction="column" className={classes.gridContainer}>
               <Grid container direction="row" >
               <label htmlFor="postLink" className={classes.label}>
-                  Post Url
+                  Reddit post url
               </label>
               <input
                   type="text"
@@ -291,12 +152,13 @@ const ContactFormCard = () => {
                   value={postLink}
                   onChange={(e) => setPostLink(e.target.value)}
                   className={classes.input}
+                  disabled={!selectedOption}
               />
               </Grid>
               <Grid item>
                   <Grid container direction="row" >
                       <label htmlFor="postLink" className={classes.label}>
-                          No Upvotes
+                          Number of {action}
                       </label>
                     <input
                       type="text"
@@ -310,7 +172,7 @@ const ContactFormCard = () => {
               <Grid item>
                   <Grid container direction="row" >
                       <label htmlFor="postLink" className={classes.label}>
-                          Speed
+                          Number of {action} per min.
                       </label>
                   <input
                       type="text"
@@ -322,7 +184,7 @@ const ContactFormCard = () => {
                   </Grid>
               </Grid>
               </Grid>
-              <button onClick={handleAddLink} className={classes.button}>
+              <button onClick={createOrder} className={classes.button}>
                 Add To List
               </button>
         </CardContent>
@@ -330,7 +192,7 @@ const ContactFormCard = () => {
       <Card className={classes.card2}>
         <CardContent className={classes.cardContent1}>
         <Typography className={classes.title} variant="body1">
-          {urls.length} Links To UPvote
+          {urls.length} Posts to send {action}
           </Typography>
               <Card className={classes.listContainer}>
               {urls.length > 0 ? (
@@ -342,14 +204,14 @@ const ContactFormCard = () => {
                 ))
               ) : (
                 <Typography className={classes.title} variant="body1">
-                    Add links to start UPvoting
+                    Add links to start {action}
                   </Typography>
               )}
             </Card>
             <Grid container  className={classes.gridButtons}>
               <Grid style={{witdh: "100%"}} xs={12} sm={6} item>
                 <button onClick={startVotes} className={classes.listButtons} >
-                    Start Voting
+                    Start {action}
                     </button>
                     </Grid>
                     <Grid xs={12} sm={6} item>

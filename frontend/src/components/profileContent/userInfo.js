@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 import { Card, CardContent, Typography, Grid} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -8,6 +8,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "center",
     boxShadow: "none",
+    background: "none",
 
     [theme.breakpoints.down("sm")]: {
       flexDirection: "column", // Stack cards vertically
@@ -162,12 +163,14 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const UserInfo = () => {
+const UserInfo = ({view, setView}) => {
   const classes = useStyles();
-  const handleAddLink = () => {
-   
-  };
-
+  const username = localStorage.getItem("Name")
+  const email = localStorage.getItem("Email")
+  const balance = localStorage.getItem("Balance")
+  const handleChange = () => {
+    setView("packages")
+  }
   return (
     <div className={classes.cardContainer}>
       <Card className={classes.card}>
@@ -179,29 +182,29 @@ const UserInfo = () => {
             <Card className={classes.Usercard}>
               <Grid item container justifyContent="space-between" alignItems="flex-end">
                 <Grid item className={classes.userItems}>Username</Grid>
-                <Grid item className={classes.userItems}>Developer Null</Grid>
+                <Grid item className={classes.userItems}>{username}</Grid>
               </Grid>
             </Card>
             <Card className={classes.Usercard}>
               <Grid item container justifyContent="space-between" alignItems="flex-end">
                 <Grid item className={classes.userItems}>Email</Grid>
-                <Grid item className={classes.userItems}>developer@botustech.com</Grid>
+                <Grid item className={classes.userItems}>{email}</Grid>
               </Grid>
             </Card>
             <Card className={classes.Usercard}>
               <Grid item container justifyContent="space-between" alignItems="flex-end">
-                <Grid item className={classes.userItems}>Total Votes</Grid>
+                <Grid item className={classes.userItems}>Total Upvotes</Grid>
                 <Grid item className={classes.userItems}>14,569</Grid>
               </Grid>
             </Card>
             <Card className={classes.Usercard}>
               <Grid item container justifyContent="space-between" alignItems="flex-end">
                 <Grid item className={classes.userItems}>Balance</Grid>
-                <Grid item className={classes.userItems}>$50.89</Grid>
+                <Grid item className={classes.userItems}>{"$" + balance}</Grid>
               </Grid>
             </Card>
           </Grid>
-              <button onClick={handleAddLink} className={classes.button}>
+              <button onClick={handleChange} className={classes.button}>
                 Add Balance
               </button>
         </CardContent>
@@ -228,7 +231,7 @@ const UserInfo = () => {
               </Grid>
             </Card> 
             </Grid>
-            <button onClick={handleAddLink} className={classes.button}>
+            <button onClick={setView} className={classes.button}>
                 Convert Currency
               </button>
         </CardContent>

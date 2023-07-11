@@ -1,46 +1,72 @@
 import React, {useState} from 'react';
 import { Card, CardContent, Container, Typography, Grid, Link, TextField} from '@material-ui/core';
-import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
 
 import Logo from "../../assets/logo/ref.png"
 import AuthFooter from '../../utils/authFooter';
 import useStyles from '../../assets/styles/authentication';
+import axios from 'axios';
 
 
 const LoginPage = ({setIsAdmin}) => {
 
   const classes = useStyles();
-  const [name, setPassword] = useState('');
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('')
   const [responseMessage, setResponseMessage] = useState("");
-  const endpoint = "https://botustech.com/graphql"
+  const endpoint = "http://localhost:8000/graphql"
   const navigate = useNavigate()
  
   const navigateLink = (path) => {
     navigate(path)
   }
   
-  const handleSubmitF = (e) => {
-    e.preventDefault();
-    // Send the form data to the backend
-    // You can access the values using the state variables (name, email, company, message)
-    // Perform the necessary actions, such as making an API request, saving to a database, etc.
-    if (name && email ) {
-      // Process form submission
-      localStorage.setItem("Email", email)
-      localStorage.setItem("Name", name)
-      localStorage.setItem("User", "User")
 
-      if(email === " admin@maxupvote.com"){
-        setIsAdmin(true)
-      }else{
-        setIsAdmin(false)
+  const handleSubmit = async (e) => {
+
+    e.preventDefault();
+      // Passwords match
+      try {
+        const response = await axios.post(endpoint, {
+          query: `
+            mutation {
+              loginUser(email: "${email}", password: "${password}") {
+                user {
+                  name
+                  isadmin
+                  balance
+                  email
+                }
+              }
+            }
+          `,
+        });
+  
+        // Handle the response data
+        if(response.data.data.loginUser.user){
+          localStorage.setItem("Email", email)
+          localStorage.setItem("Name", response.data.data.loginUser.user.name)
+          localStorage.setItem("Balance", response.data.data.loginUser.user.balance)
+          
+          
+          if(response.data.data.loginUser.user.isadmin === "True"){
+            setIsAdmin(true)
+            navigate("/")
+            
+          }
+          else{
+            setIsAdmin(false)
+            navigate("/")
+            
+          }
+        }
+        if(response.data.errors){
+        setResponseMessage("Credntials do not match!")
       }
-      navigate("/");
-    } else {
-      // Highlight required fields
-      setResponseMessage('All fields are required!');
+      
+    } catch (error) {
+        // Handle the error
+        setResponseMessage("Credntials do not match!")
     }
   };
 
@@ -66,7 +92,7 @@ const LoginPage = ({setIsAdmin}) => {
             <Typography variant="body1" className={classes.tagLine}>
               Sign In
             </Typography>
-            <form onSubmit={handleSubmitF}>
+            <form onSubmit={handleSubmit}>
             <Typography variant="body1" className={classes.response}>
               {responseMessage}
             </Typography>
@@ -108,7 +134,7 @@ const LoginPage = ({setIsAdmin}) => {
                       type="submit"
                       className={classes.buttonSubmit}
                       fullWidth
-                      onClick={handleSubmitF}
+                      onClick={handleSubmit}
                     >
                       SUBMIT
                     </button>

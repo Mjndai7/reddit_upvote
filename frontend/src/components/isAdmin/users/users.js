@@ -1,4 +1,4 @@
-import React, {useState}from "react";
+import React, {useEffect, useState}from "react";
 import { Card, Typography, TableContainer,
   Table,
   TableHead,
@@ -7,6 +7,7 @@ import { Card, Typography, TableContainer,
   TableCell,
 TablePagination} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles"
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   // ...existing styles
@@ -75,12 +76,13 @@ const useStyles = makeStyles((theme) => ({
     borderBottom: "none",
     color: "#7F8183",
     background: "none",
-    width: "130px",
+    width: "140px",
+    alignContent: "left"
   },
   tableHeaderCell1: { // Adjust the width according to your design requirements
     marginBottom: theme.spacing(2),
     color: "white",
-    width: "130px"
+    width: "140px"
 
 
     /*[theme.breakpoints.down("sm")]: {
@@ -120,13 +122,17 @@ const useStyles = makeStyles((theme) => ({
 
 const UserCard = () => {
   const classes = useStyles();
-
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(20);
+  const [data, setData] = useState([])
+  const email = localStorage.getItem("Email")
+  const endpoint = "http://localhost:8000/graphql"
+
   const shortenUrl = (url) => {
     const maxLength = 20; // Maximum length of the shortened URL
     return url.length > maxLength ? url.substring(0, maxLength) + '...' : url;
   };
+  
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -135,19 +141,40 @@ const UserCard = () => {
     setRowsPerPage(parseInt(event.target.value, 20));
     setPage(0);
   };
-  const data = [
-    { id: 1, url: 'developer@maxupvoe.com', upvotes: 5, speed: '45', status: 'Active', cost: '$170', created: '2023-07-01' },
-    { id: 2, url: 'developer@maxupvoe.com', upvotes: 10, speed: '45', status: 'Active', cost: '$150', created: '2023-07-01' },
-    { id: 3, url: 'developer@maxupvoe.com', upvotes: 23, speed: '45', status: 'Active', cost: '$140', created: '2023-07-01' },
-    { id: 4, url: 'developer@maxupvoe.com', upvotes: 54, speed: '45', status: 'Active', cost: '$130', created: '2023-07-01' },
-    { id: 5, url: 'developer@maxupvoe.com', upvotes: 533, speed: '45', status: 'Active', cost: '$210', created: '2023-07-01' },
-    { id: 6, url: 'developer@maxupvoe.com', upvotes: 35, speed: '45', status: 'Active', cost: '$210', created: '2023-07-01' },
-    { id: 7, url: 'developer@maxupvoe.com', upvotes: 55, speed: '45', status: 'Active', cost: '$12', created: '2023-07-01' },
-    { id: 8, url: 'developer@maxupvoe.com', upvotes: 65, speed: '45', status: 'Active', cost: '$120', created: '2023-07-01' },
-    { id: 9, url: 'developer@maxupvoe.com', upvotes: 57, speed: '45', status: 'Active', cost: '$120', created: '2023-07-01' },
-    { id: 10, url: 'developer@maxupvoe.com', upvotes: 85, speed: '45', status: 'Active', cost: '$10', created: '2023-07-01' },
-    // Add more data here...
-  ];
+  useEffect(() => {
+    getUsers()
+  }, [])
+  
+  const getUsers = async (e) => {
+      try {
+        const response = await axios.post(endpoint, {
+          query: `
+            mutation {
+              getUsers(email: "${email}") {
+                users {
+                  dateCreated  
+                  email
+                  totalvotes
+                  totalspent
+                  totalcomments
+                  status
+                  isadmin
+
+                }
+              }
+            }
+          `,
+        });
+  
+        // Handle the response data
+      if(response.data.data.getUsers){
+        setData(response.data.data.getUsers.users)
+      }
+      
+    } catch (error) {
+      console.log(error)
+    }
+  };
   return (
     <div className={classes.cardContainer}>
       <Card className={classes.card3}>
@@ -159,7 +186,7 @@ const UserCard = () => {
                 
               <Card className={classes.dataItemCard} style={{paddingTop: "20px",}}>
                 <TableRow style={{ width: "100%"}}>
-                <Typography className={classes.cardTitle} variant="text" style={{marginTop: "20px"}}> {data.length} Availeble Users</Typography>
+                <Typography className={classes.cardTitle} variant="text" style={{marginTop: "20px"}}> {data ? data.length : 0} Availeble Users</Typography>
                   <TableCell className={classes.tableHeaderCell1}>ID</TableCell>
                   <TableCell className={classes.tableHeaderCell1}>Email</TableCell>
                   <TableCell className={classes.tableHeaderCell1}>Upvotes</TableCell>
@@ -171,18 +198,18 @@ const UserCard = () => {
                 </Card>
               </TableHead>
               <TableBody>
-                {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item) => (
+                {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item, index) => (
                   
-                  <Card key={item.id} className={classes.dataItemCard}>
+                  <Card key={index} className={classes.dataItemCard}>
                       <TableRow style={{ width: "100%"}}>
-                        <TableCell className={classes.tableHeaderCell} >{item.id}</TableCell>
+                        <TableCell className={classes.tableHeaderCell} >{index + 1}</TableCell>
                         <TableCell 
-                        className={classes.tableHeaderCell}>{shortenUrl(item.url)}</TableCell>
-                        <TableCell className={classes.tableHeaderCell}>{item.upvotes}</TableCell>
-                        <TableCell className={classes.tableHeaderCell} >{item.speed}</TableCell>
+                        className={classes.tableHeaderCell}>{item.email}</TableCell>
+                        <TableCell className={classes.tableHeaderCell}>{item.totalvotes}</TableCell>
+                        <TableCell className={classes.tableHeaderCell} >{item.totalcomments}</TableCell>
                         <TableCell className={classes.tableHeaderCell} >{item.status}</TableCell>
-                        <TableCell className={classes.tableHeaderCell} >{item.cost}</TableCell>
-                        <TableCell className={classes.tableHeaderCell}>{item.created}</TableCell>
+                        <TableCell className={classes.tableHeaderCell} >{"$" + item.totalspent}</TableCell>
+                        <TableCell className={classes.tableHeaderCell}>{item.dateCreated}</TableCell>
                       </TableRow>
                   </Card>
                 ))}
@@ -192,7 +219,8 @@ const UserCard = () => {
           <Card className={classes.dataItemCard}>
             <TablePagination
               component="div"
-              count={data.length}
+              className={classes.title}
+              count={data ? data.length : 0}
               rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={handleChangePage}

@@ -228,8 +228,8 @@ const useStyles = makeStyles((theme) => ({
 const Home = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [activePath, setActivePath] = useState('');
-  const username = "Dev."
-  const title = "User"
+  const username = localStorage.getItem("Name")
+  const balance = localStorage.getItem("Balance")
 
   const classes = useStyles();
   const location = useLocation();
@@ -259,8 +259,7 @@ const Home = () => {
 
   const menuItems = [
     { isDivider: true },
-    { text: "UPvotes", path: "/upvote", icon: <BiUpvote /> },
-    { text: "Comments", path: "/comment", icon: <BiCommentEdit /> },
+    { text: "Home", path: "/", icon: <BiUpvote /> },
     { text: "Profile", path: "/profile", icon: <CgProfile /> },
   ];
   
@@ -274,7 +273,7 @@ const Home = () => {
               {username}
               </Typography>
               <Typography variant="body2" className={classes.title}>
-              {title}
+              {"$" + balance}
               </Typography>
           </div>
         </div>
@@ -329,7 +328,7 @@ const Home = () => {
               {username}
               </Typography>
               <Typography variant="body2" className={classes.title}>
-              {title}
+              {"$" + balance}
               </Typography>
           </div>
         </div>
@@ -374,9 +373,7 @@ const Home = () => {
       {renderDrawer}
       <Suspense fallback={<div>Loading...</div>}>
         {location.pathname === "/" ? <HomeCard /> : null}
-        {location.pathname === "/upvote" ? <HomeCard /> : null}
         {location.pathname === "/profile" ? <ProfileCard /> : null}
-        {location.pathname === "/comment" ? <CommentCard /> : null}
       </Suspense>
     </Grid>
       <div><Footer /></div>

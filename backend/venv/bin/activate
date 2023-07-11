@@ -38,7 +38,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/home/dev/Desktop/Projects/Botustech/botus_reddit/backend/venv"
+VIRTUAL_ENV="/home/dev/Desktop/Projects/Botustech/botus/backend/venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

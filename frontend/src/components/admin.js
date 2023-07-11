@@ -295,8 +295,7 @@ const Admin = () => {
 
   const menuItems = [
     { isDivider: true },
-    { text: "Upvote", path: "/upvote", icon: <AiOutlineHome /> },
-    { text: "Comment", path: "/comment", icon: <BiCommentEdit /> },
+    { text: "Home", path: "/", icon: <AiOutlineHome /> },
     { text: "Users", path: "/users", icon: <FaUserFriends /> },
     { text: "Accounts", path: "/accounts", icon: <MdOutlineManageAccounts /> },
     { text: "Add User", onClick: () => openContactForm(), icon: <TiUserAdd /> },
@@ -423,8 +422,6 @@ const Admin = () => {
       {renderDrawer}
       <Suspense fallback={<div>Loading...</div>}>
         {location.pathname === "/" ? <HomeCard /> : null}
-        {location.pathname === "/upvote" ? <HomeCard /> : null}
-        {location.pathname === "/comment" ? <CommentCard /> : null}
         {location.pathname === "/users" ? <UserCardHolder /> : null}
         {location.pathname === "/accounts" ? <AccountsCard /> : null}
         {location.pathname === "/profile" ? <ProfileCard /> : null}

@@ -1,4 +1,4 @@
-#!/home/dev/Desktop/Projects/Botustech/botus_reddit/backend/venv/bin/python3
+#!/home/dev/Desktop/Projects/Botustech/botus/backend/venv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys

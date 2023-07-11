@@ -6,7 +6,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
+import axios from 'axios';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -143,12 +143,11 @@ const useStyles = makeStyles((theme) => ({
 const AddAccount = ({onClose, isOpen}) => {
   const classes = useStyles();
   const [username, setUsername] = useState('');
+  const email = localStorage.getItem("Email")
   const [proxies, setPorxies] = useState('')
-  const [password, setPassword] = useState('');
   const [responseMessage, setResponseMessage] = useState("");
-  const [formSubmitted, setFormSubmitted] = useState(false);
 
-  const endpoint = "https://botustech.com/graphql"
+  const endpoint = "http://localhost:8000/graphql"
 
 
   const handleSubmit = (e) => {
@@ -156,59 +155,37 @@ const AddAccount = ({onClose, isOpen}) => {
     // Send the form data to the backend
     // You can access the values using the state variables (name, email, company, message)
     // Perform the necessary actions, such as making an API request, saving to a database, etc.
-    if (username && proxies && password ) {
+    if (username && proxies ) {
       // Process form submission
      
       onClose()
-      sendMutate();
-      setFormSubmitted(true); // Set formSubmitted state to true after successful submission
+      getAccounts()
     } else {
       // Highlight required fields
       setResponseMessage('All fields are required!');
-      setFormSubmitted(false); // Set formSubmitted state to false to trigger highlighting
     }
   };
 
 
-  const client = new ApolloClient({
-    
-    uri: endpoint,
-    cache: new InMemoryCache(),
-  });
+  const getAccounts = async (e) => {
+    try {
+      const response = await axios.post(endpoint, {
+        query: `
+          mutation {
+            getAccounts(email: "${email}", proxies: "${proxies}", name : "${username}") {
+              accounts {
+                dateCreated
 
-  const WAIT_LIST_USER = gql`
-  mutation WaitlistUsersMutaion($email: String!, $name: String!, $waitType: String!) {
-    waitlistUsers(email: $email, name: $name, waitType: $waitType) {
-      user {
-        name
-      }
-    }
+              }
+            }
+          }
+        `,
+      });
+      console.log(response)
+  } catch (error) {
+    console.log(error)
   }
-`;
-const sendMutate = () => {
-  client
-    .mutate({
-      mutation: WAIT_LIST_USER,
-      variables: {
-        username: username,
-        password: password,
-        proxies: proxies,
-      },
-    })
-    .then((result) => {
-      if (result.data.name !== null) {
-        setResponseMessage(`We'll notify you when our product out`);
-      } 
-      else {
-        setResponseMessage('An error occurred.try again later');
-      }
-    })
-    .catch((error) => {
-      setResponseMessage('An error occurred.try again later');
-    });
-    };
-
-    
+};
 
   return (
     <>
@@ -229,13 +206,6 @@ const sendMutate = () => {
                 placeholder="Username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className={classes.input}
-                />
-            <input
-                type="text"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
                 className={classes.input}
                 />
             <input

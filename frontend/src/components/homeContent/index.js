@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { makeStyles } from "@material-ui/core/styles";
 
 import Contacts from "./reach";
@@ -34,11 +34,12 @@ const useStyles = makeStyles((theme) => ({
 
 const HomeCard = () => {
   const classes = useStyles();
+  const [urls, setUrls] = useState([])
 
   return (
     <div className={classes.container}>
-        <ContactFormCard />
-        <Contacts />
+        <ContactFormCard setGlobalUrls={setUrls} />
+        <Contacts urls={urls} setUrls={setUrls}/>
     </div>
   );
 };

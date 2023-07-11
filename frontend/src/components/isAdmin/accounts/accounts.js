@@ -1,4 +1,4 @@
-import React, {useState}from "react";
+import React, {useState, useEffect}from "react";
 import { Card, Typography, TableContainer,
   Table,
   TableHead,
@@ -7,6 +7,7 @@ import { Card, Typography, TableContainer,
   TableCell,
 TablePagination} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles"
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   // ...existing styles
@@ -121,9 +122,12 @@ const useStyles = makeStyles((theme) => ({
 
 const AccCard = () => {
   const classes = useStyles();
-
+  const email = localStorage.getItem("Email")
+  const [data, setData] = useState([])
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(20);
+  const endpoint = "http://localhost:8000/graphql"
+
   const shortenemail = (email) => {
     const maxLength = 20; // Maximum length of the shortened email
     return email.length > maxLength ? email.substring(0, maxLength) + '...' : email;
@@ -136,22 +140,41 @@ const AccCard = () => {
     setRowsPerPage(parseInt(event.target.value, 20));
     setPage(0);
   };
-  const data = [
-    { id: 1, email: 'developer@maxupvoe.com', username: "Maina", voted: '45', commented: '678', status: 'ACTIVE', created: '2023-07-01' },
-    { id: 2, email: 'developer@maxupvoe.com', username: "Minaj", voted: '45', commented: '678', status: 'LOGEDOUT', created: '2023-07-01' },
-    { id: 3, email: 'developer@maxupvoe.com', username: "Raj", voted: '45', commented: '678', status: 'SUSPENDED', created: '2023-07-01' },
-    { id: 4, email: 'developer@maxupvoe.com', username: "Kevin", voted: '45', commented: '678', status: 'ACTIVE', created: '2023-07-01' },
-    { id: 5, email: 'developer@maxupvoe.com', username: "Mike", voted: '45', commented: '678', status: 'LOGEDOUT', created: '2023-07-01' },
-    { id: 6, email: 'developer@maxupvoe.com', username: "Juma", voted: '45', commented: '678', status: 'ACTIVE', created: '2023-07-01' },
-    { id: 7, email: 'developer@maxupvoe.com', username: "Hellen", voted: '45', commented: '678', status: 'ACTIVE', created: '2023-07-01' },
-    { id: 8, email: 'developer@maxupvoe.com', username: "Voke", voted: '45', commented: '678', status: 'LOGEDOUT', created: '2023-07-01' },
-    { id: 9, email: 'developer@maxupvoe.com', username: "Trevor", voted: '45', commented: '678', status: 'ACTIVE', created: '2023-07-01' },
-    { id: 10, email: 'developer@maxupvoe.com', username: "Jemo", voted: '45', commented: '678', status: 'ACTIVE', created: '2023-07-01' },
-    { id: 11, email: 'developer@maxupvoe.com', username: "Judas", voted: '45', commented: '678', status: 'SUSPENDED', created: '2023-07-01' },
-    { id: 12, email: 'developer@maxupvoe.com', username: "Iscariot", voted: '45', commented: '678', status: 'LOGEDOUT', created: '2023-07-01' },
-    { id: 13, email: 'developer@maxupvoe.com', username: "Java", voted: '45', commented: '678', status: 'SUSPENDED', created: '2023-07-01' },
-    // Add more data here...
-  ];
+  useEffect(() => {
+    getAccounts()
+  }, [])
+  
+  const getAccounts = async (e) => {
+      try {
+        const response = await axios.post(endpoint, {
+          query: `
+            mutation {
+              getAccounts(email: "${email}", proxies: "", name : "") {
+                accounts {
+                  dateCreated  
+                  status
+                  voted
+                  commented
+                  status
+                  name
+                  proxies
+
+                }
+              }
+            }
+          `,
+        });
+  
+        // Handle the response data
+      if(response.data.data.getAccounts){
+        setData(response.data.data.getAccounts.accounts)
+      }
+      
+    } catch (error) {
+      console.log(error)
+    }
+  };
+
   return (
     <div className={classes.cardContainer}>
       <Card className={classes.card3}>
@@ -160,10 +183,10 @@ const AccCard = () => {
             <Table>
               <TableHead>
               <Card className={classes.dataItemCard}>
-              <Typography className={classes.cardTitle} variant="text" style={{marginTop: "20px"}}> {data.length} Available Reddit Account</Typography>
+              <Typography className={classes.cardTitle} variant="text" style={{marginTop: "20px"}}> {data ? data.length : 0} Available Reddit Account</Typography>
                 <TableRow style={{ width: "100%"}}>
                   <TableCell className={classes.tableHeaderCell1}>ID</TableCell>
-                  <TableCell className={classes.tableHeaderCell1}>Email</TableCell>
+                  <TableCell className={classes.tableHeaderCell1}>Proxies</TableCell>
                   <TableCell className={classes.tableHeaderCell1}>Username</TableCell>
                   <TableCell className={classes.tableHeaderCell1}>Voted</TableCell>
                   <TableCell className={classes.tableHeaderCell1}>Commented</TableCell>
@@ -173,18 +196,18 @@ const AccCard = () => {
                 </Card>
               </TableHead>
               <TableBody>
-                {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item) => (
+                {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item, index) => (
                   
                   <Card key={item.id} className={classes.dataItemCard}>
                       <TableRow style={{ width: "100%"}}>
-                        <TableCell className={classes.tableHeaderCell} >{item.id}</TableCell>
+                        <TableCell className={classes.tableHeaderCell} >{index + 1}</TableCell>
                         <TableCell 
-                        className={classes.tableHeaderCell}>{shortenemail(item.email)}</TableCell>
-                        <TableCell className={classes.tableHeaderCell}>{item.username}</TableCell>
+                        className={classes.tableHeaderCell}>{item.proxies}</TableCell>
+                        <TableCell className={classes.tableHeaderCell}>{item.name}</TableCell>
                         <TableCell className={classes.tableHeaderCell} >{item.voted}</TableCell>
                         <TableCell className={classes.tableHeaderCell} >{item.commented}</TableCell>
                         <TableCell className={classes.tableHeaderCell} >{item.status}</TableCell>
-                        <TableCell className={classes.tableHeaderCell}>{item.created}</TableCell>
+                        <TableCell className={classes.tableHeaderCell}>{item.dateCreated}</TableCell>
                       </TableRow>
                   </Card>
                 ))}
@@ -194,7 +217,8 @@ const AccCard = () => {
           <Card className={classes.dataItemCard}>
             <TablePagination
               component="div"
-              count={data.length}
+              className={classes.title}
+              count={data ? data.length : 0}
               rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={handleChangePage}

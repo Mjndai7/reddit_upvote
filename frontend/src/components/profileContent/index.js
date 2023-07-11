@@ -1,9 +1,10 @@
-import React from "react";
+import React, {useState} from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Card, Typography, CardContent } from "@material-ui/core";
+import { Card} from "@material-ui/core";
 
 import AnalyticsGraph from "./analytics";
 import UserInfo from "./userInfo";
+import Packages from "./packages";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -48,8 +49,10 @@ const useStyles = makeStyles((theme) => ({
     // ...existing styles
     // Adjust the card width and height as needed
     width: "95%",
-    height: "400px",
+    height: "500px",
     background: "#171E2E",
+    paddingRight: "100px",
+    paddingLeft: "100px",
 
     [theme.breakpoints.down("lg")]: {
       height: "280px",
@@ -66,8 +69,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ProfileCard = () => {
   const classes = useStyles();
-  const cost = [50, 100, 29, 199, 20, 1000, 8]
-  const upvotes = [10, 12, 322, 34, 5, 66, 39]
+  const [view, setView] = useState("profile")
 
   const data = [
     { date: "2023-01-01", cost: 100, upvotes: 103 },
@@ -81,7 +83,7 @@ const ProfileCard = () => {
   
   return (
     <div className={classes.container}>
-        <UserInfo />
+        {view === "profile"  ? <UserInfo view={view} setView={setView} /> : <Packages setView={setView}/>}
         <div className={classes.cardContainer}>
         <Card className={classes.card3}>
             <AnalyticsGraph data={data} />
