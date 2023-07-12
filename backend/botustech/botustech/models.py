@@ -9,6 +9,7 @@ class RegisteredUsers(models.Model):
     totalcomments =models.CharField(max_length=128, unique=False)
     totalspent = models.CharField(max_length=128, unique=False)
     status = models.CharField(max_length=128, unique=False)
+    package = models.CharField(max_length=124, unique=False)
     password = models.CharField(max_length=128, unique=False)
     date_created = models.DateTimeField(auto_now_add=True)
 

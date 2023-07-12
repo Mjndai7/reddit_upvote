@@ -8,7 +8,14 @@ from botustech.models import RegisteredUsers, RedditUrls
 from botustech.models import RedditAccounts
 
 
+from reddit.ui.add_account_widget import AddAccountWidget
+from reddit.reddit_bot_manager import RedditBotManager
+
+
+
 send_email = SendEmail()
+bot_manager = RedditBotManager()
+add_account = AddAccountWidget(bot_manager)
 
 class UserType(DjangoObjectType):
     class Meta:
@@ -44,6 +51,7 @@ class CreateUserMutation(graphene.Mutation):
                 totalvotes=0, 
                 totalcomments=0,
                 totalspend=0.00,
+                package="None",
                 status="ACTIVE",
 
             )
@@ -154,6 +162,7 @@ class StartOrderMutation(graphene.Mutation):
        
         return StartOrderMutation(urls=_urls)
 
+
 class RedditAccountsMutation(graphene.Mutation):
     accounts = graphene.List(AccountsType)
     
@@ -174,7 +183,9 @@ class RedditAccountsMutation(graphene.Mutation):
                     commented=0,
                     status="ACTIVE",
                 )
-
+            user_angent = "Mozilla/5.0 (X11; Linux aarch64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.188 Safari/537.36 CrKey/1.54.250320"
+            add_account.add_account(name, proxies, user_angent)
+            
         except RegisteredUsers.DoesNotExist:
             raise GraphQLError("User doesn't exist")    
        

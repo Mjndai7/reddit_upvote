@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -83,9 +83,38 @@ const useStyles = makeStyles((theme) => ({
 
 const Packages = ({setView}) => {
   const classes = useStyles();
+  
   const handleChange = () => {
     setView("profile")
   }
+
+  const handleClick = () => {
+    window.open("https://buy.stripe.com/test_6oE28DfHW0c4772aEG", '_blank');
+  };
+
+  const stripe_key = "pk_test_51Lc84CDTMi1SAp13sTQneXvANuJIBXWOnOBylf40E6Divd7OAjYN8uPVf3z1aL5c2637Qb5liWacPUfKLFBLC6Qq00nGGHipZG"
+  
+    const createSubscription = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/api/subscriptions/create-subscription/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            lookup_key: stripe_key, // Replace with the actual lookup key
+          }),
+        });
+        const data = await response.json();
+        if (response.ok) {
+          window.location.href = data.checkout_url;
+        } else {
+          console.log("Error creating subscription:", data.error);
+        }
+      } catch (error) {
+        console.log("Error creating subscription:", error);
+      }
+    };
 
   return (
     <Grid container spacing={3} className={classes.cardContainer}>
@@ -108,6 +137,7 @@ const Packages = ({setView}) => {
             variant="contained"
             color="primary"
             className={classes.paymentButton}
+            onClick={handleClick}
           >
             Pay with Card
           </Button>

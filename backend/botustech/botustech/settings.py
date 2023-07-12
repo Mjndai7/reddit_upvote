@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,6 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-o!)be$28grk#q0#i_*v789v@w-hsa50&+wvhb%i0ws!_%pn&$2'
 
+# STRIPE
+STRIPE_SECRET_KEY = 'sk_test_51Lc84CDTMi1SAp13nQ049H6S612ZRMLUe59soxZZleOT4HFTTT9kKpqni8XCrgbu7DdQdd0BTl1BCgmUerENnhr900Wbni7Xnj'
+STRIPE_WEBHOOK_SECRET = 'whsec_e6fb9e740bfa6b76a29b7b890e11854593efa6b447c8b582cecd5081035ea1da'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 EMAIL_FROM_ADDRESS = "asidohsidney254@gmail.com"
@@ -34,7 +38,7 @@ EMAIL_HOST_USER = "asidohsidney254@gmail.com"
 EMAIL_HOST_PASSWORD ="abfgkljuxuqbrvod"
 
 ALLOWED_HOSTS = ["*"]
-CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_CREDENTIALS = False
 CORS_ORIGIN_WHITELIST = [
     "http://botustech.com",
     "https://www.botustech.com",
@@ -51,10 +55,7 @@ CSRF_TRUSTED_ORIGINS = [
     "http://localhost:3000"
     ]
 
-
-
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -66,17 +67,19 @@ INSTALLED_APPS = [
     'graphene_django',
     'django_filters',
     'corsheaders',
+    'rest_framework',
+    'rest_framework_simplejwt.token_blacklist',
+    'subscriptions',
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
 ]
@@ -160,3 +163,6 @@ STATIC_ROOT = "/root/botus/backend/botustech/static/"
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+#frontend
+SUBSCRIPTION_SUCCESS_URL = 'http://localhost:3000/subscriptions/success/'
+SUBSCRIPTION_FAILED_URL = 'http://localhost:3000/subscriptionsfailed/'
