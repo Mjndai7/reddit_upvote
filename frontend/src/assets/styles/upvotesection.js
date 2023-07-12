@@ -70,7 +70,7 @@ const useStyles = makeStyles((theme) => ({
       justifyContent: "center",
       clear: "both",
       color: "white",
-      paddingLeft: "50px",
+      paddingLeft: "30px",
       background: "#171E2E",
       width: "0px",
       borderRadius: "10px",
@@ -247,12 +247,13 @@ const useStyles = makeStyles((theme) => ({
       border: 'none',
       borderRadius: theme.spacing(0.5),
       cursor: 'pointer',
-      width: "83%",
+      width: "85%",
       height: "35px",
-      marginLeft : "1px",
+      marginLeft : "20px",
       margin: "10px",
       background: "#E34234",
       color: "white",
+      
       '@media (max-width: 600px)': {
         width: "100%",
       } 

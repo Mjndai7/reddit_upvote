@@ -10,7 +10,7 @@ import PrivateRoutes from "./utils/PrivateRoutes";
 import ActivationPage from "./components/authentication/activateUser";
 
 const App = () => {
-  const [isAdmin, setIsAdmin] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
   
 
   return (

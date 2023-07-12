@@ -1,8 +1,9 @@
 import React, {useState} from "react";
-import { FormControl,  Select, Card, CardContent, Typography, Grid} from "@material-ui/core";
+import { FormControl,  Select, Card, CardContent, Typography, TextField, Grid} from "@material-ui/core";
 import useStyles from "../../assets/styles/upvotesection";
 import axios from "axios";
 
+import AlertBarner from "../../utils/barner";
 
 const ContactFormCard = ({setGlobalUrls}) => {
   const classes = useStyles();
@@ -14,11 +15,31 @@ const ContactFormCard = ({setGlobalUrls}) => {
   const [urls, setUrls] = useState([]);
   const [selectedOption, setSelectedOption] = useState('');
   const endpoint = "http://localhost:8000/graphql"
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState('')
+  const [comments, setComments] = useState(false)
+
+  const [inputValue, setInputValue] = useState('');
+
+  const handleInputChange = (e) => {
+    setInputValue(e.target.value);
+  };
+
+
+  const closeAlert = () => {
+    setOpen(false)
+  };
 
   const handleOptionChange = (event) => {
     setSelectedOption(event.target.value);
     setAction(event.target.value)
+    
+    if(event.target.value === "comments"){
+      setComments(true)
+    }
   };
+  
+ 
 
   const createOrder = async (e) => {
     e.preventDefault();
@@ -98,11 +119,16 @@ const ContactFormCard = ({setGlobalUrls}) => {
           });
     
         // Handle the response data
-        console.log(response)
+        console.log(response.data.data.startOrder.message)
         if(response.data.data.startOrder){
           setGlobalUrls(response.data.data.startOrder.urls)
           setUrls([])
   
+        }
+       
+        if(response.data.data.startOrder.message === "Insuficient Balance"){
+          setMessage("Insufficient Balance")
+          setOpen(true)
         }
       }
       } catch (error) {
@@ -114,11 +140,16 @@ const ContactFormCard = ({setGlobalUrls}) => {
       //send data to the api to start voting
       //return the url as they are being processed
       //also clear the url list when data is send to the backend
+      if(comments === true){
+        setComments(false)
+      }
       setUrls([])
     }
 
   return (
+    
     <div className={classes.cardContainer}>
+      <AlertBarner onClose={closeAlert} isOpen={open} message={message} />
       <Card className={classes.card}>
         <CardContent className={classes.cardContent}>
         <FormControl className={classes.formControl}>
@@ -197,6 +228,17 @@ const ContactFormCard = ({setGlobalUrls}) => {
         <Typography className={classes.title} variant="body1">
           {urls.length} Posts to send {action}
           </Typography>
+          {comments ? 
+              <Card className={classes.listContainer}>
+                  <textarea
+                    placeholder="Enter Comments Here"
+                    variant="outlined"
+                    className={classes.input}
+                    value={inputValue}
+                    onChange={handleInputChange}
+                    style={{height: "100%", marginLeft: "-10px", color: "#7F8183", paddingLeft:"20px"}}
+                  />
+            </Card> :
               <Card className={classes.listContainer}>
               {urls.length > 0 ? (
                 urls.map((url, index) => (
@@ -211,6 +253,8 @@ const ContactFormCard = ({setGlobalUrls}) => {
                   </Typography>
               )}
             </Card>
+          }
+              
             <Grid container  className={classes.gridButtons}>
               <Grid style={{witdh: "100%"}} xs={12} sm={6} item>
                 <button onClick={startVotes} className={classes.listButtons} >
@@ -219,7 +263,7 @@ const ContactFormCard = ({setGlobalUrls}) => {
                     </Grid>
                     <Grid xs={12} sm={6} item>
                     <button onClick={clearList} className={classes.listButtons} >
-                    clear List
+                    {comments ? "Add Comments" : "clear list"}
                     </button>
               </Grid>
             </Grid>

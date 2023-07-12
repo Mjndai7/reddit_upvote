@@ -248,7 +248,6 @@ class UpdatePasswordMutation(graphene.Mutation):
             if not token_gen.decode_token(token):
                 return GraphQLError('Invalid or expired token')
 
-            print(user.email)
             user.password = make_password(new_password)
             user.save()
             success = True
