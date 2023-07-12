@@ -4,7 +4,10 @@ from graphene_django import DjangoObjectType
 from .Mutations import CreateUserMutation, UserType, LoginUserMutation
 from .Mutations import UrlsMutation, StartOrderMutation
 from .Mutations import GetUsersMutation, RedditAccountsMutation
-        
+from .Mutations import ResetPasswordMutation
+from .Mutations import UpdatePasswordMutation
+
+
 class Query(graphene.ObjectType):
     contactUsers = graphene.Field(UserType)
 
@@ -37,6 +40,16 @@ class Query(graphene.ObjectType):
         mutation = RedditAccountsMutation()
         result = mutation.mutate(info, email, proxies, name)
         return result.accounts
+    
+    def resolve_update_password(self, info, email, token, new_password):
+        mutation = UpdatePasswordMutation()
+        result = mutation.mutate(info, email, token, new_password)
+        return result.success
+    
+    def resolve_reset_password(self, info, email):
+        mutation = ResetPasswordMutation()
+        result = mutation.mutate(info, email)
+        return result.success
 
 class Mutation(graphene.ObjectType):
     create_users  = CreateUserMutation.Field()
@@ -45,6 +58,8 @@ class Mutation(graphene.ObjectType):
     start_order    = StartOrderMutation.Field()
     get_users    = GetUsersMutation.Field()
     get_accounts  = RedditAccountsMutation.Field()
+    update_password = UpdatePasswordMutation.Field()
+    reset_password = ResetPasswordMutation.Field()
 
 
 schema = graphene.Schema(query=Query, mutation=Mutation)

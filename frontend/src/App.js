@@ -41,7 +41,7 @@ const App = () => {
         <Route element={<RegisterPage />} path="/register" />
         <Route element={<ActivationPage />} path="/activate/:uid/:token"/>
         <Route element={<ForgotCard />} path="/forgot-password" />
-        <Route element={<ResetCard />} path="/reset-password" />
+        <Route element={<ResetCard />} path="/password-reset/:token" />
       </Routes>
     </Router>
   );

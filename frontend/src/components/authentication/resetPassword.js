@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
 import { Card, CardContent, Container, Typography, Grid, Link, TextField} from '@material-ui/core';
-import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
 import { IconButton, InputAdornment } from '@material-ui/core';
 import {RxEyeClosed} from "react-icons/rx"
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
 
 import Logo from "../../assets/logo/ref.png"
 import AuthFooter from '../../utils/authFooter';
@@ -11,25 +12,12 @@ import useStyles from '../../assets/styles/authentication';
 
 
 const ResetCard = () => {
-  const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const classes = useStyles();
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const type = "Botus Fans"
+  const [password, setPasword] = useState('');
   const [responseMessage, setResponseMessage] = useState("");
-  const endpoint = "https://botustech.com/graphql"
-  const handleMenuClose = () => {
-    setMenuAnchorEl(null);
-  };
+  const endpoint = "http://localhost:8000/graphql"
+  const { token } = useParams();
 
-  const handleButtonsClick = (link) => {
-    // Add the logic to redirect to the TikTok page
-    window.location.href = link;
-  };
-
-  const handleMenuOpen = (event) => {
-    setMenuAnchorEl(event.currentTarget);
-  };
   const navigate = useNavigate()
 
   const navigateLink = (link) => {
@@ -45,52 +33,46 @@ const ResetCard = () => {
     // Send the form data to the backend
     // You can access the values using the state variables (name, email, company, message)
     // Perform the necessary actions, such as making an API request, saving to a database, etc.
-    if (name && email ) {
+    if (password === confirmPassword ) {
       // Process form submission
       sendMutate();
     } else {
       // Highlight required fields
-      setResponseMessage('All fields are required!');
+      setResponseMessage('Password Do not match');
     }
   };
 
-  const client = new ApolloClient({
-    
-    uri: endpoint,
-    cache: new InMemoryCache(),
-  });
-
-  const WAIT_LIST_USER = gql`
-  mutation WaitlistUsersMutaion($email: String!, $name: String!, $waitType: String!) {
-    waitlistUsers(email: $email, name: $name, waitType: $waitType) {
-      user {
-        name
-      }
-    }
-  }
-`;
-const sendMutate = () => {
-  client
-    .mutate({
-      mutation: WAIT_LIST_USER,
-      variables: {
-        email: email,
-        name: name,
-        waitType: type,
-      },
-    })
-    .then((result) => {
-      if (result.data.name !== null) {
-        setResponseMessage(`We'll notify you when our product out`);
-      } 
-      else {
-        setResponseMessage('An error occurred.try again later');
-      }
-    })
-    .catch((error) => {
-      setResponseMessage('An error occurred.try again later');
+const sendMutate = async (e) => {
+  try {
+    const response = await axios.post(endpoint, {
+      query: `
+        mutation {
+          updatePassword(newPassword: "${confirmPassword}", token: "${token}") {
+            success
+          }
+        }
+      `,
     });
+
+    // Handle the response data
+    console.log(response.data.data.updatePassword.success)
+    if(response.data.errors && response.data.errors[0].message === "Token mismatch"){
+      setResponseMessage("Tokens Expired")
+    }
+
+
+    if(response.data.data.updatePassword.success  ===  true){
+     navigate("/login")
+    }
+  
+} catch (error) {
+    // Handle the error
+    console.log(error)
+    setResponseMessage("Email not registered")
+
+  }
 };
+
 
   return (
     <div className={classes.root}>
@@ -108,7 +90,7 @@ const sendMutate = () => {
             {/* Existing code */}
             <div className={classes.formContainer}>
             <Typography variant="body1" className={classes.tagLine}>
-              Reset Password
+              Change your Password
             </Typography>
             <form onSubmit={handleSubmitF}>
             <Typography variant="body1" className={classes.tagLine}>
@@ -122,14 +104,14 @@ const sendMutate = () => {
                       id="password"
                       required
                       placeholder="Password"
-                      onChange={(e) => setEmail(e.target.value)}
+                      onChange={(e) => setPasword(e.target.value)}
                     />
                   </Grid>
                   <Grid item>
                   <TextField
                       className={classes.formField}
                       type={showPassword ? 'text' : 'password'}
-                      id="email"
+                      id="conform_password"
                       required
                       placeholder="Confirm Password"
                       onChange={(e) => setConfirmPassword(e.target.value)}

@@ -3,6 +3,7 @@ from graphene_django import DjangoObjectType
 from graphql import GraphQLError
 
 from django.contrib.auth.hashers import make_password, check_password
+from django.conf import settings
 from botustech.send_mail import SendEmail
 from botustech.models import RegisteredUsers, RedditUrls
 from botustech.models import RedditAccounts
@@ -10,10 +11,14 @@ from botustech.models import RedditAccounts
 from reddit.ui.add_account_widget import AddAccountWidget
 from reddit.reddit_bot_manager import RedditBotManager
 from reddit.base import upvote
+from botustech.Actions.send_email import SendEmail
+from botustech.Actions.tokens import TokensMaker
 
 send_email = SendEmail()
 bot_manager = RedditBotManager()
 add_account = AddAccountWidget(bot_manager)
+token_gen = TokensMaker(settings.SECRET_KEY)
+
 
 
 class UserType(DjangoObjectType):
@@ -48,7 +53,7 @@ class CreateUserMutation(graphene.Mutation):
                 balance=0.00,
                 totalvotes=0, 
                 totalcomments=0,
-                totalspend=0.00,
+                totalspent=0.00,
                 package="None",
                 status="ACTIVE",
 
@@ -226,3 +231,55 @@ class RedditAccountsMutation(graphene.Mutation):
             raise GraphQLError("User doesn't exist")    
        
         return RedditAccountsMutation(accounts=RedditAccounts.objects.all())
+
+class UpdatePasswordMutation(graphene.Mutation):
+    class Arguments:
+        token = graphene.String(required=True)
+        new_password = graphene.String(required=True)
+
+    success = graphene.Boolean()
+
+    @staticmethod
+    def mutate(root, info, token, new_password):
+        try:
+            uid = token_gen.decode_token(token)
+            user = RegisteredUsers.objects.get(id=uid)
+            
+            if not token_gen.decode_token(token):
+                return GraphQLError('Invalid or expired token')
+
+            print(user.email)
+            user.password = make_password(new_password)
+            user.save()
+            success = True
+        
+        except Exception as Error:
+            return GraphQLError('Token mismatch')
+
+        return UpdatePasswordMutation(success=success)
+
+
+class ResetPasswordMutation(graphene.Mutation):
+    class Arguments:
+        email = graphene.String(required=True)
+
+    success = graphene.Boolean()
+
+    @staticmethod
+    def mutate(root, info, email):
+        try:
+            user = RegisteredUsers.objects.get(email=email)
+            token = token_gen.generate_token(user.id)
+            sent = send_email.send_email(email, token)
+            
+            if sent:
+                success = True
+                
+            
+            else:
+                success = False
+
+        except RegisteredUsers.DoesNotExist:
+            return GraphQLError('User with this email does not exist')
+
+        return ResetPasswordMutation(success=success)

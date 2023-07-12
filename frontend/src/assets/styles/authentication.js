@@ -12,6 +12,7 @@ const useStyles = makeStyles((theme) => ({
       background: "black",
     },
   
+
     logo: {
       position: 'absolute',
       //display: "none",
@@ -33,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
       },   
   
       [theme.breakpoints.up("lg")]: {
-        marginTop: "30%",
+        marginTop: "15%",
         marginLeft: "10%"
       },
   
@@ -43,13 +44,13 @@ const useStyles = makeStyles((theme) => ({
       },
   
       [theme.breakpoints.down("md")]: {
-        marginTop: "30%",
+        marginTop: "20%",
         marginLeft: "0%"
       },
   
   
       [theme.breakpoints.down("sm")]: {
-        marginTop: "20%",
+        marginTop: "15%",
         width: "100%",
         marginLeft: "0px"
       },
@@ -119,13 +120,40 @@ const useStyles = makeStyles((theme) => ({
       marginTop: "20%",
       marginLeft: "20px",
       marginBottom: theme.spacing(0),
+
+
+      [theme.breakpoints.down("sm")]: {
+        fontSize: '1.5rem',
+        marginLeft: "50px"
+      },
+
+
+      [theme.breakpoints.up("md")]: {
+        fontSize: '2rem',
+        marginLeft: "15%  "
+      },
+
+      [theme.breakpoints.up("xl")]: {
+        fontSize: '2rem',
+        marginLeft: "4%  "
+      },
     },
   
   
     heroTitle:{
       color: "#E34234",
       marginBottom: theme.spacing(1),
-      marginLeft: "40px"
+      marginLeft: "40px",
+
+      [theme.breakpoints.down("sm")]: {
+        fontSize: '.8rem',
+        marginLeft: "55px"
+      },
+
+      [theme.breakpoints.down("lg")]: {
+        fontSize: '1.rem',
+        marginLeft: "18%  "
+      },
     },
   
     response:{

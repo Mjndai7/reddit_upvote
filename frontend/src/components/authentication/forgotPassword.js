@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import { Card, CardContent, Container, Typography, Grid, Link, TextField} from '@material-ui/core';
-import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
+import axios  from 'axios';
+
 
 import Logo from "../../assets/logo/ref.png"
 import AuthFooter from '../../utils/authFooter';
@@ -9,25 +10,12 @@ import { useNavigate } from 'react-router-dom';
 
 
 const ForgotCard = () => {
-  const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const classes = useStyles();
-  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const type = "Botus Fans"
   const [responseMessage, setResponseMessage] = useState("");
-  const endpoint = "https://botustech.com/graphql"
-  const handleMenuClose = () => {
-    setMenuAnchorEl(null);
-  };
+  const endpoint = "http://localhost:8000/graphql"
+  
 
-  const handleButtonsClick = (link) => {
-    // Add the logic to redirect to the TikTok page
-    window.location.href = link;
-  };
-
-  const handleMenuOpen = (event) => {
-    setMenuAnchorEl(event.currentTarget);
-  };
   const navigate = useNavigate()
  
   const navigateLink = (path) => {
@@ -40,8 +28,9 @@ const ForgotCard = () => {
     // Send the form data to the backend
     // You can access the values using the state variables (name, email, company, message)
     // Perform the necessary actions, such as making an API request, saving to a database, etc.
-    if (name && email ) {
+    if (email) {
       // Process form submission
+      console.log("emal" , email)
       sendMutate();
     } else {
       // Highlight required fields
@@ -49,42 +38,32 @@ const ForgotCard = () => {
     }
   };
 
-  const client = new ApolloClient({
-    
-    uri: endpoint,
-    cache: new InMemoryCache(),
-  });
 
-  const WAIT_LIST_USER = gql`
-  mutation WaitlistUsersMutaion($email: String!, $name: String!, $waitType: String!) {
-    waitlistUsers(email: $email, name: $name, waitType: $waitType) {
-      user {
-        name
-      }
-    }
-  }
-`;
-const sendMutate = () => {
-  client
-    .mutate({
-      mutation: WAIT_LIST_USER,
-      variables: {
-        email: email,
-        name: name,
-        waitType: type,
-      },
-    })
-    .then((result) => {
-      if (result.data.name !== null) {
-        setResponseMessage(`We'll notify you when our product out`);
-      } 
-      else {
-        setResponseMessage('An error occurred.try again later');
-      }
-    })
-    .catch((error) => {
-      setResponseMessage('An error occurred.try again later');
+const sendMutate = async (e) => {
+  try {
+    const response = await axios.post(endpoint, {
+      query: `
+        mutation {
+          resetPassword(email: "${email}") {
+            success
+          }
+        }
+      `,
     });
+
+    // Handle the response data
+    if(response.data.data.resetPassword.success){
+      setResponseMessage("Activation Email sent.")
+    }
+  
+    if(response.data.errors){
+    setResponseMessage("Email not registered")
+  }
+  
+} catch (error) {
+    // Handle the error
+    setResponseMessage("Email not registered")
+  }
 };
 
   return (

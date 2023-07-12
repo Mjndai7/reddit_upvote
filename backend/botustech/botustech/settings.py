@@ -170,3 +170,4 @@ SUBSCRIPTION_FAILED_URL = 'http://localhost:3000/subscriptionsfailed/'
 #celery
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+FRONTEND_URL = "http://localhost:3000"

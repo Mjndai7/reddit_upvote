@@ -39,6 +39,7 @@ const RegisterPage = () => {
 
     e.preventDefault();
     const isEmailValid = isValidEmail(email);
+    setResponseMessage("Passwords do not match.")
 
     if (password === confirmPassword && isEmailValid) {
       // Passwords match
@@ -73,7 +74,7 @@ const RegisterPage = () => {
     }
 
     else{
-      {isValidEmail ? setResponseMessage("Use a valid Email") : setResponseMessage("Passwords do not match.")}
+      {isValidEmail === true ?  setResponseMessage("Passwords do not match.") :  setResponseMessage("Use a valid Email")}
     }
   };
 
