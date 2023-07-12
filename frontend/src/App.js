@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState, useEffect}from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./components/Home";
 import Admin from "./components/admin";
@@ -11,14 +11,21 @@ import ActivationPage from "./components/authentication/activateUser";
 
 const App = () => {
   const [isAdmin, setIsAdmin] = useState(false);
-  
+
+  useEffect(() => {
+    const checkAdmin = () => {
+      const adminValue = localStorage.getItem("User");
+      setIsAdmin(adminValue === "True");
+    };
+
+    checkAdmin();
+  }, []);
 
   return (
     <Router>
       <Routes>
-       {console.log(isAdmin)}
         {isAdmin ? (
-          <Route element={<PrivateRoutes setIsAdmin={setIsAdmin}/>}>
+          <Route element={<PrivateRoutes />}>
             <Route path="/" element={<Admin />} />
             <Route path="/users" element={<Admin />} />
             <Route path="/accounts" element={<Admin />} />
@@ -28,16 +35,15 @@ const App = () => {
           </Route>
         ) : 
         (
-          <Route element={<PrivateRoutes  setIsAdmin={setIsAdmin}/>}>
+          <Route element={<PrivateRoutes  />}>
             <Route path="/" element={<Home />} />
             <Route path="*" element={<Home />} />
-            <Route path="/upvote" element={<Home />} />
-            <Route path="/comment" element={<Home />} />
+            <Route path="/upvote" element={<Home />} /> 
             <Route path="/profile" element={<Home />} />
           </Route>
         )
         }
-        <Route element={<LoginPage setIsAdmin={setIsAdmin} />} path="/login" />
+        <Route element={<LoginPage  />} path="/login" />
         <Route element={<RegisterPage />} path="/register" />
         <Route element={<ActivationPage />} path="/activate/:uid/:token"/>
         <Route element={<ForgotCard />} path="/forgot-password" />

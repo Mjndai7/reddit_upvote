@@ -189,10 +189,10 @@ const UserCard = () => {
                 <Typography className={classes.cardTitle} variant="text" style={{marginTop: "20px"}}> {data ? data.length : 0} Availeble Users</Typography>
                   <TableCell className={classes.tableHeaderCell1}>ID</TableCell>
                   <TableCell className={classes.tableHeaderCell1}>Email</TableCell>
+                  <TableCell className={classes.tableHeaderCell1}>Spent</TableCell>
                   <TableCell className={classes.tableHeaderCell1}>Upvotes</TableCell>
                   <TableCell className={classes.tableHeaderCell1}>Comments</TableCell>
                   <TableCell className={classes.tableHeaderCell1}>Status</TableCell>
-                  <TableCell className={classes.tableHeaderCell1}>Spent</TableCell>
                   <TableCell className={classes.tableHeaderCell1}>Created</TableCell>
                 </TableRow>
                 </Card>
@@ -204,12 +204,12 @@ const UserCard = () => {
                       <TableRow style={{ width: "100%"}}>
                         <TableCell className={classes.tableHeaderCell} >{index + 1}</TableCell>
                         <TableCell 
-                        className={classes.tableHeaderCell}>{item.email}</TableCell>
-                        <TableCell className={classes.tableHeaderCell}>{item.totalvotes}</TableCell>
+                        className={classes.tableHeaderCell} >{item.email.split("@")[0]}</TableCell>
+                        <TableCell className={classes.tableHeaderCell}>{"$" + item.totalspent}</TableCell>
+                        <TableCell className={classes.tableHeaderCell} >{item.totalvotes}</TableCell>
                         <TableCell className={classes.tableHeaderCell} >{item.totalcomments}</TableCell>
                         <TableCell className={classes.tableHeaderCell} >{item.status}</TableCell>
-                        <TableCell className={classes.tableHeaderCell} >{"$" + item.totalspent}</TableCell>
-                        <TableCell className={classes.tableHeaderCell}>{item.dateCreated}</TableCell>
+                        <TableCell className={classes.tableHeaderCell}>{item.dateCreated.substring(0, 10)}</TableCell>
                       </TableRow>
                   </Card>
                 ))}

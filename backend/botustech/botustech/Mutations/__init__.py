@@ -105,6 +105,30 @@ class GetUsersMutation(graphene.Mutation):
             raise GraphQLError("User doesn't exist")
         
         return GetUsersMutation(users=users_data)
+
+class AddUserMutation(graphene.Mutation):
+    success = graphene.String()
+
+    class Arguments:
+        email = graphene.String(required=True)
+        admin_email = graphene.String(required=True)
+    
+    def mutate(self, info, email, admin_email):
+
+        try:
+            admin_user = RegisteredUsers.objects.get(email=admin_email)
+            if admin_user.isadmin == "True":
+                user = RegisteredUsers.objects.get(email=email)
+                user.package = "FREE"
+                user.save()
+
+            else:
+                return AddUserMutation(success="failed") 
+
+        except RegisteredUsers.DoesNotExist:
+            raise GraphQLError("User doesn't exist")
+        
+        return AddUserMutation(success="success")
     
 class UrlsMutation(graphene.Mutation):
     url = graphene.Field(UrlsType)
@@ -161,7 +185,7 @@ class StartOrderMutation(graphene.Mutation):
                 user_balance = user.balance
                 user_package = user.package
 
-                if not bool(user.isadmin) and float(user_balance) <= 0.00 or user_package == "None":
+                if not bool(user.isadmin) or user_package != "FREE" and float(user_balance) <= 0.00 or user_package == "None":
                     message = "Insuficient Balance"
                     return StartOrderMutation(urls=_urls, message=message)
                 
@@ -171,27 +195,36 @@ class StartOrderMutation(graphene.Mutation):
                     if url.action == "upvotes" and user_package != "None":
                         current_stutus = "UPVOTING"
                         url.status = current_stutus
+                        url.save()
                         count , status, balance = upvote(url.url, int(url.speed) , int(url.number), float(user_package), float(user_balance))
                         url.status = status
                         user.totalvotes = int(user.totalvotes) +  int(count)
                         user.balance = balance
+                        user.save()
+                        url.save()
 
 
                     elif url.action == "downvoes" and user_package != "None":
                         current_stutus = "DOWNOTING"
                         url.status = current_stutus
+                        url.save()
                         count , status, balance = upvote(url.url, int(url.speed) , int(url.number), float(user_package), float(user_balance))
                         url.status = status
                         user.totalvotes = int(user.totalvotes) +  int(count)
                         user.balance = balance
+                        user.save()
+                        url.save()
         
                     elif url.action == "comments" and user_package != "None":
                         current_stutus = "COMMENTING"
                         url.status = current_stutus
+                        url.save()
                         count , status, balance = upvote(url.url, int(url.speed) , int(url.number), float(user_package), float(user_balance))
                         url.status = status
                         user.totalvotes = int(user.totalvotes) +  int(count)
                         user.balance = balance
+                        user.save()
+                        url.save()
 
                     else:
                         message = "Insuficient Balance"

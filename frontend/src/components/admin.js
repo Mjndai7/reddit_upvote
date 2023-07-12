@@ -241,7 +241,7 @@ const Admin = () => {
   const [open, setOpen] = useState(false)
   const [open1, setOpen1] = useState(false)
   const [open2, setOpen2] = useState(false)
-  const username = "Developer"
+  const username = localStorage.getItem("Name")
   const title = "Admin."
 
   const classes = useStyles(open1);
@@ -254,6 +254,9 @@ const Admin = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('Email');
+    localStorage.removeItem('Name');
+    localStorage.setItem('User', "False");
+    localStorage.removeItem('Balance');
     navigate("/login")
     // Perform any additional logout actions here
   };

@@ -114,7 +114,7 @@ const AuthFooter = () => {
 
   return (
     <footer className={classes.footer}>
-        <a href="https://example.com" target="_blank" rel="noopener noreferrer">
+        <a href="https://botustech.com/" target="_blank" rel="noopener noreferrer">
           <img src={Logo} className={classes.logo} alt="Botus Tech" />
         </a>
       <div className={classes.footerContent}>
@@ -123,13 +123,13 @@ const AuthFooter = () => {
           <div className={classes.footerLinks}>
 
             <Grid container direction="row">
-            <a className={classes.link} href="https://botustech.com/terms">
+            <a className={classes.link} href="/">
             <Typography>Terms of Use</Typography>
           </a>
           <Typography className={classes.from}>
             and
           </Typography>
-          <a className={classes.link} href="https://botustech.com/privacy">
+          <a className={classes.link} href="/">
             <Typography>Privacy Policy</Typography>
           </a>
             </Grid>

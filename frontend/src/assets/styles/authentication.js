@@ -78,7 +78,6 @@ const useStyles = makeStyles((theme) => ({
       border: 0,
       borderRadius: "10px",
       marginLeft: "-10px",
-      border: "none",
       backgroundColor: "#0D1321",
       '& input::selection, & textarea::selection': {
         background: 'transparent',
@@ -127,6 +126,10 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: "50px"
       },
 
+      [theme.breakpoints.down("xs")]: {
+        fontSize: '1.5rem',
+        marginLeft: "30px"
+      },
 
       [theme.breakpoints.up("md")]: {
         fontSize: '2rem',
@@ -145,8 +148,10 @@ const useStyles = makeStyles((theme) => ({
       marginBottom: theme.spacing(1),
       marginLeft: "40px",
 
+
+
       [theme.breakpoints.down("sm")]: {
-        fontSize: '.8rem',
+        fontSize: '.7rem',
         marginLeft: "55px"
       },
 
@@ -161,7 +166,7 @@ const useStyles = makeStyles((theme) => ({
       marginBottom: theme.spacing(1),
       alignContent: "center",
       justifyContent: "center",
-      marginLeft: "20%",
+      marginLeft: "8%",
       fontSize: ".8rem"
     },
   
@@ -186,7 +191,8 @@ const useStyles = makeStyles((theme) => ({
       },  
       
       [theme.breakpoints.down("sm")]: {
-        marginLeft: "15px" // Stack cards vertically
+        marginLeft: "20px", // Stack cards vertically
+        marginRight: "20px"
         
       },  
     },

@@ -8,7 +8,8 @@ import useStyles from '../../assets/styles/authentication';
 import axios from 'axios';
 
 
-const LoginPage = ({setIsAdmin}) => {
+
+const LoginPage = () => {
 
   const classes = useStyles();
   const [email, setEmail] = useState('');
@@ -47,18 +48,9 @@ const LoginPage = ({setIsAdmin}) => {
           localStorage.setItem("Email", email)
           localStorage.setItem("Name", response.data.data.loginUser.user.name)
           localStorage.setItem("Balance", response.data.data.loginUser.user.balance)
-          
-          
-          if(response.data.data.loginUser.user.isadmin === "True"){
-            setIsAdmin(true)
-            navigate("/")
-            
-          }
-          else{
-            setIsAdmin(false)
-            navigate("/")
-            
-          }
+          localStorage.setItem("User", response.data.data.loginUser.user.isadmin)
+          console.log(typeof(response.data.data.loginUser.user.isadmin))
+          navigate("/")
         }
         if(response.data.errors){
         setResponseMessage("Credntials do not match!")
@@ -69,8 +61,6 @@ const LoginPage = ({setIsAdmin}) => {
         setResponseMessage("Credntials do not match!")
     }
   };
-
- 
 
   return (
     <div className={classes.root}>

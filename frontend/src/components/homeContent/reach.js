@@ -86,8 +86,8 @@ const Contacts = ({urls, setUrls}) => {
                   <TableCell className={classes.tableHeaderCell1}>URL</TableCell>
                   <TableCell className={classes.tableHeaderCell1}>Action</TableCell>
                   <TableCell className={classes.tableHeaderCell1}>Speed</TableCell>
-                  <TableCell className={classes.tableHeaderCell1}>Status</TableCell>
                   <TableCell className={classes.tableHeaderCell1}>Cost</TableCell>
+                  <TableCell className={classes.tableHeaderCell1}>Status</TableCell>
                   <TableCell className={classes.tableHeaderCell1}>Created</TableCell>
                 </TableRow>
                 </Card>
@@ -102,9 +102,9 @@ const Contacts = ({urls, setUrls}) => {
                         className={classes.tableHeaderCell}>{shortenUrl(item.url)}</TableCell>
                         <TableCell className={classes.tableHeaderCell}>{item.action}</TableCell>
                         <TableCell className={classes.tableHeaderCell} >{item.speed}</TableCell>
-                        <TableCell className={classes.tableHeaderCell} >{item.status}</TableCell>
                         <TableCell className={classes.tableHeaderCell} >{"$" + item.cost}</TableCell>
-                        <TableCell className={classes.tableHeaderCell}>{item.dateCreated}</TableCell>
+                        <TableCell className={classes.tableHeaderCell} >{item.status}</TableCell>
+                        <TableCell className={classes.tableHeaderCell}>{item.dateCreated.substring(0, 10)}</TableCell>
                       </TableRow>
                   </Card>
                 ))}

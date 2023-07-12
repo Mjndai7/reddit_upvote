@@ -202,12 +202,12 @@ const AccCard = () => {
                       <TableRow style={{ width: "100%"}}>
                         <TableCell className={classes.tableHeaderCell} >{index + 1}</TableCell>
                         <TableCell 
-                        className={classes.tableHeaderCell}>{item.proxies}</TableCell>
+                        className={classes.tableHeaderCell}>{item.proxies.substring(0, 20)}</TableCell>
                         <TableCell className={classes.tableHeaderCell}>{item.name}</TableCell>
                         <TableCell className={classes.tableHeaderCell} >{item.voted}</TableCell>
                         <TableCell className={classes.tableHeaderCell} >{item.commented}</TableCell>
                         <TableCell className={classes.tableHeaderCell} >{item.status}</TableCell>
-                        <TableCell className={classes.tableHeaderCell}>{item.dateCreated}</TableCell>
+                        <TableCell className={classes.tableHeaderCell}>{item.dateCreated.substring(0, 10)}</TableCell>
                       </TableRow>
                   </Card>
                 ))}

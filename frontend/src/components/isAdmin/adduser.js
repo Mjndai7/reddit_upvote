@@ -6,12 +6,13 @@ import {
   Typography,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
+import axios from 'axios';
 
+
+import AlertBarner from '../../utils/barner';
 
 const useStyles = makeStyles((theme) => ({
   dialog: {
-    backdropFilter: 'blur(200px)',
     backgroundColor: '#171E2E',
     boxShadow: 'none',
     borderRadius: "5px",
@@ -142,8 +143,11 @@ const useStyles = makeStyles((theme) => ({
 const AddUser = ({onClose, isOpen}) => {
   const classes = useStyles();
   const [email, setEmail] = useState('');
+  const [open, setOpen] = useState(false)
+  const [message, setMessage] = useState('')
+  const adminEmail = localStorage.getItem("Email")
   const [responseMessage, setResponseMessage] = useState("");
-  const endpoint = "https://botustech.com/graphql"
+  const endpoint = "http://localhost:8000/graphql"
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -153,54 +157,41 @@ const AddUser = ({onClose, isOpen}) => {
     if (email ) {
       // Process form submission
       onClose()
-      sendMutate(); // Set formSubmitted state to true after successful submission
+      addUser(); // Set formSubmitted state to true after successful submission
     } else {
       // Highlight required fields
       setResponseMessage('All fields are required!');
     }
   };
 
-
-  const client = new ApolloClient({
-    
-    uri: endpoint,
-    cache: new InMemoryCache(),
-  });
-
-  const WAIT_LIST_USER = gql`
-  mutation WaitlistUsersMutaion($email: String!, $name: String!, $waitType: String!) {
-    waitlistUsers(email: $email, name: $name, waitType: $waitType) {
-      user {
-        name
-      }
-    }
+  const closeAlert = () => {
+    setOpen(false)
   }
-`;
-const sendMutate = () => {
-  client
-    .mutate({
-      mutation: WAIT_LIST_USER,
-      variables: {
-        email: email,
-      },
-    })
-    .then((result) => {
-      if (result.data.name !== null) {
-        setResponseMessage(`We'll notify you when our product out`);
-      } 
-      else {
-        setResponseMessage('An error occurred.try again later');
-      }
-    })
-    .catch((error) => {
-      setResponseMessage('An error occurred.try again later');
-    });
-    };
 
-    
+
+  const addUser = async (e) => {
+    try {
+      const response = await axios.post(endpoint, {
+        query: `
+          mutation {
+            addUser(email: "${email}", adminEmail: "${adminEmail}",) {
+              success 
+            }
+          }
+        `,
+      });
+      console.log(response.data.data.addUser.success)
+      setMessage("User Added")
+      setOpen(true)
+  } catch (error) {
+    setMessage("Error!")
+  }
+};
+
 
   return (
     <>
+    <AlertBarner onClose={closeAlert} isOpen={open} message={message} />
       <Dialog
         open={isOpen}
         onClose={onClose}
@@ -221,7 +212,7 @@ const sendMutate = () => {
             className={classes.input}
             />
             <button onClick={handleSubmit} className={classes.button}>
-              Authentica User
+              Authenticate User
           </button>
           </form>
         </DialogContent>

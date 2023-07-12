@@ -8,10 +8,11 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import axios from 'axios';
 
+import AlertBarner from '../../utils/barner';
+
 
 const useStyles = makeStyles((theme) => ({
   dialog: {
-    backdropFilter: 'blur(200px)',
     backgroundColor: '#171E2E',
     boxShadow: 'none',
     borderRadius: "5px",
@@ -143,6 +144,8 @@ const useStyles = makeStyles((theme) => ({
 const AddAccount = ({onClose, isOpen}) => {
   const classes = useStyles();
   const [username, setUsername] = useState('');
+  const [open, setOpen] = useState(false)
+  const [message, setMessage] = useState('')
   const email = localStorage.getItem("Email")
   const [proxies, setPorxies] = useState('')
   const [responseMessage, setResponseMessage] = useState("");
@@ -165,6 +168,9 @@ const AddAccount = ({onClose, isOpen}) => {
       setResponseMessage('All fields are required!');
     }
   };
+  const closeAlert = () => {
+    setOpen(false)
+  }
 
 
   const getAccounts = async (e) => {
@@ -182,13 +188,18 @@ const AddAccount = ({onClose, isOpen}) => {
         `,
       });
       console.log(response)
-  } catch (error) {
-    console.log(error)
+      setMessage("Activate Account")
+      setOpen(true)
+  } 
+  catch (error) {
+    setMessage("Error in Account!")
+    setOpen(true)
   }
 };
 
   return (
     <>
+     <AlertBarner onClose={closeAlert} isOpen={open} message={message} />
       <Dialog
         open={isOpen}
         onClose={onClose}

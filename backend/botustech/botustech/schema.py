@@ -6,6 +6,7 @@ from .Mutations import UrlsMutation, StartOrderMutation
 from .Mutations import GetUsersMutation, RedditAccountsMutation
 from .Mutations import ResetPasswordMutation
 from .Mutations import UpdatePasswordMutation
+from .Mutations import AddUserMutation
 
 
 class Query(graphene.ObjectType):
@@ -50,6 +51,11 @@ class Query(graphene.ObjectType):
         mutation = ResetPasswordMutation()
         result = mutation.mutate(info, email)
         return result.success
+    
+    def resolve_add_user(self, info, email,admin_email):
+        mutation = AddUserMutation()
+        result = mutation.mutate(info, email, admin_email)
+        return result.success
 
 class Mutation(graphene.ObjectType):
     create_users  = CreateUserMutation.Field()
@@ -60,6 +66,7 @@ class Mutation(graphene.ObjectType):
     get_accounts  = RedditAccountsMutation.Field()
     update_password = UpdatePasswordMutation.Field()
     reset_password = ResetPasswordMutation.Field()
+    add_user = AddUserMutation.Field()
 
 
 schema = graphene.Schema(query=Query, mutation=Mutation)
