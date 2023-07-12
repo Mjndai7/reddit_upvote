@@ -70,42 +70,45 @@ const ContactFormCard = ({setGlobalUrls}) => {
       setSpeed('');
     };
 
-
+    console.log(urls)
     const startVotes = async (e) => {
       //send data to the api to start voting
       //return the url as they are being processed
       //also clear the url list when data is sent to the backend
       try {
-        const response = await axios.post(endpoint, {
-          query: `
-            mutation {
-              startOrder(email: "${email}", urls: "${urls}") {
-                urls {
-                  dateCreated
-                  status
-                  url
-                  action
-                  speed
-                  cost
-                  number
+        console.log("urls: ", urls)
+        if (urls.length > 0){ 
+          const response = await axios.post(endpoint, {
+            query: `
+              mutation {
+                startOrder(email: "${email}", urls: "${urls}") {
+                  urls {
+                    dateCreated
+                    status
+                    url
+                    action
+                    speed
+                    cost
+                    number
+                  }
+                  message
                 }
               }
-            }
-          `,
-        });
+            `,
+          });
+    
+        // Handle the response data
+        console.log(response)
+        if(response.data.data.startOrder){
+          setGlobalUrls(response.data.data.startOrder.urls)
+          setUrls([])
   
-      // Handle the response data
-      console.log(response)
-      if(response.data.data.startOrder){
-        setGlobalUrls(response.data.data.startOrder.urls)
-        setUrls([])
-
+        }
       }
-      
-    } catch (error) {
-      console.log(error)
-    }
-  };
+      } catch (error) {
+        console.log(error)
+      }
+    };
 
     const clearList = () => {
       //send data to the api to start voting

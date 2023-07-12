@@ -7,15 +7,14 @@ from botustech.send_mail import SendEmail
 from botustech.models import RegisteredUsers, RedditUrls
 from botustech.models import RedditAccounts
 
-
 from reddit.ui.add_account_widget import AddAccountWidget
 from reddit.reddit_bot_manager import RedditBotManager
-
-
+from reddit.base import upvote
 
 send_email = SendEmail()
 bot_manager = RedditBotManager()
 add_account = AddAccountWidget(bot_manager)
+
 
 class UserType(DjangoObjectType):
     class Meta:
@@ -28,7 +27,6 @@ class UrlsType(DjangoObjectType):
 class AccountsType(DjangoObjectType):
     class Meta:
         model = RedditAccounts
-
 
 class CreateUserMutation(graphene.Mutation):
     user = graphene.Field(UserType)
@@ -62,7 +60,6 @@ class CreateUserMutation(graphene.Mutation):
             raise GraphQLError(str(error))
         
         return CreateUserMutation(user=user)
-
 
 class LoginUserMutation(graphene.Mutation):
     user = graphene.Field(UserType)
@@ -103,9 +100,7 @@ class GetUsersMutation(graphene.Mutation):
             raise GraphQLError("User doesn't exist")
         
         return GetUsersMutation(users=users_data)
-       
-
-
+    
 class UrlsMutation(graphene.Mutation):
     url = graphene.Field(UrlsType)
     
@@ -139,14 +134,14 @@ class UrlsMutation(graphene.Mutation):
 
 class StartOrderMutation(graphene.Mutation):
     urls = graphene.List(UrlsType)
+    message = graphene.String()
     
     class Arguments:
        urls = graphene.List(graphene.String, required=True)
        email = graphene.String(graphene.String, required=True)
         
+    def mutate(self, info, urls, email):    
         
-    def mutate(self, info, urls, email):
-
         try:
             user = RegisteredUsers.objects.get(email=email)
             urls_data = []
@@ -156,12 +151,53 @@ class StartOrderMutation(graphene.Mutation):
                 urls_data.extend(reddit_urls)
 
             _urls.extend(RedditUrls.objects.filter(user=user))
+            if len(url) > 0:
+                #we are using price per votes as the package 
+                user_balance = user.balance
+                user_package = user.package
 
+                if not bool(user.isadmin) and float(user_balance) <= 0.00 or user_package == "None":
+                    message = "Insuficient Balance"
+                    return StartOrderMutation(urls=_urls, message=message)
+                
+                #check is the user has abiliy to execute the action
+                for url in urls_data:
+
+                    if url.action == "upvotes" and user_package != "None":
+                        current_stutus = "UPVOTING"
+                        url.status = current_stutus
+                        count , status, balance = upvote(url.url, int(url.speed) , int(url.number), float(user_package), float(user_balance))
+                        url.status = status
+                        user.totalvotes = int(user.totalvotes) +  int(count)
+                        user.balance = balance
+
+
+                    elif url.action == "downvoes" and user_package != "None":
+                        current_stutus = "DOWNOTING"
+                        url.status = current_stutus
+                        count , status, balance = upvote(url.url, int(url.speed) , int(url.number), float(user_package), float(user_balance))
+                        url.status = status
+                        user.totalvotes = int(user.totalvotes) +  int(count)
+                        user.balance = balance
+        
+                    elif url.action == "comments" and user_package != "None":
+                        current_stutus = "COMMENTING"
+                        url.status = current_stutus
+                        count , status, balance = upvote(url.url, int(url.speed) , int(url.number), float(user_package), float(user_balance))
+                        url.status = status
+                        user.totalvotes = int(user.totalvotes) +  int(count)
+                        user.balance = balance
+
+                    else:
+                        message = "Insuficient Balance"
+                        return StartOrderMutation(urls=_urls, message=message)
+                    
+        
         except RegisteredUsers.DoesNotExist:
             raise GraphQLError("User doesn't exist")
-       
-        return StartOrderMutation(urls=_urls)
 
+        message = "Success"
+        return StartOrderMutation(urls=_urls, message=message)
 
 class RedditAccountsMutation(graphene.Mutation):
     accounts = graphene.List(AccountsType)
@@ -183,9 +219,9 @@ class RedditAccountsMutation(graphene.Mutation):
                     commented=0,
                     status="ACTIVE",
                 )
-            user_angent = "Mozilla/5.0 (X11; Linux aarch64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.188 Safari/537.36 CrKey/1.54.250320"
-            add_account.add_account(name, proxies, user_angent)
-            
+                user_angent = "Mozilla/5.0 (X11; Linux aarch64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.188 Safari/537.36 CrKey/1.54.250320"
+                add_account.add_account(name, proxies, user_angent)
+
         except RegisteredUsers.DoesNotExist:
             raise GraphQLError("User doesn't exist")    
        
