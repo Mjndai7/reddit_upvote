@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -12,12 +12,19 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
     boxShadow: "none",
     background: "none",
-    marginTop: "50px",
+    marginTop: "10px",
     padding: "10px",
     marginBottom: "10px",
 
     [theme.breakpoints.down("sm")]: {
       flexDirection: "column", // Stack cards vertically
+      
+    },  
+
+    [theme.breakpoints.up("xl")]: {
+      marginLeft: "-200px",
+      width: "100%",
+      marginTop: "40px"
       
     },  
   },
@@ -34,6 +41,11 @@ const useStyles = makeStyles((theme) => ({
     "&:hover": {
       border: "2px solid #E34234"
     },
+
+
+    [theme.breakpoints.up("xl")]: {
+      marginLeft: "0px"
+    },  
 
   },
   packageName: {
@@ -76,7 +88,13 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
     cursor: 'pointer',
     justifyContent: "left",
-    marginRight: "90%"
+    marginRight: "90%",
+
+    [theme.breakpoints.up("xl")]: {
+      width : "50px",
+      marginRight: 0
+    },  
+
     
   }
 }));
@@ -88,8 +106,8 @@ const Packages = ({setView}) => {
     setView("profile")
   }
 
-  const handleClick = () => {
-    window.open("https://buy.stripe.com/test_6oE28DfHW0c4772aEG", '_blank');
+  const handleClick = (url) => {
+    window.open(url, '_blank');
   };
 
   const stripe_key = "pk_test_51Lc84CDTMi1SAp13sTQneXvANuJIBXWOnOBylf40E6Divd7OAjYN8uPVf3z1aL5c2637Qb5liWacPUfKLFBLC6Qq00nGGHipZG"
@@ -119,7 +137,7 @@ const Packages = ({setView}) => {
   return (
     <Grid container spacing={3} className={classes.cardContainer}>
       <BiArrowBack className={classes.icon} onClick={handleChange}/>
-      <Grid item xs={12} sm={4} lg={3} className={classes.gridContainer}>
+      <Grid item xs={12} sm={4} lg={3} xl={2} className={classes.gridContainer}>
         <div className={classes.packageContainer}>
           <Typography variant="h5" className={classes.packageName}>
             $20.00
@@ -137,7 +155,7 @@ const Packages = ({setView}) => {
             variant="contained"
             color="primary"
             className={classes.paymentButton}
-            onClick={handleClick}
+            onClick={() => handleClick("https://buy.stripe.com/test_6oE28DfHW0c4772aEG")}
           >
             Pay with Card
           </Button>
@@ -150,7 +168,7 @@ const Packages = ({setView}) => {
           </Button>
         </div>
       </Grid>
-      <Grid item xs={12} sm={4} lg={3}>
+      <Grid item xs={12} sm={4} lg={3} xl={2}>
         <div className={classes.packageContainer}>
         <Typography variant="h5" className={classes.packageName}>
             $50.00
@@ -168,6 +186,7 @@ const Packages = ({setView}) => {
             variant="contained"
             color="primary"
             className={classes.paymentButton}
+            onClick={() => handleClick("https://buy.stripe.com/test_4gweVp0N22kc3UQ5kn")}
           >
             Pay with Card
           </Button>
@@ -180,7 +199,7 @@ const Packages = ({setView}) => {
           </Button>
         </div>
       </Grid>
-      <Grid item xs={12} sm={4} lg={3}>
+      <Grid item xs={12} sm={4} lg={3} xl={2}>
         <div className={classes.packageContainer} style={{border: "2px solid #E34234"}}>
         <Typography variant="h5" className={classes.packageName}>
             $100.00
@@ -198,6 +217,7 @@ const Packages = ({setView}) => {
             variant="contained"
             color="primary"
             className={classes.paymentButton}
+            onClick={() => handleClick("https://buy.stripe.com/test_dR6dRldzOcYQ77228c")}
           >
             Pay with Card
           </Button>
@@ -210,7 +230,7 @@ const Packages = ({setView}) => {
           </Button>
         </div>
       </Grid>
-      <Grid item xs={12} sm={4} lg={3}>
+      <Grid item xs={12} sm={4} lg={3} xl={2}>
         <div className={classes.packageContainer}>
         <Typography variant="h5" className={classes.packageName}>
             $250.00
@@ -228,6 +248,7 @@ const Packages = ({setView}) => {
             variant="contained"
             color="primary"
             className={classes.paymentButton}
+            onClick={() => handleClick("https://buy.stripe.com/test_fZeaF9brGcYQ9fa005")}
           >
             Pay with Card
           </Button>

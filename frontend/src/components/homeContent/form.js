@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { FormControl,  Select, Card, CardContent, Typography, TextField, Grid} from "@material-ui/core";
+import { FormControl,  Select, Card, CardContent, Typography, Grid} from "@material-ui/core";
 import useStyles from "../../assets/styles/upvotesection";
 import axios from "axios";
 

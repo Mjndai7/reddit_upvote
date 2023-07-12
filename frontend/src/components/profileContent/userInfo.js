@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { Card, CardContent, Typography, Grid} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -160,6 +160,23 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "-14px",
     marginBottom: "-14px",
     borderRadius: "10px",
+  },
+
+  input: {
+    width: '100%',
+    background: "#0D1321",
+    color: "#7F8183",
+    height: "25px",
+    border: "none",
+    padding: theme.spacing(1),
+    borderRadius: theme.spacing(0.5),
+    outline: "none",
+    fontFamily: "Lato",
+
+
+    [theme.breakpoints.down("xl")]: {
+      width: "98%"
+    },
   }
 }));
 
@@ -171,6 +188,48 @@ const UserInfo = ({view, setView}) => {
   const handleChange = () => {
     setView("packages")
   }
+
+
+  const [baseAmount, setBaseAmount] = useState(1);
+  const [baseCurrency, setBaseCurrency] = useState('USD');
+  const [targetCurrency, setTargetCurrency] = useState('EUR');
+  const [conversionRate, setConversionRate] = useState(null);
+  const [convertedAmount, setConvertedAmount] = useState(null);
+  
+  useEffect(() => {
+    const fetchConversionRate = async () => {
+      try {
+        const response = await fetch(
+          `https://api.exchangerate-api.com/v4/latest/${baseCurrency}`
+        );
+        const data = await response.json();
+        setConversionRate(data.rates[targetCurrency]);
+      } catch (error) {
+        console.error('Error fetching conversion rate:', error);
+      }
+    };
+
+    fetchConversionRate();
+  }, [baseCurrency, targetCurrency]);
+
+  useEffect(() => {
+    if (conversionRate) {
+      setConvertedAmount(baseAmount * conversionRate);
+    }
+  }, [baseAmount, conversionRate]);
+
+  const handleBaseAmountChange = (e) => {
+    setBaseAmount(parseFloat(e.target.value));
+  };
+
+  const handleBaseCurrencyChange = (e) => {
+    setBaseCurrency(e.target.value);
+  };
+
+  const handleTargetCurrencyChange = (e) => {
+    setTargetCurrency(e.target.value);
+  };
+
   return (
     <div className={classes.cardContainer}>
       <Card className={classes.card}>
@@ -219,20 +278,53 @@ const UserInfo = ({view, setView}) => {
           <Grid container direction="column" className={classes.gridContainer}>
             <Card className={classes.Usercard}>
               <Grid item container justifyContent="space-between" alignItems="flex-end">
-                <Grid item className={classes.userItems}>From</Grid>
-                <Grid item className={classes.userItems}>50 USD</Grid>
+                <Grid item className={classes.userItems}>
+                <input
+                    type="number"
+                    id="baseAmount"
+                    className={classes.in}
+                    style={{background: "none", paddingTop: "-20px", 
+                    outline: "none", border: "none", height: "10px", color:"#7F8183"}}
+                    value={baseAmount}
+                    onChange={handleBaseAmountChange}
+                  />
+                </Grid>
+                <Grid item className={classes.userItems} style={{paddingTop: "-10px", background: "none"}}>
+                <label htmlFor="baseCurrency" >From:</label>
+                  <select id="baseCurrency" value={baseCurrency} onChange={handleBaseCurrencyChange}
+                   style={{background: "none", outline: "none", border: "none", color: "#E34234"}}>
+                    <option value="USD">USD</option>
+                    <option value="EUR">EUR</option>
+                    <option value="GBP">GBP</option>
+                    {/* Add more currency options as needed */}
+                  </select>
+                </Grid>
               </Grid>
             </Card>
             <MdOutlineSwapVert className={classes.swap}/>
             <Card className={classes.Usercard}>
               <Grid item container justifyContent="space-between" alignItems="flex-end">
-                <Grid item className={classes.userItems}>To</Grid>
-                <Grid item className={classes.userItems}>4,099 INDIAN RUPEES</Grid>
+                <Grid item className={classes.userItems}>
+                <label htmlFor="targetCurrency">To:</label>
+                <select id="targetCurrency" value={targetCurrency} onChange={handleTargetCurrencyChange}
+                style={{marginTop: "-20px", background: "none", outline: "none", border: "none", color: "#E34234"}}>
+                  <option value="USD">USD</option>
+                  <option value="EUR">EUR</option>
+                  <option value="GBP">GBP</option>
+                  <option value="KES">KES</option>
+                  {/* Add more currency options as needed */}
+                </select>
+                </Grid>
               </Grid>
             </Card> 
             </Grid>
-            <button onClick={setView} className={classes.button}>
-                Convert Currency
+            <button onClick={setView} className={classes.button} >
+          
+                {conversionRate && (
+                    <p style={{marginTop: "5px"}}>
+                      {baseAmount} {baseCurrency} = {convertedAmount} {targetCurrency}
+                    </p>
+                  )}
               </button>
         </CardContent>
       </Card>

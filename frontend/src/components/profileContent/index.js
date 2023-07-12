@@ -59,11 +59,46 @@ const useStyles = makeStyles((theme) => ({
       with: "100%",
     },
 
+    
     [theme.breakpoints.down("sm")]: {
       height: "200px",
       with: "100%",
     },
+
+  [theme.breakpoints.up("xl")]: {
+    height: "490px",
+    width: "100%",
   },
+},
+
+card4: {
+  // ...existing styles
+  // Adjust the card width and height as needed
+  width: "95%",
+  height: "500px",
+  background: "#171E2E",
+  paddingRight: "100px",
+  paddingLeft: "100px",
+
+  [theme.breakpoints.down("lg")]: {
+    height: "280px",
+    with: "100%",
+  },
+
+  
+  [theme.breakpoints.down("sm")]: {
+    height: "200px",
+    with: "100%",
+  },
+
+[theme.breakpoints.up("xl")]: {
+  height: "490px",
+  width: "70%",
+  marginLeft : "-200px"
+},
+
+},
+
  
 }));
 
@@ -85,7 +120,7 @@ const ProfileCard = () => {
     <div className={classes.container}>
         {view === "profile"  ? <UserInfo view={view} setView={setView} /> : <Packages setView={setView}/>}
         <div className={classes.cardContainer}>
-        <Card className={classes.card3}>
+        <Card className={view === "profile" ? classes.card3 : classes.card4}>
             <AnalyticsGraph data={data} />
         </Card>
       </div>
