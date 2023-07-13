@@ -126,7 +126,7 @@ const UserCard = () => {
   const [rowsPerPage, setRowsPerPage] = useState(20);
   const [data, setData] = useState([])
   const email = localStorage.getItem("Email")
-  const endpoint = "http://167.71.45.71:8000/graphql/"
+  const endpoint =  "http://167.71.45.71:8000/graphql/"
 
   const shortenUrl = (url) => {
     const maxLength = 20; // Maximum length of the shortened URL

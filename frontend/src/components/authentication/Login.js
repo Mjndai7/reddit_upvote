@@ -15,7 +15,7 @@ const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('')
   const [responseMessage, setResponseMessage] = useState("");
-  const endpoint = "http://167.71.45.71:8000/graphql/"
+  const endpoint =  "http://167.71.45.71:8000/graphql/"
   const navigate = useNavigate()
  
   const navigateLink = (path) => {
@@ -58,7 +58,7 @@ const LoginPage = () => {
       
     } catch (error) {
         // Handle the error
-        setResponseMessage("Credntials do not match!")
+        setResponseMessage("An error occured")
     }
   };
 
