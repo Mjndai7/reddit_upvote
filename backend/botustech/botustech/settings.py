@@ -50,12 +50,14 @@ CORS_ORIGIN_WHITELIST = [
     "https://172.60.0.4:3000",
     "http://172.60.0.4:3000",
     "http://167.71.45.71:3000",
+    "https://167.71.45.71:3000",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     "https://172.60.0.4:3000",
     "http://172.60.0.4:3000",
     "http://167.71.45.71:3000",
+    "https://167.71.45.71:3000",
     ]
 
 # Application definition
@@ -168,11 +170,11 @@ STATIC_ROOT = "/root/botus/backend/botustech/static/"
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 #frontend
-SUBSCRIPTION_SUCCESS_URL = 'https://172.60.0.4:3000'
-SUBSCRIPTION_FAILED_URL = 'https://172.60.0.4:3000'
-SUBSCRIPTION_REDIRECT_URL = 'https://172.60.0.4:3000/coinbase-beta/'
+SUBSCRIPTION_SUCCESS_URL = "http://167.71.45.71:3000"
+SUBSCRIPTION_FAILED_URL = "http://167.71.45.71:3000"
+SUBSCRIPTION_REDIRECT_URL = 'http://167.71.45.71:3000/coinbase-beta/'
 
 #celery
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
-FRONTEND_URL = "https://172.60.0.4:3000"
+FRONTEND_URL = "http://167.71.45.71:3000"
