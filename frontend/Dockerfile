@@ -15,9 +15,6 @@ COPY . .
 
 ENV NODE_OPTIONS="--max-old-space-size=4096"
 
-# Build the React app
-RUN npm run build
-
 # Expose the port your React app will run on
 EXPOSE 3000
 
