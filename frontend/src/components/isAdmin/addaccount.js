@@ -150,7 +150,7 @@ const AddAccount = ({onClose, isOpen}) => {
   const [proxies, setPorxies] = useState('')
   const [responseMessage, setResponseMessage] = useState("");
 
-  const endpoint = "http://172.60.0.5:8000/graphql/"
+  const endpoint = "http://167.71.45.71:8000/graphql/"
 
 
   const handleSubmit = (e) => {
