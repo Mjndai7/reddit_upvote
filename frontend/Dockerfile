@@ -13,7 +13,7 @@ RUN npm install --legacy-peer-deps
 # Copy application code
 COPY . .
 
-ENV NODE_OPTIONS="--max-old-space-size=4096"
+#ENV NODE_OPTIONS="--max-old-space-size=4096"
 
 # Expose the port your React app will run on
 EXPOSE 3000
