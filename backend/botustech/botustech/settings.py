@@ -46,6 +46,16 @@ EMAIL_HOST_PASSWORD ="abfgkljuxuqbrvod"
 
 ALLOWED_HOSTS = ["*"]
 CORS_ALLOW_CREDENTIALS = False
+
+CORS_ALLOW_METHODS = [
+    'GET',
+    'POST',
+    'PUT',
+    'PATCH',
+    'DELETE',
+    'OPTIONS',
+]
+
 CORS_ORIGIN_WHITELIST = [
     "https://172.60.0.4:3000",
     "http://172.60.0.4:3000",
