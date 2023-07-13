@@ -15,7 +15,7 @@ const ResetCard = () => {
   const classes = useStyles();
   const [password, setPasword] = useState('');
   const [responseMessage, setResponseMessage] = useState("");
-  const endpoint = `${process.env.REACT_APP_GRAPHQL_ENDPOINT}`
+  const endpoint = "http://172.60.0.5:8000/graphql/"
   const { token } = useParams();
 
   const navigate = useNavigate()

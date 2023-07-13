@@ -150,7 +150,7 @@ const AddAccount = ({onClose, isOpen}) => {
   const [proxies, setPorxies] = useState('')
   const [responseMessage, setResponseMessage] = useState("");
 
-  const endpoint = `${process.env.REACT_APP_GRAPHQL_ENDPOINT}`
+  const endpoint = "http://172.60.0.5:8000/graphql/"
 
 
   const handleSubmit = (e) => {

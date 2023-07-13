@@ -126,7 +126,7 @@ const AccCard = () => {
   const [data, setData] = useState([])
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(20);
-  const endpoint = `${process.env.REACT_APP_GRAPHQL_ENDPOINT}`
+  const endpoint = "http://172.60.0.5:8000/graphql/"
 
   const shortenemail = (email) => {
     const maxLength = 20; // Maximum length of the shortened email

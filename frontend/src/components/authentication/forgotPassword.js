@@ -13,7 +13,7 @@ const ForgotCard = () => {
   const classes = useStyles();
   const [email, setEmail] = useState('');
   const [responseMessage, setResponseMessage] = useState("");
-  const endpoint = `${process.env.REACT_APP_GRAPHQL_ENDPOINT}`
+  const endpoint = "http://172.60.0.5:8000/graphql/"
   
 
   const navigate = useNavigate()

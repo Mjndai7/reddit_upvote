@@ -14,7 +14,7 @@ const ContactFormCard = ({setGlobalUrls}) => {
   const [speed, setSpeed] = useState('');
   const [urls, setUrls] = useState([]);
   const [selectedOption, setSelectedOption] = useState('');
-  const endpoint = `${process.env.REACT_APP_GRAPHQL_ENDPOINT}`
+  const endpoint = "http://172.60.0.5:8000/graphql/"
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState('')
   const [comments, setComments] = useState(false)

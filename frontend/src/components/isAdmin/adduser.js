@@ -147,7 +147,7 @@ const AddUser = ({onClose, isOpen}) => {
   const [message, setMessage] = useState('')
   const adminEmail = localStorage.getItem("Email")
   const [responseMessage, setResponseMessage] = useState("");
-  const endpoint = `${process.env.REACT_APP_GRAPHQL_ENDPOINT}`
+  const endpoint = "http://172.60.0.5:8000/graphql/"
 
   const handleSubmit = (e) => {
     e.preventDefault();

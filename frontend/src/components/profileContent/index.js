@@ -109,7 +109,7 @@ const ProfileCard = () => {
   const urls = []
   const email = localStorage.getItem("Email")
   const [data, setData] = useState([])
-  const endpoint = `${process.env.REACT_APP_GRAPHQL_ENDPOINT}`
+  const endpoint = "http://172.60.0.5:8000/graphql/"
   useEffect(() => {
     recentActivities()
   }, [])
