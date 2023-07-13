@@ -28,6 +28,7 @@ const RegisterPage = () => {
     navigate(path)
   }
 
+  console.log(endpoint)
   const isValidEmail = (email) => {
     // Regular expression pattern for email validation
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
