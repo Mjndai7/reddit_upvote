@@ -22,9 +22,10 @@ const useStyles = makeStyles((theme) => ({
     },  
 
     [theme.breakpoints.up("xl")]: {
-      marginLeft: "-200px",
+      marginLeft: "0px",
       width: "100%",
-      marginTop: "40px"
+      marginTop: "40px",
+      width: "100%"
       
     },  
   },
@@ -44,7 +45,9 @@ const useStyles = makeStyles((theme) => ({
 
 
     [theme.breakpoints.up("xl")]: {
-      marginLeft: "0px"
+      marginLeft: "0px",
+      marginLeft: "-20px",
+      paddingRight: "20px",
     },  
 
   },
@@ -55,6 +58,7 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: "50px",
     paddingTop: "10px",
     color: "#E34234",
+    marginRight: "50px"
   },
   packageDescription: {
     marginBottom: theme.spacing(2),
@@ -92,7 +96,8 @@ const useStyles = makeStyles((theme) => ({
 
     [theme.breakpoints.up("xl")]: {
       width : "50px",
-      marginRight: 0
+      marginRight: 0,
+      marginLeft: "-100px"
     },  
 
     
@@ -101,42 +106,14 @@ const useStyles = makeStyles((theme) => ({
 
 const Packages = ({setView}) => {
   const classes = useStyles();
-  
+
   const handleChange = () => {
     setView("profile")
   }
 
-  const handleClick = (url) => {
-    window.open(url, '_blank');
-  };
-
-  const stripe_key = "pk_test_51Lc84CDTMi1SAp13sTQneXvANuJIBXWOnOBylf40E6Divd7OAjYN8uPVf3z1aL5c2637Qb5liWacPUfKLFBLC6Qq00nGGHipZG"
-  
-    const stripeSubscription = async () => {
-      try {
-        const response = await fetch("http://localhost:8000/api/subscriptions/create-subscription/", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            lookup_key: stripe_key, // Replace with the actual lookup key
-          }),
-        });
-        const data = await response.json();
-        if (response.ok) {
-          window.location.href = data.checkout_url;
-        } else {
-          console.log("Error creating subscription:", data.error);
-        }
-      } catch (error) {
-        console.log("Error creating subscription:", error);
-      }
-    };
-
     const createSubscription = async () => {
       try {
-        const response = await fetch("http://localhost:8000/api/crypto/coinbase/", {
+        const response = await fetch(`${process.env.REACT_APP_REST_ENDPOINT}crypto/coinbase/`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -157,9 +134,9 @@ const Packages = ({setView}) => {
     };
 
   return (
-    <Grid container spacing={3} className={classes.cardContainer}>
+    <Grid container spacing={5} className={classes.cardContainer}>
       <BiArrowBack className={classes.icon} onClick={handleChange}/>
-      <Grid item xs={12} sm={4} lg={3} xl={2} className={classes.gridContainer}>
+      <Grid item xs={12} sm={4} lg={3} xl={3} className={classes.gridContainer}>
         <div className={classes.packageContainer}>
           <Typography variant="h5" className={classes.packageName}>
             $20.00
@@ -173,15 +150,17 @@ const Packages = ({setView}) => {
           <Typography variant="body1" className={classes.packageDescription}>
           <AiOutlineCheckSquare />100 votes
           </Typography>
-          <input type="hidden" name="price_id" value="price_1NRvsVDTMi1SAp13ecH5WWMB" />
-          <Button
+          <form action={`${process.env.REACT_APP_REST_ENDPOINT}subscriptions/create-subscription/`} method="POST">
+              <input type="hidden" name="price_id" value="price_1NTKoTDTMi1SAp13AI5woVHx" />
+              <Button
             variant="contained"
             color="primary"
             className={classes.paymentButton}
-            onClick={createSubscription}
+            type="submit"
           >
             Pay with Card
           </Button>
+        </form>
           <Button
             variant="contained"
             color="secondary"
@@ -192,7 +171,7 @@ const Packages = ({setView}) => {
           </Button>
         </div>
       </Grid>
-      <Grid item xs={12} sm={4} lg={3} xl={2}>
+      <Grid item xs={12} sm={4} lg={3} xl={3}>
         <div className={classes.packageContainer}>
         <Typography variant="h5" className={classes.packageName}>
             $50.00
@@ -206,15 +185,18 @@ const Packages = ({setView}) => {
           <Typography variant="body1" className={classes.packageDescription}>
           <AiOutlineCheckSquare />500 votes
           </Typography>
-          <Button
+          <form action={`${process.env.REACT_APP_REST_ENDPOINT}subscriptions/create-subscription/`} method="POST">
+              <input type="hidden" name="price_id" value="price_1NTKoTDTMi1SAp13AI5woVHx" />
+              <Button
             variant="contained"
             color="primary"
             className={classes.paymentButton}
-            onClick={() => handleClick("https://buy.stripe.com/test_4gweVp0N22kc3UQ5kn")}
+            type="submit"
           >
             Pay with Card
           </Button>
-          <Button
+        </form>
+        <Button
             variant="contained"
             color="secondary"
             className={classes.paymentButton}
@@ -224,7 +206,7 @@ const Packages = ({setView}) => {
           </Button>
         </div>
       </Grid>
-      <Grid item xs={12} sm={4} lg={3} xl={2}>
+      <Grid item xs={12} sm={4} lg={3} xl={3}>
         <div className={classes.packageContainer} style={{border: "2px solid #E34234"}}>
         <Typography variant="h5" className={classes.packageName}>
             $100.00
@@ -238,9 +220,9 @@ const Packages = ({setView}) => {
           <Typography variant="body1" className={classes.packageDescription}>
           <AiOutlineCheckSquare />1000 votes
           </Typography>
-          <form action={`http://localhost:8000/api/subscriptions/create-subscription/`} method="POST">
-                        <input type="hidden" name="price_id" value="price_1NRvsWDTMi1SAp13BkGeXjXo" />
-                        <Button
+          <form action={`${process.env.REACT_APP_REST_ENDPOINT}subscriptions/create-subscription/`} method="POST">
+              <input type="hidden" name="price_id" value="price_1NTKoTDTMi1SAp13AI5woVHx" />
+              <Button
             variant="contained"
             color="primary"
             className={classes.paymentButton}
@@ -250,7 +232,7 @@ const Packages = ({setView}) => {
           </Button>
         </form>
           
-          <Button
+        <Button
             variant="contained"
             color="secondary"
             className={classes.paymentButton}
@@ -260,7 +242,7 @@ const Packages = ({setView}) => {
           </Button>
         </div>
       </Grid>
-      <Grid item xs={12} sm={4} lg={3} xl={2}>
+      <Grid item xs={12} sm={4} lg={3} xl={3}>
         <div className={classes.packageContainer}>
         <Typography variant="h5" className={classes.packageName}>
             $250.00
@@ -274,15 +256,18 @@ const Packages = ({setView}) => {
           <Typography variant="body1" className={classes.packageDescription}>
           <AiOutlineCheckSquare />2500 votes
           </Typography>
-          <Button
+          <form action={`${process.env.REACT_APP_REST_ENDPOINT}subscriptions/create-subscription/`} method="POST">
+              <input type="hidden" name="price_id" value="price_1NTKoTDTMi1SAp13AI5woVHx" />
+              <Button
             variant="contained"
             color="primary"
             className={classes.paymentButton}
-            onClick={() => handleClick("https://buy.stripe.com/test_fZeaF9brGcYQ9fa005")}
+            type="submit"
           >
             Pay with Card
           </Button>
-          <Button
+        </form>
+        <Button
             variant="contained"
             color="secondary"
             className={classes.paymentButton}

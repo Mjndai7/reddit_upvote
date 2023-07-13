@@ -94,8 +94,8 @@ card4: {
 
 [theme.breakpoints.up("xl")]: {
   height: "490px",
-  width: "70%",
-  marginLeft : "-200px"
+  width: "100%",
+  marginLeft : "0px"
 },
 
 },
@@ -109,7 +109,7 @@ const ProfileCard = () => {
   const urls = []
   const email = localStorage.getItem("Email")
   const [data, setData] = useState([])
-  const endpoint = "http://localhost:8000/graphql"
+  const endpoint = `${process.env.REACT_APP_GRAPHQL_ENDPOINT}`
   useEffect(() => {
     recentActivities()
   }, [])

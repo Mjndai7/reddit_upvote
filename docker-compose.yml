@@ -1,50 +1,60 @@
-version: '3.9'
+version: '3'
 services:
-  db:
-    image: postgres
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: reddit-frontend
     restart: always
     environment:
-      - POSTGRES_DB=coredb
-      - POSTGRES_USER=core
-      - POSTGRES_PASSWORD=wCh29&HE&T83
-      
+      - HTTPS=true
     networks:
-      - upvotenet
+      reddit_net:
+        ipv4_address: 172.60.0.4
+  
+  db:
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    container_name: reddit-database
+    environment:
+      - MYSQL_DATABASE=Botustech
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=root
+      - MYSQL_ROOT_PASSWORD=root
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+    networks:
+      - reddit_net
+
+  redis:
+    image: redis:6.2.1
+    restart: unless-stopped
+    container_name: reddit-reddis
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    volumes:
+      - ../mounts/redis/:/data
+    networks:
+      - reddit_net
 
   backend:
-    restart: always
+    container_name: reddit-backend
     build:
-      context: ./backend
+      context: ./backend/botustech
       dockerfile: Dockerfile
-    
+    networks:
+      reddit_net:
+        ipv4_address: 172.60.0.5
+    restart: always
     depends_on:
      - db
-    
-    ports:
-      - 8000:8000
-      
-    command: |
-      sh -c '
-        python manage.py migrate --noinput
-        uwsgi --http "0.0.0.0:8000" --module CoreRoot.wsgi:application --master --processes 4 --threads 2 --static-map /static=/code/static
-      '
-    
-    networks:
-      upvotenet:
-        ipv4_address: 172.50.0.5
-
-    environment:
-      - DEBUG=False
-      - ALLOWED_HOST=host
-      - SECRET_KEY=django-insecure-zt8!jbn&t3^x*5@5&di!d(h^ptm@vgesboqrboc&o3)drbv^rr
-      - POSTGRES_DB=coredb
-      - POSTGRES_USER=core
-      - POSTGRES_PASSWORD=wCh29&HE&T83
-      - POSTGRES_HOST=db
-      - POSTGRES_PORT=5432
+     - redis
+    command: bash -c "python manage.py migrate && gunicorn botustech.wsgi:application --bind 0.0.0.0:8000"
 
 networks:
-  upvotenet:
+  reddit_net:
+    name: reddit-network
     ipam:
       config:
-        - subnet: 172.50.0.1/24
+        - subnet: 172.60.0.1/24

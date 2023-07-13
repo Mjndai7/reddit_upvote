@@ -32,6 +32,7 @@ COINBASE_COMMERCE_API_KEY = '0033fe47-39a9-440d-b513-4917d6cd3f49'
 COINBASE_COMMERCE_WEBHOOK_SHARED_SECRET = 'da0a52f8-b214-4308-aafb-23f511a58951'
 COINBASE_CHECKOUT_ID = '9416d7a2-6850-4fd1-a85f-e6abab8ec4e7'
 
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 EMAIL_FROM_ADDRESS = "asidohsidney254@gmail.com"
@@ -46,19 +47,15 @@ EMAIL_HOST_PASSWORD ="abfgkljuxuqbrvod"
 ALLOWED_HOSTS = ["*"]
 CORS_ALLOW_CREDENTIALS = False
 CORS_ORIGIN_WHITELIST = [
-    "http://botustech.com",
-    "https://www.botustech.com",
-    "http://203.161.54.15:3000",
-    "https://203.161.54.15:3000",
-    "http://localhost:3000"
-    
+    "https://172.60.0.4:3000",
+    "http://172.60.0.4:3000",
+    "http://localhost:3000",
 ]
+
 CSRF_TRUSTED_ORIGINS = [
-    "http://botustech.com",
-    "https://www.botustech.com",
-    "http://203.161.54.15:3000",
-    "https://203.161.54.15:3000",
-    "http://localhost:3000"
+    "https://172.60.0.4:3000",
+    "http://localhost:3000",
+    "http://172.60.0.4:3000",
     ]
 
 # Application definition
@@ -78,7 +75,6 @@ INSTALLED_APPS = [
     'subscriptions',
     'crypto',
 ]
-
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -170,13 +166,13 @@ STATIC_ROOT = "/root/botus/backend/botustech/static/"
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-#frontend
-SUBSCRIPTION_SUCCESS_URL = 'http://localhost:3000/'
-SUBSCRIPTION_FAILED_URL = 'http://localhost:3000/'
-SUBSCRIPTION_REDIRECT_URL = 'http://localhost:3000/coinbase-beta/'
 
+#frontend
+SUBSCRIPTION_SUCCESS_URL = 'https://172.60.0.4:3000'
+SUBSCRIPTION_FAILED_URL = 'https://172.60.0.4:3000'
+SUBSCRIPTION_REDIRECT_URL = 'https://172.60.0.4:3000/coinbase-beta/'
 
 #celery
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
-FRONTEND_URL = "http://localhost:3000"
+FRONTEND_URL = "https://172.60.0.4:3000"

@@ -23,11 +23,18 @@ COPY . .
 ARG DJANGO_ENV
 ENV DJANGO_ENV=${DJANGO_ENV}
 
-# Expose the port on which the Django server will run
+
+ENV REDIS_HOST=redis
+ENV REDIS_PORT=6379
+
+# Expose the port for the backend service
 EXPOSE 8000
+
 
 # Run the Django server
 RUN python manage.py makemigrations botustech 
 
-# Run Gunicorn
-CMD gunicorn botustech.wsgi:application --bind 0.0.0.0:8000
+
+# Start the Celery worker and the backend server
+CMD celery -A botustech worker --loglevel=info & gunicorn botustech.wsgi:application --bind 0.0.0.0:8000
+

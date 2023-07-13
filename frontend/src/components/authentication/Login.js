@@ -15,7 +15,7 @@ const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('')
   const [responseMessage, setResponseMessage] = useState("");
-  const endpoint = "http://localhost:8000/graphql"
+  const endpoint = `${process.env.REACT_APP_GRAPHQL_ENDPOINT}`
   const navigate = useNavigate()
  
   const navigateLink = (path) => {

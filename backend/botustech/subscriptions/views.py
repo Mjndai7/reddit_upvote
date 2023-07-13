@@ -18,37 +18,37 @@ FRONTEND_SUBSCRIPTION_CANCEL_URL = settings.SUBSCRIPTION_FAILED_URL
 
 
 class CreateSubscription(APIView):
-    @csrf_exempt
-    def post(self , request):
+    def post(self, request):
         try:
-            checkout_session = stripe.checkout.Session.create(
-                line_items =[
-                    {
-                        'price': 'price_1NRvsVDTMi1SAp13ecH5WWMB',
-                        'quantity': 1
-                    },
-                    {
-                        'price': 'price_1NRvsWDTMi1SAp13BkGeXjXo',
-                        'quantity': 1
-                    },
-                    {
-                        'price': 'price_1NRvsWDTMi1SAp13qhiVlnVY',
-                        'quantity': 1,
-                    },
-                    {
-                        'price': 'price_1NRvsWDTMi1SAp13HyyE1anl',
-                        'quantity': 1,
-                    },
-                ],
-                payment_method_types=['card',],
-                mode = 'payment',
-                success_url = FRONTEND_SUBSCRIPTION_SUCCESS_URL +"?session_id={CHECKOUT_SESSION_ID}",
-                cancel_url = FRONTEND_SUBSCRIPTION_CANCEL_URL
-            )
-            return redirect(checkout_session.url , code=303)
+            prices = [
+                'price_1NTKsZDTMi1SAp13fxJuEVb6',
+                'price_1NT73cDTMi1SAp13ptOQU2Ft',
+                'price_1NTKoTDTMi1SAp13AI5woVHx',
+                'price_1NTKqdDTMi1SAp13xdH2SwDC',
+            ]
+
+            checkout_sessions = []
+            for price in prices:
+                checkout_session = stripe.checkout.Session.create(
+                    line_items=[
+                        {
+                            'price': price,
+                            'quantity': 1
+                        }
+                    ],
+                    payment_method_types=['card'],
+                    mode='payment',
+                    success_url=FRONTEND_SUBSCRIPTION_SUCCESS_URL + "?session_id={CHECKOUT_SESSION_ID}",
+                    cancel_url=FRONTEND_SUBSCRIPTION_CANCEL_URL
+                )
+                checkout_sessions.append(checkout_session)
+            
+            # Redirect to the first checkout session url
+            return redirect(checkout_sessions[0].url, code=303)
         except Exception as err:
             raise err
-   
+
+
 
 class WebHook(APIView):
     @csrf_exempt

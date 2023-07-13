@@ -21,7 +21,7 @@ const RegisterPage = () => {
   const [responseMessage, setResponseMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState('')
-  const endpoint = "http://localhost:8000/graphql"
+  const endpoint = `${process.env.REACT_APP_GRAPHQL_ENDPOINT}`
   const navigate = useNavigate()
 
   const navigateLink = (path) => {
@@ -92,7 +92,7 @@ const RegisterPage = () => {
             <Typography variant="body1" className={classes.heroTitle}>
              Get unlimited Votes and comments on reddit
             </Typography>
-        <Card className={classes.card}>
+        <Card className={classes.card} style={{marginTop: "-5px"}}>
           <CardContent>
             {/* Existing code */}
             <div className={classes.formContainer}>
