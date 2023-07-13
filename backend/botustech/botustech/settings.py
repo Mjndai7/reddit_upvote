@@ -61,6 +61,7 @@ CORS_ORIGIN_WHITELIST = [
     "http://172.60.0.4:3000",
     "http://167.71.45.71:3000",
     "https://167.71.45.71:3000",
+    'http://localhost:3000',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
@@ -68,6 +69,7 @@ CSRF_TRUSTED_ORIGINS = [
     "http://172.60.0.4:3000",
     "http://167.71.45.71:3000",
     "https://167.71.45.71:3000",
+    'http://localhost:3000',
     ]
 
 # Application definition
