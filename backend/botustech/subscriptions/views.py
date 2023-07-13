@@ -7,9 +7,7 @@ from django.conf import settings
 from django.shortcuts import redirect
 import json
 from django.http import JsonResponse, HttpResponse
-from django.views.decorators import csrf
 from django.views.decorators.csrf import csrf_exempt
-
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 webhook_secret = settings.STRIPE_WEBHOOK_SECRET
@@ -18,40 +16,45 @@ FRONTEND_SUBSCRIPTION_SUCCESS_URL = settings.SUBSCRIPTION_SUCCESS_URL
 FRONTEND_SUBSCRIPTION_CANCEL_URL = settings.SUBSCRIPTION_FAILED_URL
 
 
-class CreateSubscription(APIView):
 
+class CreateSubscription(APIView):
     @csrf_exempt
     def post(self , request):
-        """
-            This API creates a subscription .
+        try:
+            checkout_session = stripe.checkout.Session.create(
+                line_items =[
+                    {
+                        'price': 'price_1NRvsVDTMi1SAp13ecH5WWMB',
+                        'quantity': 1
+                    },
+                    {
+                        'price': 'price_1NRvsWDTMi1SAp13BkGeXjXo',
+                        'quantity': 1
+                    },
+                    {
+                        'price': 'price_1NRvsWDTMi1SAp13qhiVlnVY',
+                        'quantity': 1,
+                    },
+                    {
+                        'price': 'price_1NRvsWDTMi1SAp13HyyE1anl',
+                        'quantity': 1,
+                    },
+                ],
+                payment_method_types=['card',],
+                mode = 'payment',
+                success_url = FRONTEND_SUBSCRIPTION_SUCCESS_URL +"?session_id={CHECKOUT_SESSION_ID}",
+                cancel_url = FRONTEND_SUBSCRIPTION_CANCEL_URL
+            )
+            return redirect(checkout_session.url , code=303)
+        except Exception as err:
+            raise err
+   
 
-            :return: redirect to payment page .
-        """
-        print(request.data)
-        prices = stripe.Price.list(
-            lookup_keys = [request.data['lookup_key']],
-            expand=['data.product']
-        )
-        print(prices    )
-        checkout_session = stripe.checkout.Session.create(
-            line_items = [
-                {
-                    'price': prices.data[0].id,
-                    'quantity': 1
-                },
-            ],
-            payment_method_types = ['card'],
-            mode='subscription',
-            success_url = FRONTEND_SUBSCRIPTION_SUCCESS_URL +"?success=true&session_id={CHECKOUT_SESSION_ID}",
-            cancel_url = FRONTEND_SUBSCRIPTION_CANCEL_URL + '/?canceled=true'
-        )
-        return redirect(checkout_session.url , code=303)
-        
 class WebHook(APIView):
     @csrf_exempt
     def post(self , request):
         """
-            This API handling the webhook .
+            This API handles the webhook.
 
             :return: returns event details as json response .
         """

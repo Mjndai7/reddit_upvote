@@ -1,4 +1,4 @@
-import React, { useState , Suspense, lazy } from "react";
+import React, { useState , Suspense } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useLocation, useNavigate} from "react-router-dom";
 import { AppBar, Toolbar, Drawer, List, ListItem, ListItemText, Button, Grid, ListItemIcon, Avatar, Typography} from "@material-ui/core";
@@ -8,13 +8,12 @@ import Avator from "../assets/images/profile.jpg"
 
 import MenuIcon from "@material-ui/icons/Menu";
 import {BiUpvote} from "react-icons/bi";
-import {BiLogOut, BiCommentEdit} from "react-icons/bi"
+import {BiLogOut} from "react-icons/bi"
 import {FaTelegram} from "react-icons/fa"
 import {CgProfile} from "react-icons/cg"
 
 import HomeCard from "./homeContent";
 import ProfileCard from "./profileContent";
-import CommentCard from "./comments";
 import Footer from "./footer";
 
 

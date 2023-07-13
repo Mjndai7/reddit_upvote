@@ -36,7 +36,6 @@ const useStyles = makeStyles((theme) => ({
     },
   
     card2: {
-      width: "40%",
       background: "none",
       marginTop: "6%",
       boxShadow: "none",
@@ -174,7 +173,6 @@ const useStyles = makeStyles((theme) => ({
     title: {
         width: '100%',
         background: "#0D1321",
-        color: "#7F8183",
         height: "25px",
         border: "none",
         padding: theme.spacing(1),

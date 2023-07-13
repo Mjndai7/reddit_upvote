@@ -26,6 +26,12 @@ SECRET_KEY = 'django-insecure-o!)be$28grk#q0#i_*v789v@w-hsa50&+wvhb%i0ws!_%pn&$2
 # STRIPE
 STRIPE_SECRET_KEY = 'sk_test_51Lc84CDTMi1SAp13nQ049H6S612ZRMLUe59soxZZleOT4HFTTT9kKpqni8XCrgbu7DdQdd0BTl1BCgmUerENnhr900Wbni7Xnj'
 STRIPE_WEBHOOK_SECRET = 'whsec_e6fb9e740bfa6b76a29b7b890e11854593efa6b447c8b582cecd5081035ea1da'
+
+# COINBASE
+COINBASE_COMMERCE_API_KEY = '0033fe47-39a9-440d-b513-4917d6cd3f49'
+COINBASE_COMMERCE_WEBHOOK_SHARED_SECRET = 'da0a52f8-b214-4308-aafb-23f511a58951'
+COINBASE_CHECKOUT_ID = '9416d7a2-6850-4fd1-a85f-e6abab8ec4e7'
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 EMAIL_FROM_ADDRESS = "asidohsidney254@gmail.com"
@@ -70,6 +76,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
     'subscriptions',
+    'crypto',
 ]
 
 
@@ -164,8 +171,10 @@ STATIC_ROOT = "/root/botus/backend/botustech/static/"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #frontend
-SUBSCRIPTION_SUCCESS_URL = 'http://localhost:3000/subscriptions/success/'
-SUBSCRIPTION_FAILED_URL = 'http://localhost:3000/subscriptionsfailed/'
+SUBSCRIPTION_SUCCESS_URL = 'http://localhost:3000/'
+SUBSCRIPTION_FAILED_URL = 'http://localhost:3000/'
+SUBSCRIPTION_REDIRECT_URL = 'http://localhost:3000/coinbase-beta/'
+
 
 #celery
 CELERY_BROKER_URL = 'redis://localhost:6379/0'

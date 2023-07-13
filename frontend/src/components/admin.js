@@ -1,4 +1,4 @@
-import React, { useState , Suspense, lazy } from "react";
+import React, { useState , Suspense } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useLocation, useNavigate} from "react-router-dom";
 import { AppBar, Toolbar, Drawer, List, ListItem, ListItemText, Button, Grid, ListItemIcon, Avatar, Typography} from "@material-ui/core";
@@ -10,15 +10,14 @@ import MenuIcon from "@material-ui/icons/Menu";
 import {AiOutlineHome} from "react-icons/ai";
 import {MdOutlineManageAccounts, MdManageAccounts} from "react-icons/md";
 import {FaTelegram} from "react-icons/fa"
-import {FaUserFriends, FaReddit} from "react-icons/fa"
-import { BiLogOut, BiCommentEdit} from "react-icons/bi"
+import {FaUserFriends} from "react-icons/fa"
+import { BiLogOut} from "react-icons/bi"
 import {CgProfile} from "react-icons/cg"
 import {TiUserAdd} from "react-icons/ti"
 
 import HomeCard from "./homeContent";
 import ProfileCard from "./profileContent";
 import Footer from "./footer";
-import CommentCard from "./comments";
 import UserCardHolder from "./isAdmin/users";
 import AccountsCard from "./isAdmin/accounts";
 import AddUser from "./isAdmin/adduser";

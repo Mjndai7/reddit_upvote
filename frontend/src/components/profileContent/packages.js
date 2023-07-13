@@ -112,7 +112,7 @@ const Packages = ({setView}) => {
 
   const stripe_key = "pk_test_51Lc84CDTMi1SAp13sTQneXvANuJIBXWOnOBylf40E6Divd7OAjYN8uPVf3z1aL5c2637Qb5liWacPUfKLFBLC6Qq00nGGHipZG"
   
-    const createSubscription = async () => {
+    const stripeSubscription = async () => {
       try {
         const response = await fetch("http://localhost:8000/api/subscriptions/create-subscription/", {
           method: "POST",
@@ -126,6 +126,28 @@ const Packages = ({setView}) => {
         const data = await response.json();
         if (response.ok) {
           window.location.href = data.checkout_url;
+        } else {
+          console.log("Error creating subscription:", data.error);
+        }
+      } catch (error) {
+        console.log("Error creating subscription:", error);
+      }
+    };
+
+    const createSubscription = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/api/crypto/coinbase/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        
+        const data = await response.json();
+        console.log("response:" , data.checkout_link)
+        
+        if (data.checkout_link) {
+          window.location.href = data.checkout_link;
         } else {
           console.log("Error creating subscription:", data.error);
         }
@@ -151,11 +173,12 @@ const Packages = ({setView}) => {
           <Typography variant="body1" className={classes.packageDescription}>
           <AiOutlineCheckSquare />100 votes
           </Typography>
+          <input type="hidden" name="price_id" value="price_1NRvsVDTMi1SAp13ecH5WWMB" />
           <Button
             variant="contained"
             color="primary"
             className={classes.paymentButton}
-            onClick={() => handleClick("https://buy.stripe.com/test_6oE28DfHW0c4772aEG")}
+            onClick={createSubscription}
           >
             Pay with Card
           </Button>
@@ -163,6 +186,7 @@ const Packages = ({setView}) => {
             variant="contained"
             color="secondary"
             className={classes.paymentButton}
+            onClick={createSubscription}
           >
             Pay with Crypto
           </Button>
@@ -194,6 +218,7 @@ const Packages = ({setView}) => {
             variant="contained"
             color="secondary"
             className={classes.paymentButton}
+            onClick={createSubscription}
           >
             Pay with Crypto
           </Button>
@@ -213,18 +238,23 @@ const Packages = ({setView}) => {
           <Typography variant="body1" className={classes.packageDescription}>
           <AiOutlineCheckSquare />1000 votes
           </Typography>
-          <Button
+          <form action={`http://localhost:8000/api/subscriptions/create-subscription/`} method="POST">
+                        <input type="hidden" name="price_id" value="price_1NRvsWDTMi1SAp13BkGeXjXo" />
+                        <Button
             variant="contained"
             color="primary"
             className={classes.paymentButton}
-            onClick={() => handleClick("https://buy.stripe.com/test_dR6dRldzOcYQ77228c")}
+            type="submit"
           >
             Pay with Card
           </Button>
+        </form>
+          
           <Button
             variant="contained"
             color="secondary"
             className={classes.paymentButton}
+            onClick={createSubscription}
           >
             Pay with Crypto
           </Button>
@@ -256,6 +286,7 @@ const Packages = ({setView}) => {
             variant="contained"
             color="secondary"
             className={classes.paymentButton}
+            onClick={createSubscription}
           >
             Pay with Crypto
           </Button>

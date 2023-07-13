@@ -1,6 +1,7 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Card} from "@material-ui/core";
+import axios from "axios";
 
 import AnalyticsGraph from "./analytics";
 import UserInfo from "./userInfo";
@@ -105,16 +106,47 @@ card4: {
 const ProfileCard = () => {
   const classes = useStyles();
   const [view, setView] = useState("profile")
+  const urls = []
+  const email = localStorage.getItem("Email")
+  const [data, setData] = useState([])
+  const endpoint = "http://localhost:8000/graphql"
+  useEffect(() => {
+    recentActivities()
+  }, [])
 
-  const data = [
-    { date: "2023-01-01", cost: 100, upvotes: 103 },
-    { date: "2023-02-01", cost: 240, upvotes: 203 },
-    { date: "2023-03-01", cost: 330, upvotes: 230 },
-    { date: "2023-04-01", cost: 430, upvotes: 40 },
-    { date: "2023-05-01", cost: 120, upvotes: 50 },
-    { date: "2023-06-01", cost: 540, upvotes: 30 },
-    { date: "2023-07-01", cost: 520, upvotes: 20 },
-  ];
+  const recentActivities = async (e) => {
+    //send data to the api to start voting
+    //return the url as they are being processed
+    //also clear the url list when data is sent to the backend
+    console.log(urls)
+    try {
+      const response = await axios.post(endpoint, {
+        query: `
+          mutation {
+            startOrder(email: "${email}", urls: "${urls}") {
+              urls {
+                dateCreated
+                cost
+                number
+              }
+            }
+          }
+        `,
+      });
+
+    // Handle the response data
+    
+    if(response.data.data.startOrder.urls){
+      const urls = response.data.data.startOrder.urls;
+      const lastSevenItems = urls ? urls.slice(-7) : [];
+      setData(lastSevenItems);
+      console.log(data)
+    }
+    
+  } catch (error) {
+    console.log(error)
+  }
+};
   
   return (
     <div className={classes.container}>

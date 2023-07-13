@@ -1,6 +1,6 @@
 import React from "react";
 import Chart from 'chart.js/auto';
-import { Bar} from "react-chartjs-2";
+import {Line} from "react-chartjs-2";
 import { Axis, Scale, Grid, Legend } from "react-chartjs-2";
 
 const AnalyticsGraph = ({ data }) => {
@@ -30,13 +30,13 @@ const AnalyticsGraph = ({ data }) => {
   const datasets = [
     {
       label: "Cost",
-      data: data.map((item) => ({ x: item.date, y: item.cost })),
+      data: data.map((item) => ({ x: item.dateCreated.substring(0, 10), y: item.cost })),
       borderColor: "#E34234",
       borderWidth: 2,
     },
     {
       label: "Upvotes",
-      data: data.map((item) => ({ x: item.date, y: item.upvotes })),
+      data: data.map((item) => ({ x: item.dateCreated.substring(0, 10), y: item.number })),
       borderColor: "#7F8183",
       borderWidth: 2,
     },
@@ -48,7 +48,7 @@ const AnalyticsGraph = ({ data }) => {
 
   return (
     <div style={{ width: "100%", height: "100%" }}>
-    <Bar data={chartData} options={options} />
+    <Line data={chartData} options={options} />
   </div>
   );
 };

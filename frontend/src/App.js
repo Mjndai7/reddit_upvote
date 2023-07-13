@@ -1,4 +1,4 @@
-import React, {useState, useEffect}from "react";
+import React, {useState}from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./components/Home";
 import Admin from "./components/admin";
@@ -10,22 +10,13 @@ import PrivateRoutes from "./utils/PrivateRoutes";
 import ActivationPage from "./components/authentication/activateUser";
 
 const App = () => {
-  const [isAdmin, setIsAdmin] = useState(false);
-
-  useEffect(() => {
-    const checkAdmin = () => {
-      const adminValue = localStorage.getItem("User");
-      setIsAdmin(adminValue === "True");
-    };
-
-    checkAdmin();
-  }, []);
+  const [isAdmin, setIsAdmin] = useState("false");
 
   return (
     <Router>
       <Routes>
-        {isAdmin ? (
-          <Route element={<PrivateRoutes />}>
+        {isAdmin === "True" ? (
+          <Route element={<PrivateRoutes setIsAdmin={setIsAdmin}/>}>
             <Route path="/" element={<Admin />} />
             <Route path="/users" element={<Admin />} />
             <Route path="/accounts" element={<Admin />} />
@@ -35,7 +26,7 @@ const App = () => {
           </Route>
         ) : 
         (
-          <Route element={<PrivateRoutes  />}>
+          <Route element={<PrivateRoutes setIsAdmin={setIsAdmin} />}>
             <Route path="/" element={<Home />} />
             <Route path="*" element={<Home />} />
             <Route path="/upvote" element={<Home />} /> 
