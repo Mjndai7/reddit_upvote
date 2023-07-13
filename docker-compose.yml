@@ -6,8 +6,8 @@ services:
       dockerfile: Dockerfile
     container_name: reddit-frontend
     restart: always
-    environment:
-      - HTTPS=true
+    ports:
+      - 3000:3000
     networks:
       reddit_net:
         ipv4_address: 172.60.0.4
@@ -19,9 +19,9 @@ services:
     container_name: reddit-database
     environment:
       - MYSQL_DATABASE=Botustech
-      - MYSQL_USER=root
-      - MYSQL_PASSWORD=root
-      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_USER=botus
+      - MYSQL_PASSWORD=botus1234
+      - MYSQL_ROOT_PASSWORD=boturoot
     volumes:
       - ./mysql-data:/var/lib/mysql
     networks:
