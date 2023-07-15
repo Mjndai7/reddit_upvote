@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from botustech import send_mail
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -7,6 +8,7 @@ from django.conf import settings
 from django.shortcuts import redirect
 import json
 from django.http import JsonResponse, HttpResponse
+from .models import Transaction
 from django.views.decorators.csrf import csrf_exempt
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -48,53 +50,89 @@ class CreateSubscription(APIView):
         except Exception as err:
             raise err
 
-
-
 class WebHook(APIView):
     @csrf_exempt
-    def post(self , request):
+    def post(self, request):
         """
-            This API handles the webhook.
+        This API handles the webhook.
 
-            :return: returns event details as json response .
+        :return: returns event details as a JSON response.
         """
         request_data = json.loads(request.body)
-        if webhook_secret:
-            # Retrieve the event by verifying the signature using the raw body and secret if webhook signing is configured.
-            signature = request.META['HTTP_STRIPE_SIGNATURE']
-            try:
-                event = stripe.Webhook.construct_event(
-                    payload=request.body, 
-                    sig_header=signature, 
-                    secret=webhook_secret
-                    )
-                data = event['data']
-            except ValueError as err:
-                raise err
-            except stripe.error.SignatureVerificationError as err:
-                raise err
-            # Get the type of webhook event sent - used to check the status of PaymentIntents.
-            event_type = event['type']
-        else:
-            data = request_data['data']
-            event_type = request_data['type']
-        data_object = data['object']
+        payload = request.body.decode('utf-8')
+        sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
+
+        if not sig_header:
+            return JsonResponse({'success': False, 'error': 'Stripe-Signature header is missing'}, status=400)
+
+        try:
+            event = stripe.Webhook.construct_event(
+                payload, sig_header, webhook_secret
+            )
+        except ValueError as e:
+            # Invalid payload
+            return JsonResponse({'success': False, 'error': str(e)}, status=400)
+        except stripe.error.SignatureVerificationError as e:
+            # Invalid signature
+            return JsonResponse({'success': False, 'error': str(e)}, status=400)
+
+        event_type = event['type']
+        data_object = event['data']['object']
 
         if event_type == 'checkout.session.completed':
-        # Payment is successful and the subscription is created.
-        # You should provision the subscription and save the customer ID to your database.
-            print("-----checkout.session.completed----->",data['object']['customer'])
+            # Payment is successful and a subscription is created.
+            # Provision the subscription and save the customer ID to your database.
+            customer_id = data_object['customer']
+            amount = data_object['amount_total']
+            package = data_object['metadata'].get['package']
+
+            # Send email notification to the customer
+            subject = 'Payment Successful'
+            message = f"Thank you for your payment. You have purchased the {package} package for ${amount}"
+            send_mail(subject, message, 'support@botustech.com', [data_object['customer_email']])
+
+            # Create a Transaction object and save it to the database
+            transaction = Transaction(customer_id=customer_id,amount=amount, package=package, status='completed')
+            transaction.save()
+
         elif event_type == 'invoice.paid':
-        # Continue to provision the subscription as payments continue to be made.
-        # Store the status in your database and check when a user accesses your service.
-        # This approach helps you avoid hitting rate limits.
-            print("-----invoice.paid----->", data)
+            # Continue to provision the subscription as payments continue to be made.
+            # Store the status in your database and check when a user accesses your service.
+            invoice_id = data_object['id']
+            customer_id = data_object['customer']
+            amount = data_object['amount_paid']
+            package = data_object['metadata'].get['package']
+
+            # Send email notification to the customer
+            subject = 'Payment Successful'
+            message = f"Thank you for your payment. You have purchased the {package} for ${amount}."
+            send_mail(subject, message, 'support@botustech.com', [data_object['customer_email']])
+            
+            # Create a Transaction object and save it to the database
+            transaction = Transaction(customer_id=customer_id, amount=amount, package=package, status='completed')
+            transaction.save()
+
         elif event_type == 'invoice.payment_failed':
-        # The payment failed or the customer does not have a valid payment method.
-        # The subscription becomes past_due. Notify your customer and send them to the
-        # customer portal to update their payment information.
-            print("-----invoice.payment_failed----->",data)
+            # customer portal updates their payment information
+            customer_id = data_object['customer']
+            package = data_object['metadata'].get('package')
+
+            # Send email notification to the customer
+            subject = 'Payment Failed'
+            message = f"Payment for the {package} package failed. Please update your information."
+            send_mail(subject, message, "support@botustech.com", [data_object['customer_email']])
+
+            # Create a transaction object and update it in the database
+            transaction = Transaction(customer_id=customer_id, package=package, status='failed')
+            transaction.save()
+
         else:
-            print('Unhandled event type {}'.format(event_type))
-        
-        return JsonResponse(success=True, safe=False)
+            print('unhandled event type {}'.format(event_type))
+
+        return JsonResponse({'success': True})
+    
+
+
+
+
+
