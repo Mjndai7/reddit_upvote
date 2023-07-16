@@ -216,9 +216,11 @@ CELERY_BEAT_SCHEDULE = deepcopy(BEAT_SCHEDULE)
 STATIC_URL = '/static/'
 MEDIA_ROOT = '/web/media/'
 STATIC_ROOT = '/web/static/'
+GRAPHQL_ENDPOINT = 'http://167.71.45.71/graphql/'
 
 
 TELEGRAM_TOKEN = env.str('TELEGRAM_TOKEN', default='6089392705:AAGZ8uCk181uF9vcJ1YgkwsoiCbI-XvvYsI')
+TELEGRAM_CHATID = "6089392705"
 MAIN_BOT_USERNAME = env.str('TELEGRAM_BOT_NAME', default='MaxUpvote Bot')
 TELEGRAM_LOG = env.str('TELEGRAM_LOG', default='/web/logs/bot.log') 
 

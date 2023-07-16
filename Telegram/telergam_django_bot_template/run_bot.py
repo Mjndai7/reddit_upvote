@@ -18,7 +18,6 @@ def add_handlers(updater):
     dp = updater.dispatcher
     dp.add_handler(RouterCallbackMessageCommandHandler())
 
-
 def main():
     if not DEBUG:
         logging.basicConfig(
