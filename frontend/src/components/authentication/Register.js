@@ -21,7 +21,7 @@ const RegisterPage = () => {
   const [responseMessage, setResponseMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState('')
-  const endpoint = "http://167.71.45.71/:8000/graphql/"
+  const endpoint = "http://167.71.45.71:8000/graphql/"
   const navigate = useNavigate()
 
   const navigateLink = (path) => {
