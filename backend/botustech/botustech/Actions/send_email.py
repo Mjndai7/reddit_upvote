@@ -24,4 +24,22 @@ class SendEmail:
             print(f"ERROR: {E}")
             return False
         
+    def send_activation_email(self, email, token, id):
+        url = f"{settings.FRONTEND_URL}/activate/{id}/{token}"
+        message =( f"Click the link to activate your account at maxupvote.\n{url}"
+        f"\n\n If you did not make this request please check your email security")
+        
+        try:
+            send_mail(
+                "Maxupvote account activation.",
+                message,
+                settings.EMAIL_FROM_ADDRESS,
+                [email],
+                fail_silently=False,
+            )
+            return True
+        
+        except Exception as E:
+            print(f"ERROR: {E}")
+            return False
         

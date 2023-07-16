@@ -1,34 +1,31 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const ActivationPage = () => {
   const { uid, token } = useParams();
-
-  const csrfToken = document.cookie
-  .split('; ')
-  .find((row) => row.startsWith('csrftoken='))
-  .split('=')[1];
+  const endpoint =  "http://170.64.130.58:8000/graphql/";
   
-  console.log(csrfToken)
+  const navigate = useNavigate()
+
   useEffect(() => {
     const activateUser = async () => {
-        const headers = {
-            'X-CSRFToken': csrfToken,
-            
-          };
-
       try {
-        const response = await axios.post('http://localhost:8000/users/activation', {
-          uid,
-          token,
-        },{
-            headers,
-          });
-
-        
-        console.log('User activated successfully:', response.data);
-        // Add any additional logic or redirection after successful activation
+        const response = await axios.post(endpoint, {
+          query: `
+            mutation {
+              activateUser(uid: "${uid}", token: "${token}") {
+                message 
+              }
+            }
+          `,
+        });
+        if (response.data && response.data.errors && response.data.errors[0].message === "Token Expired"){
+          navigate("/register")
+        }
+      
+        navigate("/login")
       } catch (error) {
         console.log('Activation failed:', error.message);
         // Handle activation failure, show error message, etc.

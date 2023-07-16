@@ -7,6 +7,7 @@ from .Mutations import GetUsersMutation, RedditAccountsMutation
 from .Mutations import ResetPasswordMutation
 from .Mutations import UpdatePasswordMutation
 from .Mutations import AddUserMutation
+from .Mutations import ActivateUserMutation
 
 
 class Query(graphene.ObjectType):
@@ -56,6 +57,11 @@ class Query(graphene.ObjectType):
         mutation = AddUserMutation()
         result = mutation.mutate(info, email, admin_email)
         return result.success
+    
+    def resolve_activate_user(self, info, uid,token):
+        mutation = ActivateUserMutation()
+        result = mutation.mutate(info, uid, token)
+        return result.message
 
 class Mutation(graphene.ObjectType):
     create_users  = CreateUserMutation.Field()
@@ -67,6 +73,7 @@ class Mutation(graphene.ObjectType):
     update_password = UpdatePasswordMutation.Field()
     reset_password = ResetPasswordMutation.Field()
     add_user = AddUserMutation.Field()
+    activate_user = ActivateUserMutation.Field()
 
 
 schema = graphene.Schema(query=Query, mutation=Mutation)

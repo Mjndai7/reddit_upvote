@@ -42,9 +42,16 @@ const LoginPage = () => {
             }
           `,
         });
-  
-        // Handle the response data
-        if(response.data.data.loginUser.user){
+
+        if(response.data && response.data.errors &&  response.data.errors[0].message === "No User" ){
+          setResponseMessage("User does not exist!")
+        }
+
+        if(response.data && response.data.errors &&  response.data.errors[0].message === "Invalid credentials" ){
+          setResponseMessage("Credentials do not match!")
+        }
+
+        if(response.data && response.data.data && response.data.data.loginUser && response.data.data.loginUser.user){
           localStorage.setItem("Email", email)
           localStorage.setItem("Name", response.data.data.loginUser.user.name)
           localStorage.setItem("Balance", response.data.data.loginUser.user.balance)
@@ -52,12 +59,11 @@ const LoginPage = () => {
           console.log(typeof(response.data.data.loginUser.user.isadmin))
           navigate("/")
         }
-        if(response.data.errors){
-        setResponseMessage("Credntials do not match!")
-      }
-      
+
+        
     } catch (error) {
         // Handle the error
+        console.log(error)
         setResponseMessage("An error occured")
     }
   };

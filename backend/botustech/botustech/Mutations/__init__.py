@@ -14,6 +14,7 @@ from reddit.base import upvote
 from botustech.Actions.send_email import SendEmail
 from botustech.Actions.tokens import TokensMaker
 
+
 send_email = SendEmail()
 bot_manager = RedditBotManager()
 add_account = AddAccountWidget(bot_manager)
@@ -35,6 +36,7 @@ class AccountsType(DjangoObjectType):
 
 class CreateUserMutation(graphene.Mutation):
     user = graphene.Field(UserType)
+    message = graphene.String()
     
     class Arguments:
         email = graphene.String(required=True)
@@ -44,6 +46,7 @@ class CreateUserMutation(graphene.Mutation):
     def mutate(self, info, email, name, password):
         if RegisteredUsers.objects.filter(email=email).exists():
             return GraphQLError("User Exists")
+    
         try:
             user = RegisteredUsers.objects.create(
                 email=email,
@@ -55,16 +58,43 @@ class CreateUserMutation(graphene.Mutation):
                 totalcomments=0,
                 totalspent=0.00,
                 package="None",
-                status="ACTIVE",
-
+                status="NOT ACTIVE",
             )
             #send_status = send_email.send_email(email, name, password)
             #print(send_status)
+           
+            user = RegisteredUsers.objects.get(email=email)
+            random_id = token_gen.generate_random_id()
+            token = token_gen.generate_token(user.id)
+            send_email.send_activation_email(email, token, random_id)
+            
 
         except Exception as error:
             raise GraphQLError(str(error))
         
-        return CreateUserMutation(user=user)
+        return CreateUserMutation(user=user, message="Success")
+
+class ActivateUserMutation(graphene.Mutation):
+    message = graphene.String()
+    
+    class Arguments:
+        uid = graphene.String(required=True)
+        token = graphene.String(required=True)
+        
+    def mutate(self, info, uid, token, ):
+
+        try:
+            uid = token_gen.decode_token(token)
+            user = RegisteredUsers.objects.get(id=uid)
+            user.status =  "ACTIVATED"
+            user.save()
+            message = "success"
+        
+        except Exception as Error:
+            return GraphQLError('Token Expired')
+        
+        return ActivateUserMutation(message=message)
+
 
 class LoginUserMutation(graphene.Mutation):
     user = graphene.Field(UserType)
@@ -79,7 +109,7 @@ class LoginUserMutation(graphene.Mutation):
             user = RegisteredUsers.objects.get(email=email)
         
         except RegisteredUsers.DoesNotExist:
-            raise "User Doesn't exist"
+            return GraphQLError('No User')
        
         if not check_password(password, user.password):
             return GraphQLError('Invalid credentials')

@@ -28,20 +28,11 @@ const RegisterPage = () => {
     navigate(path)
   }
 
-  console.log(endpoint)
-  const isValidEmail = (email) => {
-    // Regular expression pattern for email validation
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    
-    return emailPattern.test(email);
-  };
   
   const handleSubmit = async (e) => {
 
     e.preventDefault();
-    const isEmailValid = isValidEmail(email);
-
-    if (password === confirmPassword && isEmailValid) {
+    if (password === confirmPassword) {
       // Passwords match
       try {
         const response = await axios.post(endpoint, {
@@ -59,22 +50,24 @@ const RegisterPage = () => {
         });
   
         // Handle the response data
-        if(response.data.data.createUsers.user){
-          navigate("/login")
+        if (response.data && response.data.errors && response.data.errors[0].message === "User Exists"){
+          setResponseMessage("Email already in use.")
         }
-      
-        if(response.data.errors){
-        setResponseMessage("Email Already in use")
-      }
+        
+        if(response.data.data && response.data.data.createUsers && response.data.data.createUsers.user){
+          navigate("/activate")
+        }
+
       
     } catch (error) {
         // Handle the error
+        console.log(error)
         setResponseMessage("Server Error")
       }
     }
 
     else{
-      setResponseMessage("Check Credentials")
+      setResponseMessage("Passwords do not match.")
     }
   };
 

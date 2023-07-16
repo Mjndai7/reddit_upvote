@@ -21,7 +21,6 @@ const ForgotCard = () => {
   const navigateLink = (path) => {
     navigate(path)
   }
- 
 
   const handleSubmitF = (e) => {
     e.preventDefault();
@@ -30,14 +29,12 @@ const ForgotCard = () => {
     // Perform the necessary actions, such as making an API request, saving to a database, etc.
     if (email) {
       // Process form submission
-      console.log("emal" , email)
       sendMutate();
     } else {
       // Highlight required fields
       setResponseMessage('All fields are required!');
     }
   };
-
 
 const sendMutate = async (e) => {
   try {

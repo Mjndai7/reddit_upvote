@@ -19,8 +19,27 @@ const useStyles = makeStyles((theme) => ({
       background: "none",
       top: 0,
       left: 0,
-      width: 80,
-      height: 80,
+      maxWidth: 70,
+      maxHeight: 70,
+
+      [theme.breakpoints.down("sm")]: {
+        maxWidth: 40,
+        maxHeight: 40,
+      },
+    },
+
+
+    image: {
+      position: 'absolute',
+      //display: "none",
+      background: "none",
+      maxWidth: 70,
+      maxHeight: 70,
+
+      [theme.breakpoints.down("sm")]: {
+        maxWidth: 40,
+        maxHeight: 40,
+      },
     },
     card: {
       maxWidth: 400,
@@ -160,13 +179,22 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: "18%  "
       },
     },
+
+
+    heroTitle1:{
+      color: "#7F8183",
+
+      [theme.breakpoints.down("sm")]: {
+        fontSize: '.7rem',
+      },
+    },
   
     response:{
       color: "#E34234",
       marginBottom: theme.spacing(1),
       alignContent: "center",
       justifyContent: "center",
-      marginLeft: "8%",
+      marginLeft: "2%",
       fontSize: ".8rem"
     },
   

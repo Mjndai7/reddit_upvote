@@ -216,7 +216,7 @@ CELERY_BEAT_SCHEDULE = deepcopy(BEAT_SCHEDULE)
 STATIC_URL = '/static/'
 MEDIA_ROOT = '/web/media/'
 STATIC_ROOT = '/web/static/'
-GRAPHQL_ENDPOINT = 'http://170.64.130.58/graphql/'
+GRAPHQL_ENDPOINT = 'http://localhost/graphql/'
 
 
 TELEGRAM_TOKEN = env.str('TELEGRAM_TOKEN', default='6089392705:AAGZ8uCk181uF9vcJ1YgkwsoiCbI-XvvYsI')

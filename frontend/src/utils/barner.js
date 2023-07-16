@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
 responseMessage: {
-    marginLeft: "35%", 
+    marginLeft: "20%", 
     marginBottom: "0%", 
     color: "#E34234",
 

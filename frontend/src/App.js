@@ -8,6 +8,7 @@ import ForgotCard from "./components/authentication/forgotPassword";
 import ResetCard from "./components/authentication/resetPassword";
 import PrivateRoutes from "./utils/PrivateRoutes";
 import ActivationPage from "./components/authentication/activateUser";
+import ActivationCard from "./components/authentication/activate";
 
 const App = () => {
   const [isAdmin, setIsAdmin] = useState("false");
@@ -36,6 +37,7 @@ const App = () => {
         }
         <Route element={<LoginPage  />} path="/login" />
         <Route element={<RegisterPage />} path="/register" />
+        <Route element={<ActivationCard />} path="/activate"/>
         <Route element={<ActivationPage />} path="/activate/:uid/:token"/>
         <Route element={<ForgotCard />} path="/forgot-password" />
         <Route element={<ResetCard />} path="/password-reset/:token" />

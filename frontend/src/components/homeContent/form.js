@@ -14,12 +14,12 @@ const ContactFormCard = ({setGlobalUrls}) => {
   const [speed, setSpeed] = useState('');
   const [urls, setUrls] = useState([]);
   const [selectedOption, setSelectedOption] = useState('');
-  const endpoint =  "http://170.64.130.58:8000/graphql/"
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState('')
   const [comments, setComments] = useState(false)
-
   const [inputValue, setInputValue] = useState('');
+
+  const endpoint =  "http://170.64.130.58:8000/graphql/"
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
@@ -37,12 +37,29 @@ const ContactFormCard = ({setGlobalUrls}) => {
     if(event.target.value === "comments"){
       setComments(true)
     }
+    if(event.target.value != "comments"){
+      setComments(false)
+    }
   };
   
  
 
   const createOrder = async (e) => {
     e.preventDefault();
+    const redditUrlRegex = /^https?:\/\/(?:www\.)?reddit\.com/i;
+    if (speed === "" || postLink === "" || upvotes === "") {
+      // Display a notification or set an error message stating that all fields are required
+      setMessage("Missing Fields.");
+      setOpen(true);
+      return; // Exit the function to prevent making the API request
+      }
+
+      if (postLink !== "" && !redditUrlRegex.test(postLink)){
+        console.log(postLink)
+        setOpen(true);
+        setMessage("Invalid reddit post url.");
+        return;
+      }
       // Passwords match
       try {
         const response = await axios.post(endpoint, {
@@ -60,42 +77,25 @@ const ContactFormCard = ({setGlobalUrls}) => {
         // Handle the response data
         console.log(response)
       if(response.data.data.createOrder.url.dateCreated){
-        handleAddLink()
-      }
+        const updatedUrls = [...urls];
+
+        // Add the new links to the beginning of the array using unshift()
+        updatedUrls.unshift(postLink);
+
+        // Set the state with the updated array
+        setUrls(updatedUrls);
+        }
       
     } catch (error) {
       console.log(error)
     }
   };
 
-  const handleAddLink = () => {
-
-    // Add the new URL to the beginning of the array
-    if(postLink != ""){
-      const urlRegex = /^(ftp|http|https):\/\/[^ "]+$/;
-      if (urlRegex.test(postLink)) {
-        // Create a copy of the current urls array
-        const updatedUrls = [...urls];
-
-        // Add the new URL to the beginning of the array
-        updatedUrls.unshift(postLink);
-
-        // Set the state with the updated array
-        setUrls(updatedUrls);
-
-      }
-    }
-      // Reset the form fields
-      setPostLink('');
-      setUpvotes('');
-      setSpeed('');
-    };
-
-    console.log(urls)
     const startVotes = async (e) => {
       //send data to the api to start voting
       //return the url as they are being processed
       //also clear the url list when data is sent to the backend
+      e.preventDefault()
       try {
         console.log("urls: ", urls)
         if (urls.length > 0){ 
@@ -119,7 +119,6 @@ const ContactFormCard = ({setGlobalUrls}) => {
           });
     
         // Handle the response data
-        console.log(response.data.data.startOrder.message)
         if(response.data.data.startOrder){
           setGlobalUrls(response.data.data.startOrder.urls)
           setUrls([])
@@ -145,7 +144,12 @@ const ContactFormCard = ({setGlobalUrls}) => {
       }
       setUrls([])
     }
-
+    const handleInputClick = () => {
+      if (!selectedOption) {
+        setOpen(true);
+        setMessage("Select an option.")
+      }
+    }
   return (
     
     <div className={classes.cardContainer}>
@@ -169,7 +173,7 @@ const ContactFormCard = ({setGlobalUrls}) => {
               },
             }}
           > 
-            <option value="">Choose an Action</option>
+            <option value="">Select an option.</option>
             <option value="comments">Comments</option>
             <option value="upvotes">Upovtes</option>
             <option value="downvotes">Downvotes</option>
@@ -178,25 +182,26 @@ const ContactFormCard = ({setGlobalUrls}) => {
           <Grid container direction="column" className={classes.gridContainer}>
               <Grid container direction="row" >
               <label htmlFor="postLink" className={classes.label}>
-                  Reddit post url
+                  Reddit post url.
               </label>
               <input
                   type="text"
-                  placeholder="Post Link"
+                  placeholder="Valid reddit link"
                   value={postLink}
                   onChange={(e) => setPostLink(e.target.value)}
                   className={classes.input}
                   disabled={!selectedOption}
+                  onClick={handleInputClick}
               />
               </Grid>
               <Grid item>
                   <Grid container direction="row" >
                       <label htmlFor="postLink" className={classes.label}>
-                          Number of {action}
+                          Number of {action}.
                       </label>
                     <input
                       type="text"
-                      placeholder="1000"
+                      placeholder="0"
                       value={upvotes}
                       onChange={(e) => setUpvotes(e.target.value)}
                       className={classes.input}
@@ -210,7 +215,7 @@ const ContactFormCard = ({setGlobalUrls}) => {
                       </label>
                   <input
                       type="text"
-                      placeholder="24"
+                      placeholder="0"
                       value={speed}
                       onChange={(e) => setSpeed(e.target.value)}
                       className={classes.input}
