@@ -92,7 +92,7 @@ const RegisterPage = () => {
             <Typography variant="body1" className={classes.heroTitle}>
              Get unlimited Votes and comments on reddit
             </Typography>
-        <Card className={classes.card} style={{marginTop: "-5px"}}>
+        <Card className={classes.card} style={{marginTop: "-2px"}}>
           <CardContent>
             {/* Existing code */}
             <div className={classes.formContainer}>
