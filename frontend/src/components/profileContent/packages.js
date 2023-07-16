@@ -113,7 +113,7 @@ const Packages = ({setView}) => {
 
     const createSubscription = async () => {
       try {
-        const response = await fetch(`http://167.71.45.71:8000/api/crypto/coinbase/`, {
+        const response = await fetch(`http://170.64.130.58:8000/api/crypto/coinbase/`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -150,7 +150,7 @@ const Packages = ({setView}) => {
           <Typography variant="body1" className={classes.packageDescription}>
           <AiOutlineCheckSquare />100 votes
           </Typography>
-          <form action={`http://167.71.45.71:8000/api/subscriptions/create-subscription/`} method="POST">
+          <form action={`http://170.64.130.58:8000/api/subscriptions/create-subscription/`} method="POST">
               <input type="hidden" name="price_id" value="price_1NTKoTDTMi1SAp13AI5woVHx" />
               <Button
             variant="contained"
@@ -185,7 +185,7 @@ const Packages = ({setView}) => {
           <Typography variant="body1" className={classes.packageDescription}>
           <AiOutlineCheckSquare />500 votes
           </Typography>
-          <form action={`http://167.71.45.71:8000/api/subscriptions/create-subscription/`} method="POST">
+          <form action={`http://170.64.130.58:8000/api/subscriptions/create-subscription/`} method="POST">
               <input type="hidden" name="price_id" value="price_1NTKoTDTMi1SAp13AI5woVHx" />
               <Button
             variant="contained"
@@ -220,7 +220,7 @@ const Packages = ({setView}) => {
           <Typography variant="body1" className={classes.packageDescription}>
           <AiOutlineCheckSquare />1000 votes
           </Typography>
-          <form action={`http://167.71.45.71:8000/api/subscriptions/create-subscription/`} method="POST">
+          <form action={`http://170.64.130.58:8000/api/subscriptions/create-subscription/`} method="POST">
               <input type="hidden" name="price_id" value="price_1NTKoTDTMi1SAp13AI5woVHx" />
               <Button
             variant="contained"
@@ -256,7 +256,7 @@ const Packages = ({setView}) => {
           <Typography variant="body1" className={classes.packageDescription}>
           <AiOutlineCheckSquare />2500 votes
           </Typography>
-          <form action={`http://167.71.45.71:8000/api/subscriptions/create-subscription/`} method="POST">
+          <form action={`http://170.64.130.58:8000/api/subscriptions/create-subscription/`} method="POST">
               <input type="hidden" name="price_id" value="price_1NTKoTDTMi1SAp13AI5woVHx" />
               <Button
             variant="contained"
