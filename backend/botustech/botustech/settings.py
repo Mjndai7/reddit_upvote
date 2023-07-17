@@ -187,6 +187,7 @@ SUBSCRIPTION_FAILED_URL = "http://localhost:3000"
 SUBSCRIPTION_REDIRECT_URL = 'http://localhost:3000/coinbase-beta/'
 
 #celery
-CELERY_BROKER_URL = 'redis://localhost:6379/0'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+REDIS_HOST = '172.60.0.7'
+CELERY_BROKER_URL = 'redis://' + REDIS_HOST + ':6379'
+CELERY_RESULT_BACKEND = 'redis://' + REDIS_HOST + ':6379'
 FRONTEND_URL = "http://172.60.0.4:3000"

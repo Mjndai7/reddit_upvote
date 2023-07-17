@@ -21,7 +21,7 @@ const RegisterPage = () => {
   const [responseMessage, setResponseMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState('')
-  const endpoint = "http://170.64.130.58:8000/graphql/"
+  const endpoint = "http://172.60.0.5:8000/graphql/"
   const navigate = useNavigate()
 
   const navigateLink = (path) => {
@@ -30,7 +30,6 @@ const RegisterPage = () => {
 
   
   const handleSubmit = async (e) => {
-
     e.preventDefault();
     if (password === confirmPassword) {
       // Passwords match

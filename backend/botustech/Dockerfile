@@ -12,6 +12,8 @@ RUN apt-get update \
 # Copy the requirements file to the working directory
 COPY requirements.txt .
 
+COPY entrypoint.sh .
+
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
@@ -34,7 +36,6 @@ EXPOSE 8000
 # Run the Django server
 RUN python manage.py makemigrations botustech 
 
-
 # Start the Celery worker and the backend server
-CMD celery -A botustech worker --loglevel=info & gunicorn botustech.wsgi:application --bind 0.0.0.0:8000
+CMD gunicorn botustech.wsgi:application --bind 0.0.0.0:8000
 

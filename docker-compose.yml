@@ -17,26 +17,28 @@ services:
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     container_name: reddit-database
+    networks:
+      reddit_net:
+        ipv4_address: 172.60.0.6
     environment:
       - MYSQL_DATABASE=Botustech
       - MYSQL_USER=botus
       - MYSQL_PASSWORD=botus1234
       - MYSQL_ROOT_PASSWORD=boturoot
     volumes:
-      - ./mysql-data:/var/lib/mysql
-    networks:
-      - reddit_net
+      - /mounts/mysql:/var/lib/mysql
 
   redis:
     image: redis:6.2.1
     restart: unless-stopped
-    container_name: reddit-reddis
+    container_name: botus_redis
+    networks:
+      reddit_net:
+        ipv4_address: 172.60.0.7
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
     volumes:
       - ../mounts/redis/:/data
-    networks:
-      - reddit_net
 
   backend:
     container_name: reddit-backend
@@ -52,7 +54,7 @@ services:
     depends_on:
      - db
      - redis
-    command: bash -c "python manage.py migrate && gunicorn botustech.wsgi:application --bind 0.0.0.0:8000"
+    command: ./entrypoint.sh
 
 networks:
   reddit_net:

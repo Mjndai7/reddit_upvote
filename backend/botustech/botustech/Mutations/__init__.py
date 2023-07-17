@@ -11,11 +11,10 @@ from botustech.models import RedditAccounts
 from reddit.ui.add_account_widget import AddAccountWidget
 from reddit.reddit_bot_manager import RedditBotManager
 from reddit.base import upvote
-from botustech.Actions.send_email import SendEmail
+from botustech.Actions.send_email import send_activation_email, send_email
 from botustech.Actions.tokens import TokensMaker
 
 
-send_email = SendEmail()
 bot_manager = RedditBotManager()
 add_account = AddAccountWidget(bot_manager)
 token_gen = TokensMaker(settings.SECRET_KEY)
@@ -44,6 +43,7 @@ class CreateUserMutation(graphene.Mutation):
         password = graphene.String(required=True)
         
     def mutate(self, info, email, name, password):
+
         if RegisteredUsers.objects.filter(email=email).exists():
             return GraphQLError("User Exists")
     
@@ -66,7 +66,7 @@ class CreateUserMutation(graphene.Mutation):
             user = RegisteredUsers.objects.get(email=email)
             random_id = token_gen.generate_random_id()
             token = token_gen.generate_token(user.id)
-            send_email.send_activation_email(email, token, random_id)
+            send_activation_email.delay(email, token, random_id)
             
 
         except Exception as error:
@@ -332,7 +332,7 @@ class ResetPasswordMutation(graphene.Mutation):
         try:
             user = RegisteredUsers.objects.get(email=email)
             token = token_gen.generate_token(user.id)
-            sent = send_email.send_email(email, token)
+            sent = send_email.delay(email, token)
             
             if sent:
                 success = True

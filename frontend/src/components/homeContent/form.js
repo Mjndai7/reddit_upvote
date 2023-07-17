@@ -19,7 +19,7 @@ const ContactFormCard = ({setGlobalUrls}) => {
   const [comments, setComments] = useState(false)
   const [inputValue, setInputValue] = useState('');
 
-  const endpoint =  "http://170.64.130.58:8000/graphql/"
+  const endpoint =  "http://172.60.0.5:8000/graphql/"
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
