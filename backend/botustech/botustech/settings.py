@@ -129,9 +129,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'Botustech',
-        'USER': 'root',
-        'PASSWORD': 'root',
-        'HOST': 'localhost',
+        'USER': 'botus',
+        'PASSWORD': 'botus1234',
+        'HOST': 'db',
         'PORT': '3306',
     }
 }
