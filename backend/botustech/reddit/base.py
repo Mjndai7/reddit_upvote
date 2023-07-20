@@ -1,93 +1,63 @@
-import os, json
-import threading
-from queue import Queue
+from celery import shared_task
+from botustech.celery import _celery_app
+import requests
 
-from reddit.reddit_bot import RedditBot
-from botustech.celery import app
-      
-json_file = os.getcwd() + "/reddit/data/state.json"
-with open(json_file, "r") as json_file:
-    data = json.load(json_file)
+base_url = "http://localhost:5000"  # Replace with the actual base URL of your Flask app
 
-#get available accounts that can vote.
-accounts = data.get('accounts', [])
-count = 0
+@_celery_app.task
+def upvote(url, threads, number_of_upvotes, rate, balance):
+    print(threads)
+    endpoint = f"{base_url}/upvote"
 
-#create a queue to hold the accounts
-accounts_queue = Queue()
-for account in accounts:
-    accounts_queue.put(account)
+    params = {
+        'url': url,
+        'threads': threads,
+        'number_of_upvotes': number_of_upvotes,
+        'rate': rate,
+        'balance': balance
+    }
 
-@app.task
-def upvote(url: str, threads: int, number_of_upvotes: int, rate: float, balance: float):
-    semaphore = threading.Semaphore(threads)
-    count = 0
-    new_balance = balance
-    while True:
-        account = accounts_queue.get()
-        bot = RedditBot(account)
-        bot.upvote_post(url)
-        accounts_queue.task_done()
-        semaphore.release()
-        count += 1
-        new_balance = new_balance - rate
-        
-        if new_balance < rate:
-            status = "INCOMPLETE"
-            break
+    response = requests.get(endpoint, params=params)
+    if response.status_code == 200:
+        print("Response:", response.json())
+    else:
+        print("Request failed with status code:", response.status_code)
 
-        if count == number_of_upvotes:
-            status = "COMPLETE"
-            break
-    
-    return count, status, new_balance
+@_celery_app.task
+def downvote(url, threads, number_of_upvotes, rate, balance):
+    print(threads)
+    endpoint = f"{base_url}/downvote"
 
-@app.task
-def downvote(url: str, threads: int, number_of_downvotes: int, rate: float, balance: float):
-    semaphore = threading.Semaphore(threads)
-    count = 0
-    new_balance = balance
-    while True:
-        account = accounts_queue.get()
-        bot = RedditBot(account)
-        bot.upvote_post(url)
-        accounts_queue.task_done()
-        semaphore.release()
-        count += 1
-        new_balance = new_balance - rate
-        
-        if new_balance < rate:
-            status = "INCOMPLETE"
-            break
+    params = {
+        'url': url,
+        'threads': threads,
+        'number_of_downvotes': number_of_upvotes,
+        'rate': rate,
+        'balance': balance
+    }
 
-        if count == number_of_downvotes:
-            status = "COMPLETE"
-            break
-    
-    return count, status, new_balance
+    response = requests.get(endpoint, params=params)
+    if response.status_code == 200:
+        print("Response:", response.json())
+    else:
+        print("Request failed with status code:", response.status_code)
 
-@app.task
-def comment(url: str, threads: int, number_of_comments: int, rate: float, balance: float):
-    semaphore = threading.Semaphore(threads)
-    count = 0
-    new_balance = balance
-    while True:
-        account = accounts_queue.get()
-        bot = RedditBot(account)
-        bot.upvote_post(url)
-        accounts_queue.task_done()
-        semaphore.release()
-        count += 1
-        new_balance = new_balance - rate
-        
-        if new_balance < rate:
-            status = "INCOMPLETE"
-            break
+@_celery_app.task
+def comment(url, comment, threads, number_of_upvotes, rate, balance):
+    print(threads)
+    endpoint = f"{base_url}/comment"
 
-        if count == number_of_comments:
-            status = "COMPLETE"
-            break
-    
-    return count, status, new_balance
-if __name__ == "__main__":
-    pass
+    params = {
+        'url': url,
+        'threads': threads,
+        'number_of_comments': number_of_upvotes,
+        'rate': rate,
+        'balance': balance,
+        'comment' : comment
+    }
+
+    response = requests.get(endpoint, params=params)
+    if response.status_code == 200:
+        print("Response:", response.json())
+    else:
+        print("Request failed with status code:", response.status_code)

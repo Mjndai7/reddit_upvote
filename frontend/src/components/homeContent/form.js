@@ -19,7 +19,7 @@ const ContactFormCard = ({setGlobalUrls}) => {
   const [comments, setComments] = useState(false)
   const [inputValue, setInputValue] = useState('');
 
-  const endpoint =  "http://172.60.0.5:8000/graphql/"
+  const endpoint =  "http://localhost:8000/graphql/"
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
@@ -37,7 +37,7 @@ const ContactFormCard = ({setGlobalUrls}) => {
     if(event.target.value === "comments"){
       setComments(true)
     }
-    if(event.target.value != "comments"){
+    if(event.target.value !== "comments"){
       setComments(false)
     }
   };
@@ -76,14 +76,21 @@ const ContactFormCard = ({setGlobalUrls}) => {
   
         // Handle the response data
         console.log(response)
-      if(response.data.data.createOrder.url.dateCreated){
+      if(response.data.data && response.data.data.createOrder &&  response.data.data.createOrder.url.dateCreated){
         const updatedUrls = [...urls];
-
+        setPostLink("")
+        setUpvotes("")
+        setSpeed("")
         // Add the new links to the beginning of the array using unshift()
         updatedUrls.unshift(postLink);
 
         // Set the state with the updated array
         setUrls(updatedUrls);
+        }
+
+        if(response.data &&  response.data.data && response.data.data.startOrder && response.data.data.startOrder.message === "Insuficient Balance"){
+          setMessage(`Add Balance to ${action}`)
+          setOpen(true)
         }
       
     } catch (error) {
@@ -91,49 +98,45 @@ const ContactFormCard = ({setGlobalUrls}) => {
     }
   };
 
-    const startVotes = async (e) => {
-      //send data to the api to start voting
-      //return the url as they are being processed
-      //also clear the url list when data is sent to the backend
-      e.preventDefault()
-      try {
-        console.log("urls: ", urls)
-        if (urls.length > 0){ 
-          const response = await axios.post(endpoint, {
-            query: `
-              mutation {
-                startOrder(email: "${email}", urls: "${urls}") {
-                  urls {
-                    dateCreated
-                    status
-                    url
-                    action
-                    speed
-                    cost
-                    number
-                  }
-                  message
+  const startVotes = async (e) => {
+    e.preventDefault();
+    try {
+      console.log("urls: ", urls);
+      if (urls.length > 0) {
+        const response = await axios.post(endpoint, {
+          query: `
+            mutation {
+              startOrder(email: "${email}", urls: ${JSON.stringify(urls)}) {
+                urls {
+                  dateCreated
+                  status
+                  url
+                  action
+                  speed
+                  cost
+                  number
                 }
+                message
               }
-            `,
-          });
-    
+            }
+          `,
+        });
+        setUrls([]);
         // Handle the response data
-        if(response.data.data.startOrder){
-          setGlobalUrls(response.data.data.startOrder.urls)
-          setUrls([])
+        if (response.data.data.startOrder) {
+          setGlobalUrls(response.data.data.startOrder.urls);
+        }
   
-        }
-       
-        if(response.data.data.startOrder.message === "Insuficient Balance"){
-          setMessage("Insufficient Balance")
-          setOpen(true)
+        if (response.data.data.startOrder.message === "Insuficient Balance") {
+          setMessage("Insufficient Balance");
+          setOpen(true);
         }
       }
-      } catch (error) {
-        console.log(error)
-      }
-    };
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  
 
     const clearList = () => {
       //send data to the api to start voting

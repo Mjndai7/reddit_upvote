@@ -52,7 +52,7 @@ class BotBase:
         if user_agent:
             options.add_argument(f'--user-agent="{user_agent}"')
         
-        driver = Chrome(options=options, driver_executable_path=f"{current_dir}/reddit/chromedriver.exe",
+        driver = Chrome(options=options,
                         user_data_dir=f"{current_dir}/reddit/profiles/{self._account['username']}", seleniumwire_options=seleniumwire_options)
         driver.set_window_size(950, 1080)
         return driver
@@ -70,57 +70,81 @@ class RedditBot(BotBase):
 
 
     def upvote_post(self, post_url:str) -> bool:
-        self.driver.get(post_url)
-        self.sleep(5)
-        upvote_button = self.driver.find_element(By.CLASS_NAME, "Post").find_elements(By.CLASS_NAME, "voteButton")[0]
-        ariaPressed = self.driver.execute_script('return arguments[0].ariaPressed', upvote_button)
-        if ariaPressed == "true":
-            print(f"=> Account: {self._account['username']} Action Type: UPVOTE Action Message: POST_ALREADY_UPVOTED")
-        else:
-            upvote_button.click()
-            self.sleep(4)
-            print(f"=> Account: {self._account['username']} Action Type: UPVOTE Action Message: POST_UPVOTED")
-    
-    
-    def downvote_post(self, post_url:str) -> bool:
-        self.driver.get(post_url)
-        self.sleep(5)
-        upvote_button = self.driver.find_element(By.CLASS_NAME, "Post").find_elements(By.CLASS_NAME, "voteButton")[1]
-        ariaPressed = self.driver.execute_script('return arguments[0].ariaPressed', upvote_button)
-        if ariaPressed == "true":
-            print(f"=> Account: {self._account['username']} Action Type: UPVOTE Action Message: POST_ALREADY_UPVOTED")
+        try:
+            self.driver.get(post_url)
+            self.sleep(5)
+            upvote_button = self.driver.find_element(By.CLASS_NAME, "Post").find_elements(By.CLASS_NAME, "voteButton")[0]
+            ariaPressed = self.driver.execute_script('return arguments[0].ariaPressed', upvote_button)
+            if ariaPressed == "true":
+                print(f"=> Account: {self._account['username']} Action Type: UPVOTE Action Message: POST_ALREADY_UPVOTED")
+                status = False
+
+            else:
+                upvote_button.click()
+                self.sleep(4)
+                print(f"=> Account: {self._account['username']} Action Type: UPVOTE Action Message: POST_UPVOTED")
+                status = True
         
-        else:
-            upvote_button.click()
-            self.sleep(4)
-            print(f"=> Account: {self._account['username']} Action Type: UPVOTE Action Message: POST_UPVOTED")
+        except Exception as Error:
+            status = False
+    
+        return status
+        
+    def downvote_post(self, post_url:str) -> bool:
+        try:
+            self.driver.get(post_url)
+            self.sleep(5)
+            upvote_button = self.driver.find_element(By.CLASS_NAME, "Post").find_elements(By.CLASS_NAME, "voteButton")[1]
+            ariaPressed = self.driver.execute_script('return arguments[0].ariaPressed', upvote_button)
+            if ariaPressed == "true":
+                print(f"=> Account: {self._account['username']} Action Type: UPVOTE Action Message: POST_ALREADY_UPVOTED")
+                status = False
+            
+            else:
+                upvote_button.click()
+                self.sleep(4)
+                print(f"=> Account: {self._account['username']} Action Type: UPVOTE Action Message: POST_UPVOTED")
+                status = True
+        
+        except Exception as Error:
+            print(Error)
+            status = False
+        
+        return status
 
 
     def comment_post(self, post_url:str, comment:str):
-        self.driver.get(post_url)
-        self.sleep(5)
-        commentInput = self.driver.find_element(By.CLASS_NAME, "public-DraftEditor-content")
-        self.driver.execute_script('arguments[0].scrollIntoView()', commentInput)
-        time.sleep(1)
-        commentInput.click()
-        action_chain = ActionChains(self.driver)
-        for letter in comment: 
-            action_chain.send_keys(letter)
-            action_chain.pause(random.randint(6, 15)/100)
-        action_chain.perform()
-        submitButton = [e for e in self.driver.find_elements(By.TAG_NAME, "button") if "comment" in e.text.lower()][-1]
-        submitButton.click()
-
-        # s_time = time.time()
-        # print("Comment done waiting")
-        for _ in range(10):
+        try:
+            self.driver.get(post_url)
+            self.sleep(5)
+            commentInput = self.driver.find_element(By.CLASS_NAME, "public-DraftEditor-content")
+            self.driver.execute_script('arguments[0].scrollIntoView()', commentInput)
             time.sleep(1)
-            if self.driver.find_element(By.CLASS_NAME, "public-DraftEditor-content").find_elements(By.TAG_NAME, "span")[0].text.strip() == "":
-                print(f"=> Account: {self._account['username']} Action Type: COMMENT Action Message: COMMENT_DONE")
-                self.sleep[2, 4]
-        else:
-            raise Exception('comment not submitted, timeout')
-        # print("Time taken for comment:", time.time() - s_time)
+            commentInput.click()
+            action_chain = ActionChains(self.driver)
+            for letter in comment: 
+                action_chain.send_keys(letter)
+                action_chain.pause(random.randint(6, 15)/100)
+            action_chain.perform()
+            submitButton = [e for e in self.driver.find_elements(By.TAG_NAME, "button") if "comment" in e.text.lower()][-1]
+            submitButton.click()
+
+            # s_time = time.time()
+            # print("Comment done waiting")
+            for _ in range(10):
+                time.sleep(1)
+                if self.driver.find_element(By.CLASS_NAME, "public-DraftEditor-content").find_elements(By.TAG_NAME, "span")[0].text.strip() == "":
+                    print(f"=> Account: {self._account['username']} Action Type: COMMENT Action Message: COMMENT_DONE")
+                    self.sleep[2, 4]
+                return True
+            else:
+                status =  False
+
+        except Exception as Error:
+            print(f"Error occured while commenting , {post_url}")
+            status =  False
+        
+        return status
 
     def comment_first_post(self, comment:str):
         self.driver.get('https://www.reddit.com')

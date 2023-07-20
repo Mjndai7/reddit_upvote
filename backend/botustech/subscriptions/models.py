@@ -1,4 +1,6 @@
 from django.db import models
+from  botustech.models  import RegisteredUsers
+
 
 # Create your models here.
 class Transaction(models.Model):
@@ -8,6 +10,7 @@ class Transaction(models.Model):
     status = models.CharField(max_length=20)
     invoice_id = models.CharField(max_length=255, blank=True, null=True)
     timestamp = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(RegisteredUsers, on_delete=models.CASCADE)
 
 
     def __str__(self):

@@ -11,7 +11,7 @@ from telegram_django_bot.routing import telegram_reverse
 from telegram_django_bot.tg_dj_bot import TG_DJ_Bot
 from telegram import Update,  ParseMode
 from telegram.ext import ConversationHandler
-from telegram.ext import CommandHandler, MessageHandler, filters, ContextTypes
+from telegram.ext import CallbackContext ,ContextTypes, CommandHandler, MessageHandler, filters
 from telegram.ext import Updater
 from .forms import BotMenuElemForm
 from .models import User
@@ -20,8 +20,8 @@ from .database import DataBaseOperations
 from .payments import Payments
 
 help_link = "https://web.telegram.org/k/#@dannyofm"
-ACTION, PHOTO, LOCATION, BIO = range(4)
 
+OPTION, URL, NUM_ACTION, SPEED = range(4)
 
 @handler_decor()
 def start(bot: TG_DJ_Bot, update: Update, user: User):
@@ -139,32 +139,115 @@ def account(bot: TG_DJ_Bot, update: Update, user: User):
         # gm_callback_data (add method and args to Viewset)
         return bot.send_message(chat_id=chat_id, text=f'{message}', reply_markup=reply_markup, parse_mode='Markdown')
 
-async def start_with_action(update: Update, context: ContextTypes) -> int:
-    """Starts the conversation and asks the user about their gender."""
-    reply_keyboard = [["Upvotes", "Downvotes", "Comments"]]
-
-    await update.message.reply_text(
-        "You need to choose one action to continue\n\n"
-        "What action would you like to perform?\n\n",
-        reply_markup=ReplyKeyboardMarkup(
-            reply_keyboard, one_time_keyboard=True, input_field_placeholder="What action?"
-        ),
-    )
-    return ACTION
-
-async def action(update: Update, context: ContextTypes) -> int:
-    """Stores the selected gender and asks for a photo."""
-    user = update.message.from_user
-    await update.message.reply_text(
-        "I see! Please send me a photo of yourself, "
-        "so I know what you look like, or send /skip if you don't want to.",
-        reply_markup=ReplyKeyboardRemove(),
+def start_order(updata: Update , context: CallbackContext):
+    return ConversationHandler(
+        entry_points=[CommandHandler("new_order", new_order)],
+        states={
+            OPTION: [MessageHandler(filters.Filters.text("^(COMMENT|COMMENTS|UPVOTE|UPVOTES|DOWNVOTE|DOWNVOTES|Upvotes|Downvotes|upvotes|downvotes|comment|comments|Comment)$"), option)],
+            URL: [MessageHandler(filters.Filters.regex("^(Yes)$"), number)],
+        },
+        fallbacks=[CommandHandler("cancel", cancel)],
     )
 
-    return PHOTO
+@handler_decor()
+async def new_order(update: Update,context: CallbackContext,  user: User):
+    database = DataBaseOperations()
+
+    is_member, user_data = database.is_a_member(user.telegram_username)
+    if is_member and user_data:
+        message = _(
+        f'Relpy with an option.Avaible options are🤖\n \n'
+
+        f'Upvotes🤖\n'
+        f'Downvotes\n'
+        f'Comments\n'
+        )
+        _buttons = [
+            [InlineKeyboardButtonDJ(
+            text=_('💬 Support'),
+            callback_data=BotMenuElemViewSet(telegram_reverse('base:BotMenuElemViewSet')).gm_callback_data('show_list','')
+            # '' - for foreign_filter
+            )],
+            [InlineKeyboardButtonDJ(
+            text=_('🏠 Home'),
+            callback_data=BotMenuElemViewSet(telegram_reverse('base:BotMenuElemViewSet')).gm_callback_data('show_list','')
+            # '' - for foreign_filter
+            )],
+            [InlineKeyboardButtonDJ(
+                text=_('❎ Cancel'),
+                callback_data=settings.TELEGRAM_BOT_MAIN_MENU_CALLBACK
+            )],
+        ]
+
+        reply_markup = InlineKeyboardMarkup(_buttons)
+        await update.message.reply_text(
+            message,
+            reply_markup=reply_markup
+        )
+    return OPTION
+
+async def option(update: Update, context: ContextTypes) -> int:
+    user_response = update.message.text
+    print(user_response)
+    message =  f"Relpy with a valid reddit link to {user_response}🤖\n \n"
+    _buttons = [
+            [InlineKeyboardButtonDJ(
+                text=_('❎ Cancel'),
+                callback_data=settings.TELEGRAM_BOT_MAIN_MENU_CALLBACK
+            )],
+        ]
+
+    reply_markup = InlineKeyboardMarkup(_buttons)
+    update.message.reply_text(
+        message,
+        reply_markup=reply_markup
+        )
+    return URL
+
+async def number(update: Update, context: ContextTypes) -> int:
+    user_response = update.message.text
+    message =  f"Relpy with a valid reddit link to {user_response}🤖\n \n"
+    _buttons = [
+            [InlineKeyboardButtonDJ(
+                text=_('❎ Cancel'),
+                callback_data=settings.TELEGRAM_BOT_MAIN_MENU_CALLBACK
+            )],
+        ]
+
+    reply_markup = InlineKeyboardMarkup(_buttons)
+    update.message.reply_text(
+        message,
+        reply_markup=reply_markup
+        )
+    return NUM_ACTION
+
+
+async def speed(update: Update, context: ContextTypes) -> int:
+    user_response = update.message.text
+    message =  f"Relpy with a valid reddit link to {user_response}🤖\n \n"
+    _buttons = [
+            [InlineKeyboardButtonDJ(
+                text=_('❎ Cancel'),
+                callback_data=settings.TELEGRAM_BOT_MAIN_MENU_CALLBACK
+            )],
+        ]
+
+    reply_markup = InlineKeyboardMarkup(_buttons)
+    update.message.reply_text(
+        message,
+        reply_markup=reply_markup
+        )
+    return SPEED
+    
 
 async def cancel(update: Update, context: ContextTypes) -> int:
-    """Cancels and ends the conversation."""
+    """
+    Ends the conversation when the user sends /cancel.
+
+    :param update: An object that contains all the incoming update data.
+    :param context: A context object containing information for the callback function.
+    :return: The next state for the conversation, which is ConversationHandler.END in this case.
+    """
     user = update.message.from_user
     await update.message.reply_text(
         "Bye! I hope we can talk again some day.", reply_markup=ReplyKeyboardRemove()
@@ -172,22 +255,7 @@ async def cancel(update: Update, context: ContextTypes) -> int:
 
     return ConversationHandler.END
 
-@handler_decor()
-def new_order(bot: TG_DJ_Bot, update: Update, user: User):
-    database = DataBaseOperations()
 
-    is_member, user_data = database.is_a_member(user.telegram_username)
-    if is_member and user_data:
-        # Create a conversation handler
-        conv_handler = ConversationHandler(
-            entry_points=[CommandHandler("start_with_action", start_with_action)],
-            states={
-                ACTION: [MessageHandler(filters.Filters.text, action)],
-            },
-            fallbacks=[CommandHandler("cancel", cancel)],
-        )
-
-        conv_handler.handle_update
         
 class GetStartedViewSet(TelegramViewSet):
     viewset_name = 'BotMenuElem'

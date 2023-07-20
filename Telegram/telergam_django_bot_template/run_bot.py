@@ -9,7 +9,6 @@ django.setup()
 
 from telegram_django_bot.tg_dj_bot import TG_DJ_Bot
 from telegram_django_bot.routing import RouterCallbackMessageCommandHandler
-
 from bot_conf.settings import TELEGRAM_TOKEN, TELEGRAM_LOG, DEBUG
 import logging
 
@@ -17,6 +16,7 @@ import logging
 def add_handlers(updater):
     dp = updater.dispatcher
     dp.add_handler(RouterCallbackMessageCommandHandler())
+    
 
 def main():
     if not DEBUG:

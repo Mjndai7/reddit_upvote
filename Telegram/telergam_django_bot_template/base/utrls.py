@@ -2,7 +2,7 @@ from django.urls import re_path, include
 from django.conf import settings
 
 from .views import start, BotMenuElemViewSet, UserViewSet, some_debug_func
-from .views import account, new_order
+from .views import account, start_order
 from .views import AddBalanceViewSet
 from .views import GetStartedViewSet
 from .views import PaymentsViewSet
@@ -13,7 +13,7 @@ urlpatterns = [
     re_path('start', start, name='start'),
     re_path('main_menu', start, name='start'),
     re_path('account', account, name='account'),
-    re_path('new_order', new_order, name='new_order'),
+    re_path('new_order', start_order, name='new_order'),
 
     re_path('sb/', BotMenuElemViewSet, name='BotMenuElemViewSet'),
     re_path('gs/', GetStartedViewSet, name='GetStartedViewSet'),
@@ -23,7 +23,6 @@ urlpatterns = [
     re_path('us/', UserViewSet, name='UserViewSet'),
     re_path('au/', AddBalanceViewSet, name='AddBalanceViewSet'),
 ]
-
 
 if settings.DEBUG:
     urlpatterns += [

@@ -10,16 +10,13 @@ from botustech.models import RedditAccounts
 
 from reddit.ui.add_account_widget import AddAccountWidget
 from reddit.reddit_bot_manager import RedditBotManager
-from reddit.base import upvote
+from reddit.base import upvote, downvote, comment
 from botustech.Actions.send_email import send_activation_email, send_email
 from botustech.Actions.tokens import TokensMaker
-
 
 bot_manager = RedditBotManager()
 add_account = AddAccountWidget(bot_manager)
 token_gen = TokensMaker(settings.SECRET_KEY)
-
-
 
 class UserType(DjangoObjectType):
     class Meta:
@@ -57,7 +54,7 @@ class CreateUserMutation(graphene.Mutation):
                 totalvotes=0, 
                 totalcomments=0,
                 totalspent=0.00,
-                package="None",
+                package=0.00,
                 status="NOT ACTIVE",
             )
             #send_status = send_email.send_email(email, name, password)
@@ -175,15 +172,19 @@ class UrlsMutation(graphene.Mutation):
         try:
             user = RegisteredUsers.objects.get(email=email)
             
-            _url = RedditUrls.objects.create(
-                url = url,
-                action=action,
-                number=number,
-                speed=speed,
-                status="WAITING",
-                cost = round(int(number) * 0.05, 2),
-                user=user
-            )
+            if float(user.balance) > 0.00 and float(user.package) > 0.00:
+                _url = RedditUrls.objects.create(
+                    url = url,
+                    action=action,
+                    number=number,
+                    speed=speed,
+                    status="WAITING",
+                    cost = round(int(number) * 0.05, 2),
+                    user=user
+                )
+            
+            else:
+               raise GraphQLError("Insufficient Balance") 
 
         
         except RegisteredUsers.DoesNotExist:
@@ -205,28 +206,28 @@ class StartOrderMutation(graphene.Mutation):
             user = RegisteredUsers.objects.get(email=email)
             urls_data = []
             _urls = []
+            
             for url in urls:
                 reddit_urls = RedditUrls.objects.filter(url=url, user=user, status="WAITING")
                 urls_data.extend(reddit_urls)
 
             _urls.extend(RedditUrls.objects.filter(user=user))
-            if len(url) > 0:
+            
+            if len(urls) > 0:
                 #we are using price per votes as the package 
                 user_balance = user.balance
                 user_package = user.package
 
-                if not bool(user.isadmin) or user_package != "FREE" and float(user_balance) <= 0.00 or user_package == "None":
+                if float(user_package) <= 0.00 and  float(user_balance) <= 0.00:
                     message = "Insuficient Balance"
                     return StartOrderMutation(urls=_urls, message=message)
                 
-                #check is the user has abiliy to execute the action
                 for url in urls_data:
-
                     if url.action == "upvotes" and user_package != "None":
                         current_stutus = "UPVOTING"
                         url.status = current_stutus
                         url.save()
-                        count , status, balance = upvote(url.url, int(url.speed) , int(url.number), float(user_package), float(user_balance))
+                        count , status, balance = upvote.delay(url.url, int(url.speed) , int(url.number), float(user_package), float(user_balance))
                         url.status = status
                         user.totalvotes = int(user.totalvotes) +  int(count)
                         user.balance = balance
@@ -234,11 +235,11 @@ class StartOrderMutation(graphene.Mutation):
                         url.save()
 
 
-                    elif url.action == "downvoes" and user_package != "None":
+                    elif url.action == "downvotes" and user_package != "None":
                         current_stutus = "DOWNOTING"
                         url.status = current_stutus
                         url.save()
-                        count , status, balance = upvote(url.url, int(url.speed) , int(url.number), float(user_package), float(user_balance))
+                        count , status, balance = downvote.delay(url.url, int(url.speed) , int(url.number), float(user_package), float(user_balance))
                         url.status = status
                         user.totalvotes = int(user.totalvotes) +  int(count)
                         user.balance = balance
@@ -249,7 +250,7 @@ class StartOrderMutation(graphene.Mutation):
                         current_stutus = "COMMENTING"
                         url.status = current_stutus
                         url.save()
-                        count , status, balance = upvote(url.url, int(url.speed) , int(url.number), float(user_package), float(user_balance))
+                        count , status, balance = comment.delay(url.url, "comment", int(url.speed) , int(url.number), float(user_package), float(user_balance))
                         url.status = status
                         user.totalvotes = int(user.totalvotes) +  int(count)
                         user.balance = balance

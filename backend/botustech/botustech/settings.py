@@ -129,9 +129,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'Botustech',
-        'USER': 'botus',
-        'PASSWORD': 'botus1234',
-        'HOST': 'db',
+        'USER': 'root',
+        'PASSWORD': 'root',
+        'HOST': 'localhost',
         'PORT': '3306',
     }
 }
@@ -187,7 +187,7 @@ SUBSCRIPTION_FAILED_URL = "http://localhost:3000"
 SUBSCRIPTION_REDIRECT_URL = 'http://localhost:3000/coinbase-beta/'
 
 #celery
-REDIS_HOST = '172.60.0.7'
+REDIS_HOST = 'localhost'
 CELERY_BROKER_URL = 'redis://' + REDIS_HOST + ':6379'
 CELERY_RESULT_BACKEND = 'redis://' + REDIS_HOST + ':6379'
 FRONTEND_URL = "http://172.60.0.4:3000"
