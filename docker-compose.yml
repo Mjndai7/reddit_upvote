@@ -54,7 +54,7 @@ services:
     depends_on:
      - db
      - redis
-    command: ./entrypoint.sh
+    command: ./backend/entrypoint.sh
 
 networks:
   reddit_net:
