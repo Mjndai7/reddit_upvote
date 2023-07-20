@@ -3,7 +3,7 @@
 set -e
 python manage.py makemigrations botustech
 
-sleep(5)
+sleep 5
 python manage.py migrate &
 
 sleep 5
