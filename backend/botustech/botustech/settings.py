@@ -28,21 +28,21 @@ STRIPE_SECRET_KEY = 'sk_test_51Lc84CDTMi1SAp13nQ049H6S612ZRMLUe59soxZZleOT4HFTTT
 STRIPE_WEBHOOK_SECRET = 'whsec_e6fb9e740bfa6b76a29b7b890e11854593efa6b447c8b582cecd5081035ea1da'
 
 # COINBASE
-COINBASE_COMMERCE_API_KEY = '0033fe47-39a9-440d-b513-4917d6cd3f49'
+COINBASE_COMMERCE_API_KEY = '85f63c13-ea67-4d5e-aa7a-4294570775cf'
 COINBASE_COMMERCE_WEBHOOK_SHARED_SECRET = 'da0a52f8-b214-4308-aafb-23f511a58951'
-COINBASE_CHECKOUT_ID = '9416d7a2-6850-4fd1-a85f-e6abab8ec4e7'
+COINBASE_CHECKOUT_ID = '7211092c-58f0-449f-af10-9fec7dd1acbd'
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-EMAIL_FROM_ADDRESS = "asidohsidney254@gmail.com"
+EMAIL_FROM_ADDRESS = "support@maxupvote.com"
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST = 'mail.privateemail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = "asidohsidney254@gmail.com"
-EMAIL_HOST_PASSWORD ="abfgkljuxuqbrvod"
+EMAIL_HOST_USER = "support@maxupvote.com"
+EMAIL_HOST_PASSWORD ="ppkj-ttes-wvpe-zwiu"
 
 ALLOWED_HOSTS = ["*"]
 CORS_ALLOW_CREDENTIALS = False
