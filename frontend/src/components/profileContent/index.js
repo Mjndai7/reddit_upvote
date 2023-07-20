@@ -109,7 +109,7 @@ const ProfileCard = () => {
   const urls = []
   const email = localStorage.getItem("Email")
   const [data, setData] = useState([])
-  const endpoint =  "http://localhost:8000/graphql/"
+  const endpoint =  "http://13.42.43.249:8000/graphql/"
   useEffect(() => {
     recentActivities()
   }, [])

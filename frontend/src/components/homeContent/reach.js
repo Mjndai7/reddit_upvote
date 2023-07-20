@@ -13,7 +13,7 @@ import useStyles from "../../assets/styles/reach";
 const Contacts = ({urls, setUrls}) => {
   const classes = useStyles();
   const email = localStorage.getItem("Email")
-  const endpoint =  "http://localhost:8000/graphql/"
+  const endpoint =  "http://13.42.43.249:8000/graphql/"
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   
