@@ -24,6 +24,23 @@ def send_email(email, token):
         return False
 
 @_celery_app.task
+def send_payment_email(email, package, amount):
+    message = f"Thank you for your payment. You have purchased the {package} package for ${amount}"
+    try:
+        send_mail(
+            'Payment Successful',
+            message,
+            settings.EMAIL_FROM_ADDRESS,
+            [email],
+            fail_silently=False,
+        )
+        return True
+    
+    except Exception as E:
+        print(f"ERROR: {E}")
+        return False
+
+@_celery_app.task
 def send_activation_email(email, token, id):
     url = f"{settings.FRONTEND_URL}/activate/{id}/{token}"
     message =( f"Click the link to activate your account at maxupvote.\n{url}"

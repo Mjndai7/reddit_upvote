@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from botustech import send_mail
+from botustech.Actions.send_email import send_payment_email
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -8,7 +8,10 @@ from django.conf import settings
 from django.shortcuts import redirect
 import json
 from django.http import JsonResponse, HttpResponse
+
 from botustech.models import Transaction
+from botustech.models import RegisteredUsers
+
 from django.views.decorators.csrf import csrf_exempt
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -16,8 +19,6 @@ webhook_secret = settings.STRIPE_WEBHOOK_SECRET
 
 FRONTEND_SUBSCRIPTION_SUCCESS_URL = settings.SUBSCRIPTION_SUCCESS_URL
 FRONTEND_SUBSCRIPTION_CANCEL_URL = settings.SUBSCRIPTION_FAILED_URL
-
-
 
 class CreateSubscription(APIView):
     def post(self, request):
@@ -70,6 +71,7 @@ class WebHook(APIView):
 
         event_type = event['type']
         data_object = event['data']['object']
+        user = RegisteredUsers.objects.filter(email=data_object["customer_email"])
 
         if event_type == 'checkout.session.completed':
             # Payment is successful and a subscription is created.
@@ -79,12 +81,10 @@ class WebHook(APIView):
             package = data_object['metadata'].get['package']
 
             # Send email notification to the customer
-            subject = 'Payment Successful'
-            message = f"Thank you for your payment. You have purchased the {package} package for ${amount}"
-            send_mail(subject, message, 'support@maxupvote.com', [data_object['customer_email']])
+            send_payment_email(data_object["customer_email"], package, amount)
 
             # Create a Transaction object and save it to the database
-            transaction = Transaction(customer_id=customer_id,amount=amount, package=package, status='completed')
+            transaction = Transaction(customer_id=customer_id,amount=amount, package=package, status='completed', user=user)
             transaction.save()
 
         elif event_type == 'invoice.paid':
@@ -96,13 +96,33 @@ class WebHook(APIView):
             package = data_object['metadata'].get['package']
 
             # Send email notification to the customer
-            subject = 'Payment Successful'
-            message = f"Thank you for your payment. You have purchased the {package} for ${amount}."
-            send_mail(subject, message, 'support@maxupvote.com', [data_object['customer_email']])
+            send_payment_email(data_object["customer_email"], package, amount)
             
             # Create a Transaction object and save it to the database
-            transaction = Transaction(customer_id=customer_id, amount=amount, package=package, status='completed')
+            transaction = Transaction(customer_id=customer_id, amount=amount, package=package, status='completed', user=user)
             transaction.save()
+
+            if float(amount) <= 10.00:
+                user.package = 0.15
+        
+            
+            elif float(amount) > 10.00 and float(amount) < 50.00:
+                user.package = 0.12
+               
+            
+            elif float(amount) > 50.00 and float(amount) <= 500.00:
+                user.package = 0.10
+                
+            
+            elif float(amount) > 500.00 and float(amount) <= 2000.00:
+                user.package = 0.07
+            
+            else:
+                user.package = 0.00
+            
+            user.balance = amount
+            user.save()
+
 
         elif event_type == 'invoice.payment_failed':
             # customer portal updates their payment information
@@ -112,10 +132,10 @@ class WebHook(APIView):
             # Send email notification to the customer
             subject = 'Payment Failed'
             message = f"Payment for the {package} package failed. Please update your information."
-            send_mail(subject, message, "support@maxupvote", [data_object['customer_email']])
+            #send_payment_email(data_object["customer_email"], package, amount)
 
             # Create a transaction object and update it in the database
-            transaction = Transaction(customer_id=customer_id, package=package, status='failed')
+            transaction = Transaction(customer_id=customer_id, package=package, status='failed', user=user)
             transaction.save()
 
         else:
