@@ -8,7 +8,7 @@ from django.conf import settings
 from django.shortcuts import redirect
 import json
 from django.http import JsonResponse, HttpResponse
-from .models import Transaction
+from botustech.models import Transaction
 from django.views.decorators.csrf import csrf_exempt
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -22,33 +22,23 @@ FRONTEND_SUBSCRIPTION_CANCEL_URL = settings.SUBSCRIPTION_FAILED_URL
 class CreateSubscription(APIView):
     def post(self, request):
         try:
-            prices = [
-                'price_1NWCp3CHHqRTZvFEKSNOBzXs',
-                'price_1NWCkdCHHqRTZvFE4EipnBCz',
-                'price_1NWCj2CHHqRTZvFEJgFDJaCr',
-                'price_1NW6PMCHHqRTZvFE7AYWPgvq',
-            ]
-
-
-            checkout_sessions = []
-            for price in prices:
-                checkout_session = stripe.checkout.Session.create(
-                    line_items=[
-                        {
-                            'price': price,
-                            'quantity': 1
-                        }
-                    ],
-                    payment_method_types=['card'],
-                    mode='payment',
-                    success_url=FRONTEND_SUBSCRIPTION_SUCCESS_URL + "?session_id={CHECKOUT_SESSION_ID}",
-                    cancel_url=FRONTEND_SUBSCRIPTION_CANCEL_URL
-                )
-                checkout_sessions.append(checkout_session)
-            
-            #Redirect to each checkout session url individually
-            for session in checkout_session:
-                return redirect(session.url, status=303)
+            price  = request.POST.get('price_id')
+            print("price", price)
+            checkout_session = stripe.checkout.Session.create(
+                line_items=[
+                    {
+                        'price': price,
+                        'quantity': 1
+                    }
+                ],
+                payment_method_types=['card'],
+                mode='payment',
+                success_url=FRONTEND_SUBSCRIPTION_SUCCESS_URL + "?session_id={CHECKOUT_SESSION_ID}",
+                cancel_url=FRONTEND_SUBSCRIPTION_CANCEL_URL
+            )
+        
+            return redirect(checkout_session.url, status=303)
+        
         except Exception as err:
             raise err
 

@@ -151,7 +151,7 @@ const Packages = ({setView}) => {
           <AiOutlineCheckSquare />150 votes
           </Typography>
           <form action={`http://172.60.0.5:8000/api/subscriptions/create-subscription/`} method="POST">
-              <input type="hidden" name="price_id" value="price_1NWCp3CHHqRTZvFEKSNOBzXs" />
+              <input type="hidden" name="price_id" value="price_1NW6PMCHHqRTZvFE7AYWPgvq" />
               <Button
             variant="contained"
             color="primary"
@@ -186,7 +186,7 @@ const Packages = ({setView}) => {
           <AiOutlineCheckSquare />600 votes
           </Typography>
           <form action={`http://172.60.0.5:8000/api/subscriptions/create-subscription/`} method="POST">
-              <input type="hidden" name="price_id" value="price_1NWCkdCHHqRTZvFE4EipnBCz" />
+              <input type="hidden" name="price_id" value="price_1NWCj2CHHqRTZvFEJgFDJaCr" />
               <Button
             variant="contained"
             color="primary"
@@ -221,7 +221,7 @@ const Packages = ({setView}) => {
           <AiOutlineCheckSquare />5000 votes
           </Typography>
           <form action={`http://172.60.0.5:8000/api/subscriptions/create-subscription/`} method="POST">
-              <input type="hidden" name="price_id" value="price_1NWCj2CHHqRTZvFEJgFDJaCr" />
+              <input type="hidden" name="price_id" value="price_1NWCkdCHHqRTZvFE4EipnBCz" />
               <Button
             variant="contained"
             color="primary"
@@ -257,7 +257,7 @@ const Packages = ({setView}) => {
           <AiOutlineCheckSquare />14000 votes
           </Typography>
           <form action={`http://172.60.0.5:8000/api/subscriptions/create-subscription/`} method="POST">
-              <input type="hidden" name="price_id" value="price_1NW6PMCHHqRTZvFE7AYWPgvq" />
+              <input type="hidden" name="price_id" value="price_1NWCp3CHHqRTZvFEKSNOBzXs" />
               <Button
             variant="contained"
             color="primary"
