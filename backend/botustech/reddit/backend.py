@@ -60,6 +60,7 @@ def upvote():
             'status' : status
             # Include any other relevant data you want to return
         }
+        bot.close()
         return response_data, 200   
     
     except Exception as Error:
@@ -70,10 +71,11 @@ def upvote():
             'status' : status
             # Include any other relevant data you want to return
         }
+        bot.close()
         return response_data, 200 
 
 
-@app.route("/downvote")
+@app.route("/downvote",  methods=['GET'])
 def downvote():
     try:
         url = request.args.get('url')
@@ -113,6 +115,7 @@ def downvote():
             'status' : status
             # Include any other relevant data you want to return
         }
+        bot.close()
         return response_data, 200   
     
     except Exception as Error:
@@ -123,9 +126,10 @@ def downvote():
             'status' : status
             # Include any other relevant data you want to return
         }
+        bot.close()
         return response_data, 200 
 
-@app.route("/comment/")
+@app.route("/comment/",  methods=['GET'])
 def comment():
     try:
         url = request.args.get('url')
@@ -166,6 +170,7 @@ def comment():
             'status' : status
             # Include any other relevant data you want to return
         }
+        bot.close()
         return response_data, 200   
     
     except Exception as Error:
@@ -176,6 +181,7 @@ def comment():
             'status' : status
             # Include any other relevant data you want to return
         }
+        bot.close()
         return response_data, 200 
 
 
