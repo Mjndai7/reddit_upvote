@@ -23,10 +23,10 @@ class CreateSubscription(APIView):
     def post(self, request):
         try:
             prices = [
-                'price_1NW6PMCHHqRTZvFE7AYWPgvq',
-                'price_1NWCj2CHHqRTZvFEJgFDJaCr',
-                'price_1NWCkdCHHqRTZvFE4EipnBCz',
                 'price_1NWCp3CHHqRTZvFEKSNOBzXs',
+                'price_1NWCkdCHHqRTZvFE4EipnBCz',
+                'price_1NWCj2CHHqRTZvFEJgFDJaCr',
+                'price_1NW6PMCHHqRTZvFE7AYWPgvq',
             ]
 
             checkout_sessions = []

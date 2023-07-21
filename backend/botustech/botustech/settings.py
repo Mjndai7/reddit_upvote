@@ -127,15 +127,13 @@ WSGI_APPLICATION = 'botustech.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'Botustech',
-        'USER': 'botus',
-        'PASSWORD': 'botus1234',
-        'HOST': 'db',
-        'PORT': '3306',
-    }
-}
-
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'coredb',
+        'USER': 'core',
+           'PASSWORD': 'wCh29&HE&T83',
+        'HOST': 'localhost',
+        'PORT': '5432',
+} }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
