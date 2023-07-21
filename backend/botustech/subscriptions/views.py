@@ -23,10 +23,10 @@ class CreateSubscription(APIView):
     def post(self, request):
         try:
             prices = [
-                'price_1NTKsZDTMi1SAp13fxJuEVb6',
-                'price_1NT73cDTMi1SAp13ptOQU2Ft',
-                'price_1NTKoTDTMi1SAp13AI5woVHx',
-                'price_1NTKqdDTMi1SAp13xdH2SwDC',
+                'price_1NW6PMCHHqRTZvFE7AYWPgvq',
+                'price_1NWCj2CHHqRTZvFEJgFDJaCr',
+                'price_1NWCkdCHHqRTZvFE4EipnBCz',
+                'price_1NWCp3CHHqRTZvFEKSNOBzXs',
             ]
 
             checkout_sessions = []
@@ -89,7 +89,7 @@ class WebHook(APIView):
             # Send email notification to the customer
             subject = 'Payment Successful'
             message = f"Thank you for your payment. You have purchased the {package} package for ${amount}"
-            send_mail(subject, message, 'support@botustech.com', [data_object['customer_email']])
+            send_mail(subject, message, 'support@maxupvote.com', [data_object['customer_email']])
 
             # Create a Transaction object and save it to the database
             transaction = Transaction(customer_id=customer_id,amount=amount, package=package, status='completed')
@@ -106,7 +106,7 @@ class WebHook(APIView):
             # Send email notification to the customer
             subject = 'Payment Successful'
             message = f"Thank you for your payment. You have purchased the {package} for ${amount}."
-            send_mail(subject, message, 'support@botustech.com', [data_object['customer_email']])
+            send_mail(subject, message, 'support@maxupvote.com', [data_object['customer_email']])
             
             # Create a Transaction object and save it to the database
             transaction = Transaction(customer_id=customer_id, amount=amount, package=package, status='completed')
@@ -120,7 +120,7 @@ class WebHook(APIView):
             # Send email notification to the customer
             subject = 'Payment Failed'
             message = f"Payment for the {package} package failed. Please update your information."
-            send_mail(subject, message, "support@botustech.com", [data_object['customer_email']])
+            send_mail(subject, message, "support@maxupvote", [data_object['customer_email']])
 
             # Create a transaction object and update it in the database
             transaction = Transaction(customer_id=customer_id, package=package, status='failed')

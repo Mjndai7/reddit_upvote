@@ -10,7 +10,6 @@ class Transaction(models.Model):
     status = models.CharField(max_length=20)
     invoice_id = models.CharField(max_length=255, blank=True, null=True)
     timestamp = models.DateTimeField(auto_now_add=True)
-    
     def __str__(self):
         return f"Transaction: {self.customer_id} - ${self.amount} - {self.package}"
     
