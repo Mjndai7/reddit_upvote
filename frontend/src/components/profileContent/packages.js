@@ -151,7 +151,7 @@ const Packages = ({setView}) => {
           <AiOutlineCheckSquare />150 votes
           </Typography>
           <form action={`http://172.60.0.5:8000/api/subscriptions/create-subscription/`} method="POST">
-              <input type="hidden" name="price_id" value="price_1NW6PMCHHqRTZvFE7AYWPgvq" />
+              <input type="hidden" name="price_id" value="price_1NWMV2CHHqRTZvFEk2HPfqXp" />
               <Button
             variant="contained"
             color="primary"
