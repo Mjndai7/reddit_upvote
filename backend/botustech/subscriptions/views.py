@@ -29,7 +29,7 @@ class CreateSubscription(APIView):
                 'price_1NW6PMCHHqRTZvFE7AYWPgvq',
             ]
 
-            checkout_sessions = []
+            checkout_session_urls = []
             for price in prices:
                 checkout_session = stripe.checkout.Session.create(
                     line_items=[
@@ -43,10 +43,11 @@ class CreateSubscription(APIView):
                     success_url=FRONTEND_SUBSCRIPTION_SUCCESS_URL + "?session_id={CHECKOUT_SESSION_ID}",
                     cancel_url=FRONTEND_SUBSCRIPTION_CANCEL_URL
                 )
-                checkout_sessions.append(checkout_session)
+                checkout_session_urls.append(checkout_session.url)
             
             # Redirect to the first checkout session url
-            return redirect(checkout_sessions[0].url, code=303)
+            for session_url in checkout_session_urls:
+                return redirect(session_url, status=303)
         except Exception as err:
             raise err
 
