@@ -38,10 +38,11 @@ DEBUG = True
 EMAIL_FROM_ADDRESS = "support@maxupvote.com"
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'mail.privateemail.com'
-EMAIL_USE_SSL = True
-EMAIL_PORT = 465
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+EMAIL_PORT = 587
 EMAIL_HOST_USER = "support@maxupvote.com"
-EMAIL_HOST_PASSWORD ="iuff-wqya-scle-nmuv"
+EMAIL_HOST_PASSWORD ="botusmail@1$"
 
 ALLOWED_HOSTS = ["*"]
 CORS_ALLOW_CREDENTIALS = False
