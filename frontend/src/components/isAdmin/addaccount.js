@@ -187,7 +187,7 @@ const AddAccount = ({onClose, isOpen}) => {
         `,
       });
       console.log(response)
-      setMessage("Activate Account")
+      setMessage("Activate Account in the server.")
       setOpen(true)
   } 
   catch (error) {

@@ -139,16 +139,16 @@ const Packages = ({setView}) => {
       <Grid item xs={12} sm={4} lg={3} xl={3} className={classes.gridContainer}>
         <div className={classes.packageContainer}>
           <Typography variant="h5" className={classes.packageName}>
-            $20.00
+            $10.00
           </Typography>
           <Typography variant="body1" className={classes.packageDescription}>
-            <AiOutlineCheckSquare />$0.05 per vote 
+            <AiOutlineCheckSquare />$0.15 per vote 
           </Typography>
           <Typography variant="body1" className={classes.packageDescription}>
           <AiOutlineCheckSquare />10 votes per min
           </Typography>
           <Typography variant="body1" className={classes.packageDescription}>
-          <AiOutlineCheckSquare />100 votes
+          <AiOutlineCheckSquare />150 votes
           </Typography>
           <form action={`http://172.60.0.5:8000/api/subscriptions/create-subscription/`} method="POST">
               <input type="hidden" name="price_id" value="price_1NTKoTDTMi1SAp13AI5woVHx" />
@@ -177,13 +177,13 @@ const Packages = ({setView}) => {
             $50.00
           </Typography>
           <Typography variant="body1" className={classes.packageDescription}>
-            <AiOutlineCheckSquare />$0.1 per votes 
+            <AiOutlineCheckSquare />$0.12 per votes 
           </Typography>
           <Typography variant="body1" className={classes.packageDescription}>
           <AiOutlineCheckSquare />60  votes per min
           </Typography>
           <Typography variant="body1" className={classes.packageDescription}>
-          <AiOutlineCheckSquare />500 votes
+          <AiOutlineCheckSquare />600 votes
           </Typography>
           <form action={`http://172.60.0.5:8000/api/subscriptions/create-subscription/`} method="POST">
               <input type="hidden" name="price_id" value="price_1NTKoTDTMi1SAp13AI5woVHx" />
@@ -209,16 +209,16 @@ const Packages = ({setView}) => {
       <Grid item xs={12} sm={4} lg={3} xl={3}>
         <div className={classes.packageContainer} style={{border: "2px solid #E34234"}}>
         <Typography variant="h5" className={classes.packageName}>
-            $100.00
+            $500.00
           </Typography>
           <Typography variant="body1" className={classes.packageDescription}>
-            <AiOutlineCheckSquare />$0.125 per votes 
+            <AiOutlineCheckSquare />$0.10 per votes 
           </Typography>
           <Typography variant="body1" className={classes.packageDescription}>
           <AiOutlineCheckSquare />150  votes per min
           </Typography>
           <Typography variant="body1" className={classes.packageDescription}>
-          <AiOutlineCheckSquare />1000 votes
+          <AiOutlineCheckSquare />5000 votes
           </Typography>
           <form action={`http://172.60.0.5:8000/api/subscriptions/create-subscription/`} method="POST">
               <input type="hidden" name="price_id" value="price_1NTKoTDTMi1SAp13AI5woVHx" />
@@ -245,16 +245,16 @@ const Packages = ({setView}) => {
       <Grid item xs={12} sm={4} lg={3} xl={3}>
         <div className={classes.packageContainer}>
         <Typography variant="h5" className={classes.packageName}>
-            $250.00
+            $2000.00
           </Typography>
           <Typography variant="body1" className={classes.packageDescription}>
-            <AiOutlineCheckSquare />$0.15 per vote 
+            <AiOutlineCheckSquare />$0.07 per vote 
           </Typography>
           <Typography variant="body1" className={classes.packageDescription}>
           <AiOutlineCheckSquare />250  votes per min
           </Typography>
           <Typography variant="body1" className={classes.packageDescription}>
-          <AiOutlineCheckSquare />2500 votes
+          <AiOutlineCheckSquare />14000 votes
           </Typography>
           <form action={`http://172.60.0.5:8000/api/subscriptions/create-subscription/`} method="POST">
               <input type="hidden" name="price_id" value="price_1NTKoTDTMi1SAp13AI5woVHx" />

@@ -3,16 +3,17 @@ from graphene_django import DjangoObjectType
 from graphql import GraphQLError
 
 from django.contrib.auth.hashers import make_password, check_password
-from django.conf import settings
+from django.conf import settings  
+
 from botustech.models import RegisteredUsers, RedditUrls
 from botustech.models import RedditAccounts
 
-from reddit.reddit_bot_manager import RedditBotManager
+
 from reddit.base import upvote, downvote, comment, add_account
 from botustech.Actions.send_email import send_activation_email, send_email
 from botustech.Actions.tokens import TokensMaker
 
-bot_manager = RedditBotManager()
+#bot_manager = RedditBotManager()
 #add_account = AddAccountWidget(bot_manager)
 token_gen = TokensMaker(settings.SECRET_KEY)
 
