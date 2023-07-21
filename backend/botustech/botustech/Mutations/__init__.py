@@ -4,18 +4,16 @@ from graphql import GraphQLError
 
 from django.contrib.auth.hashers import make_password, check_password
 from django.conf import settings
-from botustech.send_mail import SendEmail
 from botustech.models import RegisteredUsers, RedditUrls
 from botustech.models import RedditAccounts
 
-from reddit.ui.add_account_widget import AddAccountWidget
 from reddit.reddit_bot_manager import RedditBotManager
-from reddit.base import upvote, downvote, comment
+from reddit.base import upvote, downvote, comment, add_account
 from botustech.Actions.send_email import send_activation_email, send_email
 from botustech.Actions.tokens import TokensMaker
 
 bot_manager = RedditBotManager()
-add_account = AddAccountWidget(bot_manager)
+#add_account = AddAccountWidget(bot_manager)
 token_gen = TokensMaker(settings.SECRET_KEY)
 
 class UserType(DjangoObjectType):
@@ -146,7 +144,7 @@ class AddUserMutation(graphene.Mutation):
             admin_user = RegisteredUsers.objects.get(email=admin_email)
             if admin_user.isadmin == "True":
                 user = RegisteredUsers.objects.get(email=email)
-                user.package = "FREE"
+                user.package = "0.07"
                 user.save()
 
             else:
@@ -172,6 +170,7 @@ class UrlsMutation(graphene.Mutation):
         try:
             user = RegisteredUsers.objects.get(email=email)
             
+            #check the user.package we have to register the rate
             if float(user.balance) > 0.00 and float(user.package) > 0.00:
                 _url = RedditUrls.objects.create(
                     url = url,
@@ -179,7 +178,7 @@ class UrlsMutation(graphene.Mutation):
                     number=number,
                     speed=speed,
                     status="WAITING",
-                    cost = round(int(number) * 0.05, 2),
+                    cost = round(int(number) * float(user.package), 2),
                     user=user
                 )
             
@@ -289,7 +288,7 @@ class RedditAccountsMutation(graphene.Mutation):
                     status="ACTIVE",
                 )
                 user_angent = "Mozilla/5.0 (X11; Linux aarch64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.188 Safari/537.36 CrKey/1.54.250320"
-                add_account.add_account(name, proxies, user_angent)
+                response = add_account.delay(name, proxies, user_angent)
 
         except RegisteredUsers.DoesNotExist:
             raise GraphQLError("User doesn't exist")    

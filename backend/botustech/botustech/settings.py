@@ -36,7 +36,6 @@ COINBASE_CHECKOUT_ID = '7211092c-58f0-449f-af10-9fec7dd1acbd'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 EMAIL_FROM_ADDRESS = "support@maxupvote.com"
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'mail.privateemail.com'
 EMAIL_USE_TLS = True
@@ -59,16 +58,16 @@ CORS_ALLOW_METHODS = [
 CORS_ORIGIN_WHITELIST = [
     "https://172.60.0.4:3000",
     "http://172.60.0.4:3000",
-    "http://170.64.130.58:3000",
-    "https://170.64.130.58:3000",
+    "http://172.60.0.5:3000",
+    "https://172.60.0.5:3000",
     'http://localhost:3000',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     "https://172.60.0.4:3000",
     "http://172.60.0.4:3000",
-    "http://170.64.130.58:3000",
-    "https://170.64.130.58:3000",
+    "http://172.60.0.5:3000",
+    "https://172.60.0.5:3000",
     'http://localhost:3000',
     ]
 
@@ -182,9 +181,9 @@ STATIC_ROOT = "/root/botus/backend/botustech/static/"
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 #frontend
-SUBSCRIPTION_SUCCESS_URL = "http://170.64.130.58:3000"
-SUBSCRIPTION_FAILED_URL = "http://170.64.130.58:3000"
-SUBSCRIPTION_REDIRECT_URL = 'http://170.64.130.58:3000/coinbase-beta/'
+SUBSCRIPTION_SUCCESS_URL = "http://172.60.0.5:3000"
+SUBSCRIPTION_FAILED_URL = "http://172.60.0.5:3000"
+SUBSCRIPTION_REDIRECT_URL = 'http://172.60.0.5:3000/coinbase-beta/'
 
 #celery
 REDIS_HOST = '172.60.0.7'

@@ -29,7 +29,7 @@ services:
   redis:
     image: redis:6.2.1
     restart: unless-stopped
-    container_name: botus_redis
+    container_name: reddit_redis
     networks:
       reddit_net:
         ipv4_address: 172.60.0.7
@@ -39,7 +39,7 @@ services:
       - ../mounts/redis/:/data
 
   backend:
-    container_name: reddit-backend
+    container_name: reddit_backend
     build:
       context: ./backend/botustech
       dockerfile: Dockerfile
