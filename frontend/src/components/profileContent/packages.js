@@ -7,17 +7,19 @@ import {AiOutlineCheckSquare} from "react-icons/ai"
 import {BiArrowBack} from "react-icons/bi"
 
 const useStyles = makeStyles((theme) => ({
-  cardContainer: {
+    cardContainer: {
     display: "flex",
     justifyContent: "center",
     boxShadow: "none",
     background: "none",
     marginTop: "10px",
     padding: "10px",
-    marginBottom: "10px",
+    marginBottom: "40px",
+   
 
     [theme.breakpoints.down("sm")]: {
       flexDirection: "column", // Stack cards vertically
+      marginBottom: "10px",
       
     },  
 
@@ -25,7 +27,6 @@ const useStyles = makeStyles((theme) => ({
       marginLeft: "0px",
       width: "100%",
       marginTop: "40px",
-      width: "100%"
       
     },  
   },
@@ -43,12 +44,17 @@ const useStyles = makeStyles((theme) => ({
       border: "2px solid #E34234"
     },
 
-
     [theme.breakpoints.up("xl")]: {
       marginLeft: "0px",
       marginLeft: "-20px",
       paddingRight: "20px",
     },  
+
+    [theme.breakpoints.down("sm")]: {
+      marginTop: "0px",
+      marginBottom: "-20px"
+    },  
+  
 
   },
   packageName: {
@@ -58,8 +64,15 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: "50px",
     paddingTop: "10px",
     color: "#E34234",
-    marginRight: "50px"
+    marginRight: "50px",
+
+
+    [theme.breakpoints.down("sm")]: {
+      marginLeft: "100px",
+    },  
   },
+
+
   packageDescription: {
     marginBottom: theme.spacing(2),
     color: "#7F8183"
@@ -171,19 +184,156 @@ const Packages = ({setView}) => {
           </Button>
         </div>
       </Grid>
-      <Grid item xs={12} sm={4} lg={3} xl={3}>
+      <Grid item xs={12} sm={4} lg={3} xl={3} className={classes.gridContainer}>
         <div className={classes.packageContainer}>
-        <Typography variant="h5" className={classes.packageName}>
+          <Typography variant="h5" className={classes.packageName}>
+            $30.00
+          </Typography>
+          <Typography variant="body1" className={classes.packageDescription}>
+            <AiOutlineCheckSquare />$0.13 per vote 
+          </Typography>
+          <Typography variant="body1" className={classes.packageDescription}>
+          <AiOutlineCheckSquare />10 votes per min
+          </Typography>
+          <Typography variant="body1" className={classes.packageDescription}>
+          <AiOutlineCheckSquare />390 votes
+          </Typography>
+          <form action={`http://172.60.0.5:8000/api/subscriptions/create-subscription/`} method="POST">
+              <input type="hidden" name="price_id" value="price_1NWMV2CHHqRTZvFEk2HPfqXp" />
+              <Button
+            variant="contained"
+            color="primary"
+            className={classes.paymentButton}
+            type="submit"
+          >
+            Pay with Card
+          </Button>
+        </form>
+          <Button
+            variant="contained"
+            color="secondary"
+            className={classes.paymentButton}
+            onClick={createSubscription}
+          >
+            Pay with Crypto
+          </Button>
+        </div>
+      </Grid><Grid item xs={12} sm={4} lg={3} xl={3} className={classes.gridContainer}>
+        <div className={classes.packageContainer}>
+          <Typography variant="h5" className={classes.packageName}>
             $50.00
           </Typography>
           <Typography variant="body1" className={classes.packageDescription}>
-            <AiOutlineCheckSquare />$0.12 per votes 
+            <AiOutlineCheckSquare />$0.12 per vote 
           </Typography>
           <Typography variant="body1" className={classes.packageDescription}>
-          <AiOutlineCheckSquare />60  votes per min
+          <AiOutlineCheckSquare />10 votes per min
           </Typography>
           <Typography variant="body1" className={classes.packageDescription}>
           <AiOutlineCheckSquare />600 votes
+          </Typography>
+          <form action={`http://172.60.0.5:8000/api/subscriptions/create-subscription/`} method="POST">
+              <input type="hidden" name="price_id" value="price_1NWMV2CHHqRTZvFEk2HPfqXp" />
+              <Button
+            variant="contained"
+            color="primary"
+            className={classes.paymentButton}
+            type="submit"
+          >
+            Pay with Card
+          </Button>
+        </form>
+          <Button
+            variant="contained"
+            color="secondary"
+            className={classes.paymentButton}
+            onClick={createSubscription}
+          >
+            Pay with Crypto
+          </Button>
+        </div>
+      </Grid><Grid item xs={12} sm={4} lg={3} xl={3} className={classes.gridContainer}>
+        <div className={classes.packageContainer}>
+          <Typography variant="h5" className={classes.packageName}>
+            $200.00
+          </Typography>
+          <Typography variant="body1" className={classes.packageDescription}>
+            <AiOutlineCheckSquare />$0.11 per vote 
+          </Typography>
+          <Typography variant="body1" className={classes.packageDescription}>
+          <AiOutlineCheckSquare />50 votes per min
+          </Typography>
+          <Typography variant="body1" className={classes.packageDescription}>
+          <AiOutlineCheckSquare />2200 votes
+          </Typography>
+          <form action={`http://172.60.0.5:8000/api/subscriptions/create-subscription/`} method="POST">
+              <input type="hidden" name="price_id" value="price_1NWMV2CHHqRTZvFEk2HPfqXp" />
+              <Button
+            variant="contained"
+            color="primary"
+            className={classes.paymentButton}
+            type="submit"
+          >
+            Pay with Card
+          </Button>
+        </form>
+          <Button
+            variant="contained"
+            color="secondary"
+            className={classes.paymentButton}
+            onClick={createSubscription}
+          >
+            Pay with Crypto
+          </Button>
+        </div>
+      </Grid><Grid item xs={12} sm={4} lg={3} xl={3} className={classes.gridContainer}>
+        <div className={classes.packageContainer} style={{border: "2px solid #E34234"}}>
+          <Typography variant="h5" className={classes.packageName}>
+            $500.00
+          </Typography>
+          <Typography variant="body1" className={classes.packageDescription}>
+            <AiOutlineCheckSquare />$0.10 per vote 
+          </Typography>
+          <Typography variant="body1" className={classes.packageDescription}>
+          <AiOutlineCheckSquare />100 votes per min
+          </Typography>
+          <Typography variant="body1" className={classes.packageDescription}>
+          <AiOutlineCheckSquare />5000 votes
+          </Typography>
+          <form action={`http://172.60.0.5:8000/api/subscriptions/create-subscription/`} method="POST">
+              <input type="hidden" name="price_id" value="price_1NWMV2CHHqRTZvFEk2HPfqXp" />
+              <Button
+            variant="contained"
+            color="primary"
+            className={classes.paymentButton}
+            type="submit"
+          >
+            Pay with Card
+          </Button>
+        </form>
+          <Button
+            variant="contained"
+            color="secondary"
+            className={classes.paymentButton}
+            onClick={createSubscription}
+          >
+            Pay with Crypto
+          </Button>
+        </div>
+      </Grid>
+      <Grid item xs={12} sm={4} lg={3} xl={3}>
+        <div className={classes.packageContainer}>
+        <Typography variant="h5" className={classes.packageName}>
+            $1000.00
+          </Typography>
+          <Typography variant="body1" className={classes.packageDescription}>
+            <AiOutlineCheckSquare />$0.09 per votes 
+          </Typography>
+          <Typography variant="body1" className={classes.packageDescription}>
+          <AiOutlineCheckSquare />200  votes per min
+          </Typography>
+          <Typography variant="body1" className={classes.packageDescription}>
+          <AiOutlineCheckSquare />9000 votes
           </Typography>
           <form action={`http://172.60.0.5:8000/api/subscriptions/create-subscription/`} method="POST">
               <input type="hidden" name="price_id" value="price_1NWCj2CHHqRTZvFEJgFDJaCr" />
@@ -207,18 +357,18 @@ const Packages = ({setView}) => {
         </div>
       </Grid>
       <Grid item xs={12} sm={4} lg={3} xl={3}>
-        <div className={classes.packageContainer} style={{border: "2px solid #E34234"}}>
+        <div className={classes.packageContainer}  style={{marginBottom: "30px"}}>
         <Typography variant="h5" className={classes.packageName}>
-            $500.00
+            $2000.00
           </Typography>
           <Typography variant="body1" className={classes.packageDescription}>
-            <AiOutlineCheckSquare />$0.10 per votes 
+            <AiOutlineCheckSquare />$0.07 per votes 
           </Typography>
           <Typography variant="body1" className={classes.packageDescription}>
-          <AiOutlineCheckSquare />150  votes per min
+          <AiOutlineCheckSquare />250  votes per min
           </Typography>
           <Typography variant="body1" className={classes.packageDescription}>
-          <AiOutlineCheckSquare />5000 votes
+          <AiOutlineCheckSquare />14000 votes
           </Typography>
           <form action={`http://172.60.0.5:8000/api/subscriptions/create-subscription/`} method="POST">
               <input type="hidden" name="price_id" value="price_1NWCkdCHHqRTZvFE4EipnBCz" />
@@ -242,41 +392,7 @@ const Packages = ({setView}) => {
           </Button>
         </div>
       </Grid>
-      <Grid item xs={12} sm={4} lg={3} xl={3}>
-        <div className={classes.packageContainer}>
-        <Typography variant="h5" className={classes.packageName}>
-            $2000.00
-          </Typography>
-          <Typography variant="body1" className={classes.packageDescription}>
-            <AiOutlineCheckSquare />$0.07 per vote 
-          </Typography>
-          <Typography variant="body1" className={classes.packageDescription}>
-          <AiOutlineCheckSquare />250  votes per min
-          </Typography>
-          <Typography variant="body1" className={classes.packageDescription}>
-          <AiOutlineCheckSquare />14000 votes
-          </Typography>
-          <form action={`http://172.60.0.5:8000/api/subscriptions/create-subscription/`} method="POST">
-              <input type="hidden" name="price_id" value="price_1NWCp3CHHqRTZvFEKSNOBzXs" />
-              <Button
-            variant="contained"
-            color="primary"
-            className={classes.paymentButton}
-            type="submit"
-          >
-            Pay with Card
-          </Button>
-        </form>
-        <Button
-            variant="contained"
-            color="secondary"
-            className={classes.paymentButton}
-            onClick={createSubscription}
-          >
-            Pay with Crypto
-          </Button>
-        </div>
-      </Grid>
+      
     </Grid>
   );
 };

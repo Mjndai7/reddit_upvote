@@ -27,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
     },
     [theme.breakpoints.down("sm")]: {
       marginLeft: "0px",
+      width: "100%",
     },
 
     [theme.breakpoints.up("xl")]: {
@@ -54,6 +55,7 @@ const useStyles = makeStyles((theme) => ({
     background: "#171E2E",
     paddingRight: "100px",
     paddingLeft: "100px",
+    marginBottom: "100px",
 
     [theme.breakpoints.down("lg")]: {
       height: "280px",
@@ -152,9 +154,11 @@ const ProfileCard = () => {
     <div className={classes.container}>
         {view === "profile"  ? <UserInfo view={view} setView={setView} /> : <Packages setView={setView}/>}
         <div className={classes.cardContainer}>
-        <Card className={view === "profile" ? classes.card3 : classes.card4}>
-            <AnalyticsGraph data={data} />
+        {view === "profile" ?  
+        <Card className={classes.card3}>
+           <AnalyticsGraph data={data} /> 
         </Card>
+        :  null}
       </div>
     </div>
   );
