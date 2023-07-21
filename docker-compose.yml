@@ -6,8 +6,6 @@ services:
       dockerfile: Dockerfile
     container_name: reddit-frontend
     restart: always
-    ports:
-      - 3000:3000
     networks:
       reddit_net:
         ipv4_address: 172.60.0.4
@@ -49,8 +47,6 @@ services:
       reddit_net:
         ipv4_address: 172.60.0.5
     restart: always
-    ports:
-      - 8000:8000
     depends_on:
      - db
      - redis
@@ -62,3 +58,4 @@ networks:
     ipam:
       config:
         - subnet: 172.60.0.1/24
+        

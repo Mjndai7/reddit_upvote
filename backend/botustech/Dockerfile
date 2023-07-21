@@ -33,9 +33,6 @@ ENV REDIS_PORT=6379
 EXPOSE 8000
 
 
-# Run the Django server
-RUN python manage.py makemigrations botustech 
-
 # Start the Celery worker and the backend server
 CMD gunicorn botustech.wsgi:application --bind 0.0.0.0:8000
 

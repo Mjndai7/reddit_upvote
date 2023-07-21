@@ -2,7 +2,7 @@ from celery import shared_task
 from botustech.celery import _celery_app
 import requests
 
-base_url = "http://localhost:5000"  # Replace with the actual base URL of your Flask app
+base_url = "http://86.48.26.167:5000"  # Replace with the actual base URL of your Flask app
 
 @_celery_app.task
 def upvote(url, threads, number_of_upvotes, rate, balance):
