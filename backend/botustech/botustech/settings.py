@@ -41,7 +41,7 @@ EMAIL_HOST = 'mail.privateemail.com'
 EMAIL_USE_SSL = True
 EMAIL_PORT = 465
 EMAIL_HOST_USER = "support@maxupvote.com"
-EMAIL_HOST_PASSWORD ="ppkj-ttes-wvpe-zwiu"
+EMAIL_HOST_PASSWORD ="iuff-wqya-scle-nmuv"
 
 ALLOWED_HOSTS = ["*"]
 CORS_ALLOW_CREDENTIALS = False
