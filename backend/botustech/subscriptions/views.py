@@ -17,8 +17,6 @@ webhook_secret = settings.STRIPE_WEBHOOK_SECRET
 FRONTEND_SUBSCRIPTION_SUCCESS_URL = settings.SUBSCRIPTION_SUCCESS_URL
 FRONTEND_SUBSCRIPTION_CANCEL_URL = settings.SUBSCRIPTION_FAILED_URL
 
-
-
 class CreateSubscription(APIView):
     def post(self, request):
         try:
@@ -45,9 +43,7 @@ class CreateSubscription(APIView):
                 )
                 checkout_session_urls.append(checkout_session.url)
             
-            # Redirect to the first checkout session url
-            for session_url in checkout_session_urls:
-                return redirect(session_url, status=303)
+            return Response(checkout_session_urls)
         except Exception as err:
             raise err
 
