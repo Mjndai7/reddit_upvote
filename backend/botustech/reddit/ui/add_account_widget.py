@@ -1,8 +1,8 @@
 import os
-from reddit.reddit_bot import RedditBot
-from reddit.reddit_bot_manager import RedditBotManager
-from reddit.ui.base_widget import BaseWidget
-from  reddit import constants
+from reddit_bot import RedditBot
+from reddit_bot_manager import RedditBotManager
+from ui.base_widget import BaseWidget
+from reddit_bot_manager import constants
 
 class AddAccountWidget(BaseWidget):
 
@@ -12,7 +12,7 @@ class AddAccountWidget(BaseWidget):
     def parse_proxy(self, proxy):
         
         _proxy = proxy.split(":")
-        print(_proxy)
+        print("proxy" , _proxy)
         if len(_proxy) == 2:
             return ":".join(_proxy)
         elif len(_proxy) == 4:
@@ -45,9 +45,10 @@ class AddAccountWidget(BaseWidget):
             "time":time
         }
 
-        bot = RedditBot(account, self.bot_manager.s)
+        bot = RedditBot(account)
         bot.driver.get('https://www.reddit.com/login')
 
         self.bot_manager.s["accounts"].append(account)
         self.bot_manager.saveState()
         print(f"=> Account: {account['username']} added.")
+        return account

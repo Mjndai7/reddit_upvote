@@ -2,8 +2,8 @@ import random
 import time 
 import json
 from threading import Thread
-from reddit.reddit_bot import RedditBot
-from reddit import constants
+from reddit_bot import RedditBot
+from reddit_bot_manager import constants
 
 class RedditBotManager: 
 

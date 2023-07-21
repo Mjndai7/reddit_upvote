@@ -7,7 +7,7 @@ def getAccountIndex(session, a_list):
             return i
 
 class Paths:
-    STATE_FILE = f'{os.getcwd()}/reddit/data/state.json'
+    STATE_FILE = f'{os.getcwd()}/data/state.json'
 
 class Log:
     DATE_FORMAT = "%Y-%m-%d"
