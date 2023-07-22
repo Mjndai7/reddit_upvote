@@ -126,7 +126,7 @@ const UserCard = () => {
   const [rowsPerPage, setRowsPerPage] = useState(20);
   const [data, setData] = useState([])
   const email = localStorage.getItem("Email")
-  const endpoint =  "http://172.60.0.5:8000/graphql/"
+  const endpoint =  "http://170.64.130.58:8000/graphql/"
 
   
   const handleChangePage = (event, newPage) => {

@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 const ActivationPage = () => {
   const { uid, token } = useParams();
-  const endpoint =  "http://172.60.0.5:8000/graphql/";
+  const endpoint =  "http://170.64.130.58:8000/graphql/";
   
   const navigate = useNavigate()
 

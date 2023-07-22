@@ -131,7 +131,7 @@ const Packages = ({setView}) => {
 
     const createSubscription = async () => {
       try {
-        const response = await fetch(`http://172.60.0.5:8000/api/crypto/coinbase/`, {
+        const response = await fetch(`http://170.64.130.58:8000/api/crypto/coinbase/`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -168,7 +168,7 @@ const Packages = ({setView}) => {
           <Typography variant="body1" className={classes.packageDescription}>
           <AiOutlineCheckSquare />150 votes
           </Typography>
-          <form action={`http://172.60.0.5:8000/api/subscriptions/create-subscription/`} method="POST">
+          <form action={`http://170.64.130.58:8000/api/subscriptions/create-subscription/`} method="POST">
               <input type="hidden" name="price_id" value="price_1NWMV2CHHqRTZvFEk2HPfqXp" />
               <Button
             variant="contained"
@@ -203,7 +203,7 @@ const Packages = ({setView}) => {
           <Typography variant="body1" className={classes.packageDescription}>
           <AiOutlineCheckSquare />390 votes
           </Typography>
-          <form action={`http://172.60.0.5:8000/api/subscriptions/create-subscription/`} method="POST">
+          <form action={`http://170.64.130.58:8000/api/subscriptions/create-subscription/`} method="POST">
               <input type="hidden" name="price_id" value="price_1NWMV2CHHqRTZvFEk2HPfqXp" />
               <Button
             variant="contained"
@@ -237,7 +237,7 @@ const Packages = ({setView}) => {
           <Typography variant="body1" className={classes.packageDescription}>
           <AiOutlineCheckSquare />600 votes
           </Typography>
-          <form action={`http://172.60.0.5:8000/api/subscriptions/create-subscription/`} method="POST">
+          <form action={`http://170.64.130.58:8000/api/subscriptions/create-subscription/`} method="POST">
               <input type="hidden" name="price_id" value="price_1NWMV2CHHqRTZvFEk2HPfqXp" />
               <Button
             variant="contained"
@@ -271,7 +271,7 @@ const Packages = ({setView}) => {
           <Typography variant="body1" className={classes.packageDescription}>
           <AiOutlineCheckSquare />2200 votes
           </Typography>
-          <form action={`http://172.60.0.5:8000/api/subscriptions/create-subscription/`} method="POST">
+          <form action={`http://170.64.130.58:8000/api/subscriptions/create-subscription/`} method="POST">
               <input type="hidden" name="price_id" value="price_1NWMV2CHHqRTZvFEk2HPfqXp" />
               <Button
             variant="contained"
@@ -305,7 +305,7 @@ const Packages = ({setView}) => {
           <Typography variant="body1" className={classes.packageDescription}>
           <AiOutlineCheckSquare />5000 votes
           </Typography>
-          <form action={`http://172.60.0.5:8000/api/subscriptions/create-subscription/`} method="POST">
+          <form action={`http://170.64.130.58:8000/api/subscriptions/create-subscription/`} method="POST">
               <input type="hidden" name="price_id" value="price_1NWMV2CHHqRTZvFEk2HPfqXp" />
               <Button
             variant="contained"
@@ -340,7 +340,7 @@ const Packages = ({setView}) => {
           <Typography variant="body1" className={classes.packageDescription}>
           <AiOutlineCheckSquare />9000 votes
           </Typography>
-          <form action={`http://172.60.0.5:8000/api/subscriptions/create-subscription/`} method="POST">
+          <form action={`http://170.64.130.58:8000/api/subscriptions/create-subscription/`} method="POST">
               <input type="hidden" name="price_id" value="price_1NWCj2CHHqRTZvFEJgFDJaCr" />
               <Button
             variant="contained"
@@ -375,7 +375,7 @@ const Packages = ({setView}) => {
           <Typography variant="body1" className={classes.packageDescription}>
           <AiOutlineCheckSquare />14000 votes
           </Typography>
-          <form action={`http://172.60.0.5:8000/api/subscriptions/create-subscription/`} method="POST">
+          <form action={`http://170.64.130.58:8000/api/subscriptions/create-subscription/`} method="POST">
               <input type="hidden" name="price_id" value="price_1NWCkdCHHqRTZvFE4EipnBCz" />
               <Button
             variant="contained"

@@ -149,7 +149,7 @@ const AddAccount = ({onClose, isOpen}) => {
   const email = localStorage.getItem("Email")
   const [proxies, setPorxies] = useState('')
   const [responseMessage, setResponseMessage] = useState("");
-  const endpoint =  "http://172.60.0.5:8000/graphql/"
+  const endpoint =  "http://170.64.130.58:8000/graphql/"
 
 
   const handleSubmit = (e) => {
