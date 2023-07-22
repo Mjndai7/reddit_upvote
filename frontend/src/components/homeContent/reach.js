@@ -34,7 +34,7 @@ const Contacts = ({urls, setUrls}) => {
 
   useEffect(() => {
     recentActivities()
-  })
+  }, [])
 
  
   const recentActivities = async (e) => {

@@ -140,7 +140,7 @@ const AccCard = () => {
   
   useEffect(() => {
     getAccounts()
-  })
+  }, [])
   
   const getAccounts = async (e) => {
       try {

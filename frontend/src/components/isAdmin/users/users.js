@@ -139,7 +139,7 @@ const UserCard = () => {
   };
   useEffect(() => {
     getUsers()
-  })
+  }, [])
   
   const getUsers = async (e) => {
       try {
