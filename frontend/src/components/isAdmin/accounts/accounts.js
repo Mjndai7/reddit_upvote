@@ -128,10 +128,7 @@ const AccCard = () => {
   const [rowsPerPage, setRowsPerPage] = useState(20);
   const endpoint =  "http://172.60.0.5:8000/graphql/"
 
-  const shortenemail = (email) => {
-    const maxLength = 20; // Maximum length of the shortened email
-    return email.length > maxLength ? email.substring(0, maxLength) + '...' : email;
-  };
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -140,9 +137,10 @@ const AccCard = () => {
     setRowsPerPage(parseInt(event.target.value, 20));
     setPage(0);
   };
+  
   useEffect(() => {
     getAccounts()
-  }, [])
+  })
   
   const getAccounts = async (e) => {
       try {

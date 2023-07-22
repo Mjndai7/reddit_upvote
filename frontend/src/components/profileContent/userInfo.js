@@ -23,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: "none",
     marginRight: "50px",
     borderRadius: "10px",
+    
     [theme.breakpoints.down("sm")]: {
       width: "97%",
       marginTop: "7%",
@@ -30,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
     },
 
     [theme.breakpoints.up("md")]: {
-      width: "100%",
+      width: "500px",
       marginLeft: "-19px",
     },
 
@@ -40,13 +41,24 @@ const useStyles = makeStyles((theme) => ({
   },
 
   card2: {
-    width: "40%",
+    width: "100%",
     background: "none",
     marginTop: "5%",
     boxShadow: "none",
     width: "650px",
     marginLeft: "-20px",
-    
+
+    [theme.breakpoints.up("md")]: {
+      width: "480px",
+      marginRight: "0px"
+    },
+
+    [theme.breakpoints.up("xl")]: {
+      width: "500px",
+      marginRight: "0px"
+    },
+
+
     [theme.breakpoints.down("sm")]: {
       width: "100%",
       marginLeft: "0px",
@@ -253,7 +265,7 @@ const UserInfo = ({view, setView}) => {
             <Card className={classes.Usercard}>
               <Grid item container justifyContent="space-between" alignItems="flex-end">
                 <Grid item className={classes.userItems}>Total Upvotes</Grid>
-                <Grid item className={classes.userItems}>14,569</Grid>
+                <Grid item className={classes.userItems}>{0}</Grid>
               </Grid>
             </Card>
             <Card className={classes.Usercard}>

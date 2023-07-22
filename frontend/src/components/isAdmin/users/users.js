@@ -128,10 +128,6 @@ const UserCard = () => {
   const email = localStorage.getItem("Email")
   const endpoint =  "http://172.60.0.5:8000/graphql/"
 
-  const shortenUrl = (url) => {
-    const maxLength = 20; // Maximum length of the shortened URL
-    return url.length > maxLength ? url.substring(0, maxLength) + '...' : url;
-  };
   
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -143,7 +139,7 @@ const UserCard = () => {
   };
   useEffect(() => {
     getUsers()
-  }, [])
+  })
   
   const getUsers = async (e) => {
       try {

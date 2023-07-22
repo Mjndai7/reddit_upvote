@@ -11,6 +11,32 @@ import Packages from "./packages";
 const useStyles = makeStyles((theme) => ({
   container: {
     position: "center",
+    //overflowY: "scroll",
+    height: "100vh",
+    marginLeft: "300px",
+    backgroundColor: "none",
+    scrollbarWidth: "thin",
+    //scrollbarColor: "rgba(255, 255, 255, 0.5) rgba(0, 0, 0, 0.3)",
+    "&::-webkit-scrollbar": {
+      width: "6px",
+    },
+
+    "&::-webkit-scrollbar-thumb": {
+      backgroundColor: "rgba(255, 255, 255, 0.5)",
+      borderRadius: "3px",
+    },
+    [theme.breakpoints.down("sm")]: {
+      marginLeft: "0px",
+      width: "100%",
+    },
+
+    [theme.breakpoints.up("xl")]: {
+      marginLeft: "500px",
+    },
+  },
+  
+  container2: {
+    position: "center",
     overflowY: "scroll",
     height: "100vh",
     marginLeft: "300px",
@@ -31,10 +57,11 @@ const useStyles = makeStyles((theme) => ({
     },
 
     [theme.breakpoints.up("xl")]: {
-      marginLeft: "500px",
+      marginLeft: "300px",
+      marginTop: "25px"
     },
   },
-
+  
   cardContainer: {
     display: "flex",
     justifyContent: "center",
@@ -114,7 +141,7 @@ const ProfileCard = () => {
   const endpoint =  "http://172.60.0.5:8000/graphql/"
   useEffect(() => {
     recentActivities()
-  }, [])
+  })
 
   const recentActivities = async (e) => {
     //send data to the api to start voting
@@ -151,7 +178,7 @@ const ProfileCard = () => {
 };
   
   return (
-    <div className={classes.container}>
+    <div className={view === "profile"  ? classes.container :  classes.container2}>
         {view === "profile"  ? <UserInfo view={view} setView={setView} /> : <Packages setView={setView}/>}
         <div className={classes.cardContainer}>
         {view === "profile" ?  

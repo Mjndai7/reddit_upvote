@@ -28,7 +28,13 @@ const useStyles = makeStyles((theme) => ({
       width: "100%",
       marginTop: "40px",
       
-    },  
+    }, 
+    [theme.breakpoints.up("md")]: {
+      marginLeft: "0px",
+      width: "100%",
+      marginTop: "40px",
+      
+    },   
   },
 
   packageContainer: {
@@ -46,7 +52,6 @@ const useStyles = makeStyles((theme) => ({
 
     [theme.breakpoints.up("xl")]: {
       marginLeft: "0px",
-      marginLeft: "-20px",
       paddingRight: "20px",
     },  
 
