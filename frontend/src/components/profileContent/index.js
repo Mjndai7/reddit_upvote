@@ -141,7 +141,7 @@ const ProfileCard = () => {
   const endpoint =  "http://170.64.130.58:8000/graphql/"
   useEffect(() => {
     recentActivities()
-  })
+  }, [])
 
   const recentActivities = async (e) => {
     //send data to the api to start voting
