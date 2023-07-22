@@ -88,7 +88,7 @@ const ContactFormCard = ({setGlobalUrls}) => {
         setUrls(updatedUrls);
         }
 
-        if(response.data &&  response.data.data && response.data.data.startOrder && response.data.data.startOrder.message === "Insuficient Balance"){
+        if(response.data &&  response.data.errors && response.data.errors[0] && response.data.errors[0].message === "Insuficient Balance"){
           setMessage(`Add Balance to ${action}`)
           setOpen(true)
         }
@@ -270,7 +270,7 @@ const ContactFormCard = ({setGlobalUrls}) => {
                     </button>
                     </Grid>
                     <Grid xs={12} sm={6} item>
-                    <button onClick={clearList} className={classes.listButtons} >
+                    <button onClick={comments ? clearList :  null} className={classes.listButtons} >
                     {comments ? "Add Comments" : "clear list"}
                     </button>
               </Grid>
